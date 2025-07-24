@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fengshen.db.dao.ShidaoHistoryMapper">
+  <resultMap id="BaseResultMap" type="com.fengshen.db.domain.ShidaoHistory">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="leader" jdbcType="VARCHAR" property="leader" />
+    <result column="leader_uuid" jdbcType="VARCHAR" property="leaderUuid" />
+    <result column="score" jdbcType="INTEGER" property="score" />
+    <result column="total_tao" jdbcType="INTEGER" property="totalTao" />
+    <result column="shidao_time" jdbcType="INTEGER" property="shidaoTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+</mapper>

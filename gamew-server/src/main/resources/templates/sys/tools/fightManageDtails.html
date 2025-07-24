@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>战斗管理</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+
+<link rel="shortcut icon" href="favicon.ico">
+<link th:href="@{/static/sys/css/bootstrap.min.css?v=3.3.5}" rel="stylesheet">
+<link th:href="@{/static/sys/css/plugins/sweetalert/sweetalert.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/font-awesome.min.css?v=4.4.0}" rel="stylesheet">
+<link th:href="@{/static/sys/css/animate.min.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/style.min.css?v=4.0.0}" rel="stylesheet">
+<link th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" rel="stylesheet" />
+<link rel="stylesheet" th:href="@{/static/sys/css/global.css}">
+<style>
+.openMaxImg:hover {
+	box-shadow: 0px 0px 4px 1px #4e4e4e;
+	cursor: pointer;
+}
+
+
+/* 表格头部工具栏背景色 */
+.layui-table-tool {
+	background-color: #eeffee;
+}
+
+.news_search {
+	font-size: 14px;
+}
+
+.layui-form-label {
+	padding: 9px 0;
+	left: 18px;
+	color: black;
+	font-size: 15px;
+	top: 1px;
+	width: 70px;
+}
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield;
+}
+</style>
+</head>
+
+<body>
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<!-- Panel Other -->
+		<div class="ibox float-e-margins">
+			<div class="row row-lg layui-form" lay-filter="choujiang">
+				<div class="col-sm-12">
+					<div class="example">
+						<blockquote class="layui-elem-quote news_search layui-form">
+							<div class="layui-inline">
+								<a class="layui-btn export">导出</a>
+							</div>
+							<div class="layui-inline">
+								<button type="button" class="layui-btn layui-btn-primary flush"><i class="layui-icon layui-icon-refresh"></i></button>
+							</div>
+							<div class="layui-inline">
+								<div style="font-size: 23px; margin-left: 20px;">
+									<span style="color:#359f6a">当前回合:</span>
+									<span id="onlineNumber">0</span>
+								</div>
+							</div>
+						</blockquote>
+						<table id="table" lay-filter="test">
+
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/js/bootstrap.min.js?v=3.3.5}"></script>
+	<script th:src="@{/static/sys/js/content.min.js}"></script>
+	<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/plugins/sweetalert/sweetalert.min.js}"></script>
+	<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+	<script th:src="@{/static/sys/js/public.js}"></script>
+	<script th:line="javascript">
+	var path = '[[${session.path}]]';
+		var layer;
+		var table;
+		var params;
+		var util;
+		layui.config({
+	        base: 'layui-v2.5.6/layui/module/'
+	    }).extend({
+	        treetable: 'treetable-lay/treetable'
+	    }).use([ 'layer', 'table', 'form', 'laydate', 'util','treetable' ], function() {
+			util = layui.util;
+			layer = layui.layer;
+			table = layui.table;
+			var date = layui.laydate;
+			var treetable = layui.treetable;
+			var cols = [ 
+			{type: 'numbers'},
+			{title : '攻击方',field : 'name'}, 
+			{title : '回合',field : 'roundNum',
+				templet:function(value){
+					return "第"+value.roundNum+"回合";
+				}
+			},
+			{title : '被攻方',field : 'vname'},
+			{title : '动作',field : 'action'},
+			{title : '技能',field : 'para'},
+			{title : '开始时间',field : 'startTime',
+				templet:function(value){
+					if(value.startTime != undefined){
+						return util.timeAgo(value.startTime);
+					}else {
+						return "";
+					}
+				}
+			},
+			{
+				title : '已死亡',
+				field : 'isDead',
+			},
+			{
+				title : '复活',
+				field : 'isRevive',
+			},
+			{
+				title : '喊话',
+				field : 'isTalk',
+			}
+			];
+			
+			layer.load(2);
+			var renderTable = function(){
+				 treetable.render({
+		                treeColIndex: 1,
+		                treeSpid: -1,
+		                treeIdName: 'roundNum',
+		                treePidName: 'pid',
+		                treeDefaultClose: true,
+		                treeLinkage: false,
+		                elem: '#table',
+		                url: path+"/fight/getFightInfoDetails?uid="+$.getQueryString("key"),
+		                page: false,
+		                height:500,
+		                cols: [cols],
+		                done: function (c,curr) {
+		                    layer.closeAll('loading');
+		                },
+		                success:function(c,curr) {
+		                   $("#onlineNumber").text(c.roundNum);
+		                }
+		            });
+			}
+			
+			renderTable();
+			$(".flush").click(function() {
+				layer.load(2);
+				renderTable();
+			})
+			
+			$(".export").click(function() {
+				var download = window.open(path + "/sys/index/wd/exportJson?uid=" + $.getQueryString("key"));
+				var load = $.load("正在导出...");
+				var timer = setInterval(function() {
+					if(download != null && download.closed) {
+						layer.close(load);
+						layer.msg("导出成功");
+						clearInterval(timer);
+					}
+				}, 500)
+			});
+		});
+	</script>
+</body>
+
+</html>

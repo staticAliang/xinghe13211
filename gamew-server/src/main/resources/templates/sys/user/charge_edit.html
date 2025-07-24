@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手动充值</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link th:href="@{/static/sys/css/bootstrap.min.css?v=3.3.5}" rel="stylesheet">
+    <link th:href="@{/static/sys/css/plugins/sweetalert/sweetalert.css}" rel="stylesheet">
+    <link th:href="@{/static/sys/css/font-awesome.min.css?v=4.4.0}" rel="stylesheet">
+    <link th:href="@{/static/sys/css/animate.min.css}" rel="stylesheet">
+    <link th:href="@{/static/sys/css/style.min.css?v=4.0.0}" rel="stylesheet">
+    <link th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/static/sys/css/global.css}">
+</head>
+
+<body>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <!-- Panel Other -->
+    <div class="ibox float-e-margins">
+        <div class="row row-lg">
+            <div class="col-sm-12">
+
+                <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                    <ul class="layui-tab-title">
+                        <li class="layui-this">福利充值</li>
+                        <!--                        <li>挑战次数</li>-->
+                    </ul>
+                    <div class="layui-tab-content layui-form" lay-filter="baseForm">
+                        <!-- 基础设置 -->
+                        <div class="layui-tab-item layui-show">
+                            <div class="example">
+                                <form class="layui-form" action="" lay-filter="chageForm">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">账号</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" name="name" lay-verify="required" placeholder="请输入账号" autocomplete="off" class="layui-input">
+                                        </div>
+                                        <div class="layui-form-mid layui-word-aux"><span style="color:#ee0f29;">*请填写账号,如需所有账号发放,请填写全部账号</span></div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">金额</label>
+                                        <div class="layui-input-inline">
+                                            <input type="number" name="money" lay-verify="number|required" placeholder="请输入充值金额" autocomplete="off" class="layui-input">
+                                        </div>
+                                        <div class="layui-form-mid layui-word-aux"><span style="color:#ee0f29;">*请填写金额应>0</span></div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">备注</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" name="remark" lay-verify="required" placeholder="请输入备注" autocomplete="off" class="layui-input">
+                                        </div>
+                                        <div class="layui-form-mid layui-word-aux"><span style="color:#ee0f29;">*请填写充值原因和备注</span></div>
+                                    </div>
+                                    <div class="layui-form-item"><a class="layui-btn layui-btn-danger layui-btn" lay-submit lay-filter="*"
+                                                                    style="margin-left: 109px;" id="chageForm">保存</a></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Panel Other -->
+</div>
+
+<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+<script th:src="@{/static/sys/js/bootstrap.min.js?v=3.3.5}"></script>
+<script th:src="@{/static/sys/js/content.min.js}"></script>
+<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+<script th:src="@{/static/sys/js/plugins/sweetalert/sweetalert.min.js}"></script>
+<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+<script th:line="javascript">
+    var path = '[[${session.path}]]';
+    layui.use(["form", "layer", "element"], function () {
+        var layer = layui.layer;
+        var form = layui.form;
+        $("#chageForm").click(function () {
+            var load = $.load("保存中...");
+            //请求后端修改
+            form.on('submit(*)', function(data){
+                // console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+                // console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+                // console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+                setTimeout(function () {
+                    layer.close(load);
+                }, 1500);
+                $.post(path + "/account/chargeMoney", data.field, function (data) {
+                    if (data.status == 200) {
+                        layer.msg("充值成功");
+                    } else {
+                        layer.msg(data.retmsg);
+                    }
+                })
+                return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+            });
+
+        });
+    });
+</script>
+</body>
+
+</html>

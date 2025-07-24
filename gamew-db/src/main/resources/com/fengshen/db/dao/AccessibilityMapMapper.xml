@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fengshen.db.dao.AccessibilityMapMapper">
+  <resultMap id="BaseResultMap" type="com.fengshen.db.domain.AccessibilityMap">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="map_name" jdbcType="VARCHAR" property="mapName" />
+    <result column="x" jdbcType="INTEGER" property="x" />
+    <result column="y" jdbcType="INTEGER" property="y" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="delete" jdbcType="INTEGER" property="delete" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, map_name, x, y, create_time, delete
+  </sql>
+  
+  
+  <select id="getRandomData" parameterType="com.fengshen.db.domain.AccessibilityMap" resultMap="BaseResultMap">
+  		SELECT
+	*
+	FROM
+	`accessibility_map`
+	WHERE
+	id >= ( SELECT floor( RAND( ) * ( SELECT MAX( id ) FROM `accessibility_map`
+	) ) )
+	AND map_name = #{mapName,jdbcType=VARCHAR}
+	ORDER BY
+	id
+	LIMIT #{x,jdbcType=INTEGER};
+  		
+  		
+  </select>
+  
+  <select id="randomData"  resultMap="BaseResultMap" parameterType="com.fengshen.db.domain.AccessibilityMap">
+		SELECT
+	*
+	FROM
+	`accessibility_map`
+	WHERE
+	id >= ( SELECT floor( RAND( ) * ( SELECT MAX( id ) FROM `accessibility_map`
+	) ) )
+	ORDER BY
+	id
+	LIMIT #{x,jdbcType=INTEGER};
+		
+  </select> 
+  
+  
+</mapper>

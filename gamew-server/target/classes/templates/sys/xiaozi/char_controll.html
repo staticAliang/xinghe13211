@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>角色控制</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="stylesheet" th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" />
+<style type="text/css">
+.layadmin-homepage-pad-ver{
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+.layadmin-homepage-pad-img{
+    box-shadow: 0 0 0 4px rgba(0,0,0,.1);
+    border-radius: 50%;
+}
+.layadmin-homepage-min-font{
+    margin: 5px 0 10px;
+    font-size: .9em;
+    color: #afb9c3;
+}
+.layadmin-homepage-font{
+	font-weight: 600;
+    color: rgb(43, 66, 91);
+    font-size: 1.2em;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+input[type="number"]{
+    -moz-appearance: textfield;
+}
+</style>
+</head>
+
+<body>
+	<div style="margin: 0 auto;">
+		<div class="layui-form" lay-filter="charaInfo">
+			<fieldset class="layui-elem-field">
+				<legend>位置其他</legend>
+				<div class="layui-field-box">
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">监听坐标</label>
+							<div class="layui-input-inline">
+								<input type="text" name="listerName" lay-verify="required|text"
+										autocomplete="off" class="layui-input" placeholder="请输入监听玩家名称">
+								 <div class="layui-form-mid layui-word-aux">X:<span id="listerX">0</span>----Y:<span id="listerY">0</span></div>
+							</div>
+							<div class="layui-input-inline">
+								<button type="button" class="layui-btn" id="listerChara">开始</button>
+							</div>
+							<div class="layui-input-inline">
+								<button type="button" class="layui-btn" id="splitCharas">打散</button>
+							</div>
+						</div>
+					</div>
+					<!-- <div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">跟随玩家</label>
+							<div class="layui-input-inline">
+								<input type="text" name="followName" lay-verify="required|text"
+										autocomplete="off" class="layui-input" placeholder="请输入跟随玩家名称">
+							</div>
+							<div class="layui-input-inline">
+								<button type="button" class="layui-btn" id="submit" lay-submit lay-filter="*" data-status = "0">开始</button>
+							</div>
+						</div>
+					</div> -->
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">x,y</label>
+							<div class="layui-input-inline">
+								<input type="number" name="x" lay-verify="required|number"
+										autocomplete="off" class="layui-input" placeholder="请输入x轴">
+							</div>
+							<div class="layui-input-inline">
+								<input type="number" name="y" lay-verify="required|number"
+									autocomplete="off" class="layui-input" placeholder="请输入y轴">
+							</div>
+							<div class="layui-input-inline">
+								<button type="button" class="layui-btn" id="moveCharaXy">校对</button>
+							</div>
+							<div class="layui-inline">
+							<label class="layui-form-label">快捷键</label>
+							<div class="layui-input-inline">
+								<button type="button" class="layui-btn" id="fastEnter">开启</button>
+							</div>
+						</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">上</label>
+							<div class="layui-input-inline">
+								<button type="button" class="layui-btn layui-btn-sm layui-btn-primary posBtn" data-id="'+data.uuid+'" data="up"> <i class="layui-icon layui-icon-up" ></i> </button>
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">下</label>
+							<div class="layui-input-inline">
+							<button type="button" class="layui-btn layui-btn-sm layui-btn-primary posBtn" data-id="'+data.uuid+'" data="down"> <i class="layui-icon layui-icon-down"></i> </button>
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">左</label>
+							<div class="layui-input-inline">
+							<button type="button" class="layui-btn layui-btn-sm layui-btn-primary posBtn" data-id="'+data.uuid+'" data="left"> <i class="layui-icon layui-icon-left"></i> </button>
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">右</label>
+							<div class="layui-input-inline">
+								<button type="button" class="layui-btn layui-btn-sm layui-btn-primary posBtn" data-id="'+data.uuid+'" data="right"> <i class="layui-icon layui-icon-right"></i> </button>
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">NPC</label>
+							<div class="layui-input-inline">
+								<input type="text" name="npcName" lay-verify="required|text"
+										autocomplete="off" class="layui-input" placeholder="请输入npc名字">
+							</div>
+							<div class="layui-input-inline">
+								<button type="button" class="layui-btn" id="moveNpc">确定</button>
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">地图</label>
+							<div class="layui-input-inline">
+								<input type="text" name="mapName" lay-verify="required|text"
+										autocomplete="off" class="layui-input" placeholder="请输入地图名称">
+							</div>
+							<div class="layui-input-inline">
+								<button type="button" class="layui-btn" id="moveMap">确定</button>
+							</div>
+						</div>
+					</div>
+					
+					<div class="layui-form-item layui-form-text">
+				    <label class="layui-form-label">脚本</label>
+				    <div class="layui-input-block">
+				      <textarea name="script" placeholder="点击npc按钮示例:请前往#P北斗星使|M=【进塔】进入通天塔#P处,进入更高层挑战,如果有多个 请用英文逗号(,)隔开" class="layui-textarea"></textarea>
+				    </div>
+				  </div>
+				<div class="layui-form-item">
+					    <div class="layui-input-inline" style="margin-left: 110px;">
+							<button type="button" class="layui-btn" id="executeScript">执行</button>
+							<button type="button" class="layui-btn layui-btn-danger about">
+						    <i class="layui-icon layui-icon-tips"></i>
+						  </button>
+						  
+						</div>
+					    <div class="layui-input-inline" style="margin-left: 110px;">
+							<button type="button" class="layui-btn" id="timeExecuteScript">循环执行</button>						  
+						</div>
+				  </div>
+				  <!-- 聊天 -->
+					
+					<div class="layui-form-item layui-form-text">
+				    <label class="layui-form-label">消息</label>
+				    <div class="layui-input-block">
+				      <textarea name="msgContent" placeholder="请输入文字,如需要定时发送请先编辑好内容,在点击定时发送消息按钮输入时间，如要停止直接刷新页面,如有多条请用#I分割" class="layui-textarea"></textarea>
+				    </div>
+				  </div>
+				<div class="layui-form-item">
+					    <div class="layui-input-inline" style="margin-left: 110px;">
+							<div style="width: 80px; display: inline-block; position: relative; top: 2px;" class="layui-form">
+								<select name="msgType">
+									<option value="1">当前</option>
+									<option value="2">世界</option>
+									<option value="4">队伍</option>
+									<option value="5">帮派</option>
+									<option value="9">好友</option>
+								</select>
+							</div>
+							<a class="layui-btn" id="comment_send">发送</a>
+
+						</div>
+					    <div class="layui-input-inline">
+							<a class="layui-btn" id="time_comment_send">定时消息</a>
+						</div>
+				  </div>
+					
+				</div>
+			</fieldset>
+
+			<fieldset class="layui-elem-field">
+				<legend>队伍操作</legend>
+				<div class="layui-field-box">
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">类型</label>
+							<div class="layui-input-inline">
+								<input type="text" name="isTeam" lay-verify="required|text"
+									autocomplete="off" class="layui-input" readonly="readonly" value="队员">
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">申请入队</label>
+							<div class="layui-input-inline">
+								<input type="text" name="request_join" lay-verify="required|text"
+									autocomplete="off" class="layui-input" placeholder="请输入队长名称">
+							</div>
+							<div class="layui-input-inline">
+								<button type="button" class="layui-btn" id="request_join" >加入</button>
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">组队|离队</label>
+							<div class="layui-input-inline">
+								<button type="button" class="layui-btn" id="team">创建队伍</button>
+							</div>
+						</div>
+					</div>
+
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">请离队伍</label>
+							<div class="layui-input-inline">
+								<input type="text" name="outTeamName" lay-verify="required|text"
+									autocomplete="off" class="layui-input" placeholder="请输入队员名称">
+							</div>
+							<div class="layui-input-inline">
+								<button type="button" class="layui-btn" id="outTeamName">确定</button>
+							</div>
+							<div class="layui-input-inline">
+								<button type="button" class="layui-btn" id="showAppliTeams">申请列表</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</fieldset>
+			<fieldset class="layui-elem-field">
+				<legend>剧情任务</legend>
+				<div class="layui-field-box">
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">寻宝</label>
+							<div class="layui-input-inline">
+								<button type="button" class="layui-btn autoTask" data-name="xunbao">开始</button>
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">除暴</label>
+							<div class="layui-input-inline">
+								<button type="button" class="layui-btn autoTask" data-name="chubao">开始</button>
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">除妖</label>
+							<div class="layui-input-inline">
+								<button type="button" class="layui-btn autoTask" data-name="chuyao">开始</button>
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">伏魔</label>
+							<div class="layui-input-inline">
+								<button type="button" class="layui-btn autoTask" data-name="fumo">开始</button>
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">飞仙</label>
+							<div class="layui-input-inline">
+								<button type="button" class="layui-btn autoTask" data-name="feixian">开始</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</fieldset>
+			<!-- <fieldset class="layui-elem-field">
+				<legend>宠物操作</legend>
+				<div class="layui-field-box">
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">参战宠物</label>
+							<div class="layui-input-inline">
+								<input type="text" name="xiangxingshangxian" lay-verify="required|number"
+									autocomplete="off" class="layui-input" placeholder="请输入宠物id">
+							</div>
+							<div class="layui-input-inline">
+								<button type="button" class="layui-btn" id="submit" lay-submit lay-filter="*" data-status = "0">确定</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</fieldset> -->
+			
+			
+			<!-- <div class="layui-form-item" style="height: 40px;">
+				<div class="layui-input-block" style="position:fixed;bottom: 2%;right:43%;">
+					<button type="button" class="layui-btn" id="submit" lay-submit lay-filter="*" data-status = "0">立即提交</button>
+					<button type="button" class="layui-btn layui-btn-primary" id="resetCharaAttrInfo">重置属性</button>
+				</div>
+			</div> -->
+		</div>
+		
+	</div>
+	<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/js/bootstrap.min.js?v=3.3.5}"></script>
+	<script th:src="@{/static/sys/js/content.min.js}"></script>
+	<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/plugins/sweetalert/sweetalert.min.js}"></script>
+	<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+	<script th:src="@{/static/sys/js/public.js}"></script>
+	<script th:line="javascript">
+	var path = '[[${session.path}]]';
+		var uuid = $.getQueryString("uuid");
+		var isAll = $.getQueryString("isAll");
+		layui.use(['layer','table','form','util'], function(){
+			var form = layui.form;
+			var table = layui.table;
+			init();
+			function init() {
+				if(isAll != undefined) {
+					return false;
+				}
+				$.post(path+"/wd/chara/getCharaValue",{"gid":uuid,"type":"xiaoziCharaInfo"},function(data){
+					if(data.status == 200) {
+						var chara = data.data.chara;
+						var team = data.data.teams;
+						if(team != undefined) {
+							//有队伍
+							$("#team").attr("data-team","1");
+							$("#team").html("离队解散");
+						}else {
+							$("#team").attr("data-team","0");
+							$("#team").html("创建队伍");
+						}
+						form.val("charaInfo",{
+							x:chara.x,
+							y:chara.y,
+						});
+						$(".autoTask").each(function(i,o){
+							var t = $(o);
+							if(t.attr("data-name")==chara.action) {
+								t.text("停止");
+								t.addClass("layui-btn-danger");
+							}
+						})
+					}
+				});
+			}
+			
+			form.on('submit(*)', function(data){
+				if($("#submit").attr("data-status") == 0) {
+					layer.msg("获取数据中。");
+				}else {
+					var obj = data.field;
+					obj.gid = uuid;
+					obj.type = "updateCharaInfo";
+					var load = $.load();
+					$.post(path+"/wd/chara/updateValue",obj,function(data){
+						layer.msg(data.retmsg);
+						layer.close(load);
+						init();
+					})
+				}
+				return false;
+			});
+			form.on("switch(feisheng)",function(data){
+				var sendObject = {};
+				var obj = data.field;
+				if(data.elem.checked) {
+					sendObject.isFeisheng = 1;
+				}else {
+					sendObject.isFeisheng = 0;
+				}
+				sendObject.gid = uuid;
+				sendObject.type = "updateCharaInfoToFeisheng";
+				var load = $.load();
+				$.post(path+"/wd/chara/updateValue",sendObject,function(data){
+					layer.msg(data.retmsg);
+					layer.close(load);
+				})
+			})
+			$(document).on("click",".posBtn",function(){
+				var value = $(this).attr("data");
+				$.post(path+"/wd/xiaozi/wdXiaoZiOp",reqObj({"type":"posi","value":value,"uuid":uuid}),function(d){
+					layer.msg(d.retmsg);
+				});
+			})
+			$(document).on("click","#moveCharaXy",function(){
+				var datas = form.val("charaInfo");
+				if(datas.x == "" || datas.x.length == 0) {
+					layer.msg("请输入x");
+					return false;
+				}else if(datas.y == "" || datas.y.length == 0) {
+					layer.msg("请输入x");
+					return false;
+				}
+				$.post(path+"/wd/xiaozi/wdXiaoZiOp",reqObj({"type":"move","x":datas.x,"y":datas.y,"uuid":uuid}),function(){
+					layer.msg("操作成功！");
+				});
+			})
+			
+			
+			$(document).keydown(function(event){
+				if($("#fastEnter").text()=="关闭") {
+					if (event.keyCode == 37) {
+						move("left");
+				    	return false;
+				    }
+				    if (event.keyCode == 38) {
+					 	move("up");
+				        return false;
+				    }
+				    if (event.keyCode == 39) {
+					 	move("right");
+				        return false;
+				    }
+				    if (event.keyCode == 40) {
+						move("down");        
+					 	return false;
+			     	}
+				}
+			});
+			
+			function move(value){
+				$.post(path+"/wd/xiaozi/wdXiaoZiOp",reqObj({"type":"posi","value":value,"uuid":uuid}),function(d){
+					layer.msg(d.retmsg);
+				});
+			}
+			$("#executeScript").click(function(){
+				var datas = form.val("charaInfo");
+				$.post(path+"/wd/xiaozi/wdXiaoZiOp",reqObj({"type":"script","value":datas.script,"uuid":uuid}),function(d){
+			  		if(d.status == 200) {
+						layer.msg("操作成功");
+					}else {
+						layer.msg(d.retmsg);
+					}
+			  	});
+			})
+			//说明
+			$(".about").click(function(){
+				var open = layer.open({
+					title:"说明",
+					type:2,
+					area:["80%","80%"],
+					maxmin:true,
+					shade:false,
+					moveOut:true,
+					content:path+"/sys/jump?page=/xiaozi/wdxiaozi_script_about.html"
+				})
+			})
+			//加入队伍
+			$("#request_join").click(function(){
+				if(isAll != undefined) {
+					layer.msg("此操作不支持全局");
+					return;
+				}
+				var datas = form.val("charaInfo");
+				if(datas.request_join.length == 0 || datas.request_join == "") {
+					layer.msg("请输入要加入队伍队长的名称");
+					return;
+				}
+				$.post(path+"/wd/xiaozi/wdXiaoZiOp",{"type":"reqeust_join","value":datas.request_join,"uuid":uuid},function(d){
+			  		if(d.status == 200) {
+						layer.msg("操作成功");
+					}else {
+						layer.msg(d.retmsg);
+					}
+			  	});
+			})
+			
+			$("#comment_send").click(function() {
+				var datas = form.val("charaInfo");
+				if(datas.msgContent==""|| datas.msgContent.length==0) {
+					layer.msg("请输入内容");
+				}else {
+					$.post(path+"/wd/xiaozi/wdXiaoZiOp",reqObj({"type":"comment_send","value":datas.msgContent,"msgType":datas.msgType,"uuid":uuid}),function(d){
+				  		if(d.status == 200) {
+							layer.msg("发送成功");
+						}else {
+							layer.msg(d.retmsg);
+						}
+				  	});
+				}
+			})
+			//创建队伍和离队
+			$("#team").click(function() {
+				var load = $.load();
+				var status = $(this).attr("data-team");
+				var type = "createTeam";
+				if(status == 1) {
+					//离队
+					type = "jiesanTeam";
+					$("#team").attr("data-team", 0);
+					$("#team").html("创建队伍");
+				}else {
+					$("#team").attr("data-team", 1);
+					$("#team").html("离队解散");
+				}
+				$.post(path+"/wd/xiaozi/wdXiaoZiOp",reqObj({"type":type,"value":status,"uuid":uuid}),function(d){
+			  		if(d.status == 200) {
+						layer.msg(d.retmsg);
+					}else {
+						layer.msg(d.retmsg);
+					}
+					layer.close(load);
+			  	});
+			})
+			$("#fastEnter").click(function(){
+				var status = $(this);
+				if(status.text() == "开启") {
+					status.text("关闭");
+					layer.msg("键盘方向键已打开，上下左右可控制问道小子。");
+				}else {
+					status.text("开启");
+					layer.msg("键盘方向键已关闭");
+				}
+			})
+			$("#showAppliTeams").click(function(){
+				if(isAll != undefined) {
+					layer.msg("此操作不支持全局");
+					return;
+				}
+				showApplyHtml();
+			})
+			function showApplyHtml() {
+				//查看申请列表
+				var obj = {"type":"showAppliTeams","uuid":uuid};
+				var html = '<div style="width:95%;margin:0 auto"><table class="layui-table"> <thead><th>名称</th> <th>帮派</th> <th>操作</th> </thead> <tbody>';
+				$.post(path+"/wd/xiaozi/wdXiaoZiOp",obj,function(d){
+			  		if(d.status == 500) {
+						layer.msg(d.retmsg);
+						return;
+					}
+					$(d.data).each(function(i,o){
+						html+='<tr id='+o.name+'><td>'+o.name+'</td><td>'+o.partyName+'</td><td><a class="layui-btn layui-btn-danger layui-btn-xs acceptJoin" data-name="'+o.name+'">同意</a><a class="layui-btn layui-btn-danger layui-btn-xs rejectJoin" data-name="'+o.name+'">拒绝</a></td></tr>';
+					})
+					html+='<tr><td colspan="3"><a class="layui-btn layui-btn-danger layui-btn-xs refreshJoin">刷新</a></td></tr></tbody> </table>';
+					layer.open({
+						title:"队伍申请列表",
+						type:1,
+						content:html,
+						area:["500px","400px"],
+						shadeClose:true
+					})
+			  	});
+			}
+			
+			function reqop(obj) {
+				var load = $.load();
+				obj.uuid = uuid;
+				var result;
+				$.post(path+"/wd/xiaozi/wdXiaoZiOp",obj,function(d){
+			  		if(d.status == 200) {
+						layer.msg(d.retmsg);
+					}else {
+						layer.msg(d.retmsg);
+					}
+			  		result = d.data;
+					layer.close(load);
+			  	});
+				return result;
+			}
+			$(document).on("click",".acceptJoin",function(){
+				if(isAll != undefined) {
+					layer.msg("此操作不支持全局");
+					return;
+				}
+				var name = $(this).attr("data-name");
+				$.post(path+"/wd/xiaozi/wdXiaoZiOp",{"type":"acceptJoin","value":name,"uuid":uuid},function(d){
+			  		if(d.status == 200) {
+						layer.msg(d.retmsg);
+					}else {
+						//异常删除这个请求
+						if("对方有队伍" == d.retmsg) {
+							//已有队伍
+							$("#"+name).remove();
+						}
+						layer.msg(d.retmsg);
+					}
+			  	});
+			})
+			$(document).on("click",".rejectJoin",function(){
+				if(isAll != undefined) {
+					layer.msg("此操作不支持全局");
+					return;
+				}
+				var name = $(this).attr("data-name");
+				$.post(path+"/wd/xiaozi/wdXiaoZiOp",{"type":"rejectJoin","value":name,"uuid":uuid},function(d){
+			  		if(d.status == 200) {
+						layer.msg(d.retmsg);
+						$("#"+name).remove();
+					}else {
+						layer.msg(d.retmsg);
+					}
+			  	});
+			})
+			$(document).on("click",".refreshJoin",function(){
+				layer.closeAll();
+				showApplyHtml();
+			})
+			$(".autoTask").click(function(){
+				var name = $(this).attr("data-name");
+				var t = $(this);
+				if($(this).text() != "开始") {
+					name = "";
+				}
+				$.post(path+"/wd/xiaozi/wdXiaoZiOp",reqObj({"type":"autoTask","value":name,"uuid":uuid}),function(d){
+					if(d.status == 200) {
+						if(t.text() == "开始") {
+							t.text("停止");
+							t.addClass("layui-btn-danger");
+						}else {
+							t.text("开始");
+							name = "";
+							t.removeClass("layui-btn-danger");
+						}
+					}
+					layer.msg(d.retmsg);
+			  	});
+			})
+			$("#moveMap").click(function(){
+				var datas = form.val("charaInfo");
+				if(datas.mapName == "" || datas.mapName.length ==0) {
+					layer.msg("请输入地图名称");
+					return;
+				}
+				$.post(path+"/wd/xiaozi/wdXiaoZiOp",reqObj({"type":"script","value":"#Z"+datas.mapName+"#Z","uuid":uuid}),function(d){
+			  		if(d.status == 200) {
+						layer.msg("操作成功");
+					}else {
+						layer.msg(d.retmsg);
+					}
+			  	});
+			})
+			$("#moveNpc").click(function(){
+				var datas = form.val("charaInfo");
+				if(datas.npcName == "" || datas.npcName.length ==0) {
+					layer.msg("请输入npc名称");
+					return;
+				}
+				$.post(path+"/wd/xiaozi/wdXiaoZiOp",reqObj({"type":"moveNpc","value":datas.npcName,"uuid":uuid}),function(d){
+			  		if(d.status == 200) {
+						layer.msg("操作成功");
+					}else {
+						layer.msg(d.retmsg);
+					}
+			  	});
+			})
+			
+			function reqObj(obj) {
+				if(isAll != undefined) {
+					obj.isAll = "1";
+				}
+				return obj;
+			}
+			//监听某个玩家的坐标
+			var listCharaXyTimer;
+			$("#listerChara").click(function(){
+				var datas = form.val("charaInfo");
+				if(datas.listerName == "" || datas.listerName.length ==0) {
+					layer.msg("请输入玩家名称");
+					return;
+				}
+				var t = $(this);
+				if(t.text() == "开始") {
+					t.text("停止");
+					t.addClass("layui-btn-danger");
+					//开始监听
+					listerCharaXy(datas,t);
+					listCharaXyTimer = window.setInterval(function() {
+						listerCharaXy(datas,t);
+					},1000);
+				}else {
+					if(listCharaXyTimer != undefined) {
+						window.clearInterval(listCharaXyTimer) 
+					}
+					t.text("开始");
+					t.removeClass("layui-btn-danger");
+				}
+			})
+			function listerCharaXy(datas,t) {
+				$.post(path+"/wd/xiaozi/wdXiaoZiOp",{"type":"listerChara","value":datas.listerName,"uuid":"useName", value:datas.listerName},function(d){
+			  		if(d.status == 200) {
+						$("#listerX").text(d.data.x);
+				  		$("#listerY").text(d.data.y);
+				  		$("input[name='mapName']").val(d.data.mapName);
+			  		}else {
+			  			if(listCharaXyTimer != undefined) {
+							window.clearInterval(listCharaXyTimer) 
+							t.text("开始");
+							t.removeClass("layui-btn-danger");
+							layer.msg(d.retmsg);
+						}
+			  		}
+				});
+			}
+			//请求队员
+			$("#outTeamName").click(function(){
+				if(isAll != undefined) {
+					layer.msg("此操作不支持全局");
+					return;
+				}
+				var datas = form.val("charaInfo");
+				if(datas.outTeamName == "" || datas.outTeamName.length ==0) {
+					layer.msg("请输入队员名称");
+					return;
+				}
+				$.post(path+"/wd/xiaozi/wdXiaoZiOp",reqObj({"type":"moveNpc","value":datas.npcName,"uuid":uuid}),function(d){
+			  		if(d.status == 200) {
+						layer.msg("操作成功");
+					}else {
+						layer.msg(d.retmsg);
+					}
+			  	});
+			})
+			//分散问道小子
+			$("#splitCharas").click(function(){
+				$.post(path+"/wd/xiaozi/wdXiaoZiOp",reqObj({"type":"splitCharas","uuid":uuid}),function(d){
+			  		if(d.status == 200) {
+						layer.msg("操作成功");
+					}else {
+						layer.msg(d.retmsg);
+					}
+			  	});
+			});
+			//定时发送消息
+			var commontTime;
+			var time_comment_send_index = 0;
+			$(document).on("click","#time_comment_send",function(){
+				layer.prompt({
+					  formType: 0,
+					  title: '请输入定时时间(秒)',
+					}, function(value, index, elem){
+						$("#time_comment_send").attr("id","stopTime_comment_send");
+						$("#stopTime_comment_send").text("停止定时");
+						$("#stopTime_comment_send").addClass("layui-btn-danger");
+						commontTime = window.setInterval(function() {
+							var datas = form.val("charaInfo");
+							if(datas.msgContent==""|| datas.msgContent.length==0) {
+								layer.msg("请输入内容");
+							}else {
+								var cp = datas.msgContent.split("#I");
+								if(time_comment_send_index == cp.length) {
+									time_comment_send_index = 0; 
+								}
+								$.post(path+"/wd/xiaozi/wdXiaoZiOp",reqObj({"type":"comment_send","value":cp[time_comment_send_index],"msgType":datas.msgType,"uuid":uuid}),function(d){
+									time_comment_send_index++;
+								});
+							}
+						},parseInt(value)*1000);
+					  	layer.close(index);
+				});		
+			})
+			
+			//停止循环执行脚本
+			$(document).on("click","#stopTime_comment_send",function(){
+				$("#stopTime_comment_send").attr("id","time_comment_send");
+				$("#time_comment_send").text("定时消息");
+				$("#time_comment_send").removeClass("layui-btn-danger");
+				if(commontTime != undefined) {
+					window.clearInterval(commontTime);
+				}
+			})
+			
+			//循环执行指令
+			var excuteScriptIndex = 0;
+			var excuteScriptTime;
+			$(document).on("click","#timeExecuteScript",function(){
+				layer.prompt({
+					  formType: 0,
+					  title: '请输入定时时间(秒)',
+					}, function(value, index, elem){
+						$("#timeExecuteScript").attr("id","stopTimeExecuteScript");
+						$("#stopTimeExecuteScript").text("停止脚本");
+						$("#stopTimeExecuteScript").addClass("layui-btn-danger");
+						startExeceteTimeF();
+						layer.msg("开始执行自动脚本");
+						excuteScriptTime = window.setInterval(function() {
+							try{
+								startExeceteTimeF(parseInt(value)*1000);
+							}catch(err) {
+								layer.msg("脚本格式错误！");
+							}
+						},parseInt(value)*1000);
+					  	layer.close(index);
+				});
+			})
+			function startExeceteTimeF(timeValue) {
+				var datas = form.val("charaInfo");
+				if(datas.script==""|| datas.script.length==0) {
+					layer.msg("请输入脚本");
+				}else {
+					//开始分割脚本
+					var scriptStrs = datas.script.split("~");
+					var autoScriptText = scriptStrs[0].split(",");
+					 if(excuteScriptIndex == autoScriptText.length) {
+						excuteScriptIndex = 0;
+					}
+					var autoScriptInfo;
+					if(scriptStrs.length>1) {
+						//如果有则取出加成信息
+						var expScript = scriptStrs[1].split(",");
+						//表示指定的经验
+						if(expScript.length > 1) {
+							if(expScript.length!=autoScriptText.length) {
+								layer.msg("脚本格式错误！");
+								return;
+							}
+							autoScriptInfo = expScript[excuteScriptIndex];
+						}else {
+							autoScriptInfo = expScript[0];
+						}
+					}
+					execeteScriptTimeF(autoScriptText);
+					setTimeout(function(){
+						if(autoScriptInfo != undefined) {
+							var autoScriptInfoArr = autoScriptInfo.split("=");
+							//类型
+							var autoScriptInfoType = autoScriptInfoArr[0]
+							//具体数值
+							var autoScriptInfoNum = autoScriptInfoArr[1];
+							if(autoScriptInfoType == "exp") {
+								var obj = {"uuid":uuid,"type":"exp","value":autoScriptInfoNum};
+								if(isAll != undefined) {
+									obj.sendAllChara = 1;
+								}
+								$.post(path+"/wd/xiaozi/sendCharInfo",obj,function(){
+								})
+							}
+							console.log("执行加成")
+						}
+					},timeValue-(2*1000))
+				}
+			}
+			
+			function execeteScriptTimeF(scriptStrs) {
+				$.post(path+"/wd/xiaozi/wdXiaoZiOp",reqObj({"type":"script","value":scriptStrs[excuteScriptIndex],"uuid":uuid,"executeType":"autoTimeScript"}),function(d){
+					excuteScriptIndex++;
+				});
+			}
+			
+			//停止循环执行脚本
+			$(document).on("click","#stopTimeExecuteScript",function(){
+				$("#stopTimeExecuteScript").attr("id","timeExecuteScript");
+				$("#timeExecuteScript").text("循环执行");
+				$("#timeExecuteScript").removeClass("layui-btn-danger");
+				if(excuteScriptTime != undefined) {
+					window.clearInterval(excuteScriptTime);
+				}
+			})
+		})
+	</script>
+</body>
+
+</html>

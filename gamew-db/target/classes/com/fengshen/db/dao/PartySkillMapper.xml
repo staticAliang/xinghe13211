@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fengshen.db.dao.PartySkillMapper">
+  <resultMap id="BaseResultMap" type="com.fengshen.db.domain.PartySkill">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="party_id" jdbcType="VARCHAR" property="partyId" />
+    <result column="no" jdbcType="INTEGER" property="no" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="level" jdbcType="INTEGER" property="level" />
+    <result column="current_score" jdbcType="INTEGER" property="currentScore" />
+    <result column="levelup_score" jdbcType="INTEGER" property="levelupScore" />
+  </resultMap>
+</mapper>

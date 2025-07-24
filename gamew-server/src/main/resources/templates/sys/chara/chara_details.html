@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>角色详情</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="stylesheet" th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" />
+<style type="text/css">
+.layadmin-homepage-pad-ver{
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+.layadmin-homepage-pad-img{
+    box-shadow: 0 0 0 4px rgba(0,0,0,.1);
+    border-radius: 50%;
+}
+.layadmin-homepage-min-font{
+    margin: 5px 0 10px;
+    font-size: .9em;
+    color: #afb9c3;
+}
+.layadmin-homepage-font{
+	font-weight: 600;
+    color: rgb(43, 66, 91);
+    font-size: 1.2em;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+input[type="number"]{
+    -moz-appearance: textfield;
+}
+</style>
+</head>
+
+<body>
+	<div style="margin: 0 auto;">
+		<div class="layui-form" lay-filter="charaInfo">
+			<div class="layui-form-item">
+				<div class="layadmin-homepage-pad-ver" style="text-align: center;">
+					<img class="layadmin-homepage-pad-img headImg"
+						th:src="@{/static/sys/img/wd/00000_01_s.png}" width="96" height="96">
+					<h4 class="layadmin-homepage-font charaName">默认名字</h4>
+					<p class="layadmin-homepage-min-font uuid">FFFFFFF</p>
+				</div>
+			</div>
+			<fieldset class="layui-elem-field">
+				<legend>基本</legend>
+				<div class="layui-field-box">
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">真身等级</label>
+							<div class="layui-input-inline">
+								<input type="number" name="realLevel" lay-verify="required|number"
+									autocomplete="off" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">道行</label>
+							<div class="layui-input-inline">
+								<input type="number" name="tao" lay-verify="required|number"
+									autocomplete="off" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">称谓</label>
+							<div class="layui-input-block">
+								<select name="chengwei" lay-filter="chengwei">
+									<option value="无">无</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">元婴</label>
+							<div class="layui-input-inline">
+								<input type="number" name="upgrade_level" lay-verify="required|number"
+									autocomplete="off" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">锁定经验</label>
+							<div class="layui-input-block">
+								<input type="checkbox" name="lock_exp" lay-skin="switch"
+									lay-text="锁定|解锁">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">是否飞升</label>
+							<div class="layui-input-block">
+								<input type="checkbox" name="isFeisheng" lay-skin="switch" lay-filter="feisheng"
+									lay-text="是|否">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">驱魔香</label>
+							<div class="layui-input-block">
+								<input type="checkbox" name="qumoxiang" lay-skin="switch" lay-filter="qumoxiang"
+									lay-text="开|关">
+							</div>
+						</div>
+					</div>
+				</div>
+			</fieldset>
+
+			<fieldset class="layui-elem-field">
+				<legend>属性</legend>
+				<div class="layui-field-box">
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">气血</label>
+							<div class="layui-input-inline">
+								<input type="number" name="max_life" lay-verify="required|number"
+									autocomplete="off" class="layui-input" readonly="readonly">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">法力</label>
+							<div class="layui-input-inline">
+								<input type="number" name="dex" lay-verify="required|number"
+									autocomplete="off" class="layui-input" readonly="readonly">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">物伤</label>
+							<div class="layui-input-inline">
+								<input type="number" name="accurate" lay-verify="required|number"
+									autocomplete="off" class="layui-input" readonly="readonly">
+							</div>
+						</div>
+					</div>
+
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">法伤</label>
+							<div class="layui-input-inline">
+								<input type="number" name="mana" lay-verify="required|number"
+									autocomplete="off" class="layui-input" readonly="readonly">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">防御</label>
+							<div class="layui-input-inline">
+								<input type="number" name="wiz" id="date" autocomplete="off"
+									class="layui-input" readonly="readonly">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">速度</label>
+							<div class="layui-input-inline">
+								<input type="number" name="parry" autocomplete="off"
+									class="layui-input" readonly="readonly">
+							</div>
+						</div>
+					</div>
+				</div>
+			</fieldset>
+			
+			<!-- 属性加点 -->
+			<fieldset class="layui-elem-field">
+				<legend>属性点</legend>
+				<div class="layui-field-box">
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">剩余属性</label>
+							<div class="layui-input-inline">
+								<input type="number" name="attribPoint" lay-verify="required|number"
+									autocomplete="off" class="layui-input" readonly="readonly">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">体质</label>
+							<div class="layui-input-inline">
+								<input type="number" name="life" lay-verify="required|number"
+									autocomplete="off" class="layui-input" readonly="readonly">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">灵力</label>
+							<div class="layui-input-inline">
+								<input type="number" name="mag_power" lay-verify="required|number"
+									autocomplete="off" class="layui-input" readonly="readonly">
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">力量</label>
+							<div class="layui-input-inline">
+								<input type="number" name="phy_power" lay-verify="required|number"
+									autocomplete="off" class="layui-input" readonly="readonly">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">敏捷</label>
+							<div class="layui-input-inline">
+								<input type="number" name="speed" id="date" autocomplete="off"
+									class="layui-input" readonly="readonly">
+							</div>
+						</div>
+					</div>
+				</div>
+			</fieldset>
+			<!-- 属性加点 -->
+			
+			<!-- 相性加点 -->
+			<fieldset class="layui-elem-field">
+				<legend>相性点</legend>
+				<div class="layui-field-box">
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">相性上限</label>
+							<div class="layui-input-inline">
+								<input type="number" name="xiangxingshangxian" lay-verify="required|number"
+									autocomplete="off" class="layui-input" readonly="readonly">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">剩余相性点</label>
+							<div class="layui-input-inline">
+								<input type="number" name="polarPoint" lay-verify="required|number"
+									autocomplete="off" class="layui-input" readonly="readonly">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">金相</label>
+							<div class="layui-input-inline">
+								<input type="number" name="metal" lay-verify="required|number"
+									autocomplete="off" class="layui-input" readonly="readonly">
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">木相</label>
+							<div class="layui-input-inline">
+								<input type="number" name="wood" lay-verify="required|number"
+									autocomplete="off" class="layui-input" readonly="readonly">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">水相</label>
+							<div class="layui-input-inline">
+								<input type="number" name="water" autocomplete="off"
+									class="layui-input" readonly="readonly">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">火相</label>
+							<div class="layui-input-inline">
+								<input type="number" name="fire" lay-verify="required|number"
+									autocomplete="off" class="layui-input" readonly="readonly">
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">土相</label>
+							<div class="layui-input-inline">
+								<input type="number" name="earth" lay-verify="required|number"
+									autocomplete="off" class="layui-input" readonly="readonly">
+							</div>
+						</div>
+					</div>
+				</div>
+			</fieldset>
+			<!-- 相性加点 -->
+			<!-- 魂魄 -->
+			<fieldset class="layui-elem-field">
+				<legend>魂魄</legend>
+				<div class="layui-field-box">
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">物伤</label>
+							<div class="layui-input-inline">
+								<input type="number" name="shenHunPhyPower" autocomplete="off"
+									class="layui-input">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">法伤</label>
+							<div class="layui-input-inline">
+								<input type="number" name="shenHunMagPower" autocomplete="off"
+									class="layui-input">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">气血</label>
+							<div class="layui-input-inline">
+								<input type="number" name="shenHunmaxLife" autocomplete="off"
+									class="layui-input">
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">防御</label>
+							<div class="layui-input-inline">
+								<input type="number" name="shenHunDef" autocomplete="off"
+									class="layui-input">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">速度</label>
+							<div class="layui-input-inline">
+								<input type="number" name="shenHunSpeed" autocomplete="off"
+									class="layui-input">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">阶数</label>
+							<div class="layui-input-inline">
+								<input type="number" name="shenHunDataSate" autocomplete="off"
+									class="layui-input">
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">层数</label>
+							<div class="layui-input-inline">
+								<input type="number" name="shenHunDataLaye" autocomplete="off"
+									class="layui-input">
+							</div>
+						</div>
+					</div>
+				</div>
+			</fieldset>
+			<!-- 魂魄 -->
+			
+			<!-- 财富 -->
+			<fieldset class="layui-elem-field">
+				<legend>财富</legend>
+				<div class="layui-field-box">
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">金钱</label>
+							<div class="layui-input-inline">
+								<input type="number" name="cash" id="date" autocomplete="off"
+									class="layui-input">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">金元宝</label>
+							<div class="layui-input-inline">
+								<input type="number" name="goldCoin" autocomplete="off"
+									class="layui-input">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">银元宝</label>
+							<div class="layui-input-inline">
+								<input type="number" name="silverCoin" autocomplete="off"
+									class="layui-input">
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">积分</label>
+							<div class="layui-input-inline">
+								<input type="number" name="chargeScore" autocomplete="off"
+									class="layui-input">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">抽奖</label>
+							<div class="layui-input-inline">
+								<input type="number" name="shadow_self" autocomplete="off"
+									class="layui-input">
+							</div>
+						</div>
+					</div>
+				</div>
+			</fieldset>
+			<!-- 财富 -->
+			
+			<div class="layui-form-item" style="height: 40px;">
+				<div class="layui-input-block" style="position:fixed;bottom: 2%;right:43%;">
+					<button type="button" class="layui-btn" id="submit" lay-submit lay-filter="*" data-status = "0">立即提交</button>
+					<button type="button" class="layui-btn layui-btn-primary" id="resetCharaAttrInfo">重置属性</button>
+					<button type="button" class="layui-btn layui-btn-primary" id="deleteChara">注销角色</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/js/bootstrap.min.js?v=3.3.5}"></script>
+	<script th:src="@{/static/sys/js/content.min.js}"></script>
+	<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/plugins/sweetalert/sweetalert.min.js}"></script>
+	<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+	<script th:src="@{/static/sys/js/public.js}"></script>
+	<script th:line="javascript">
+		var uuid = $.getQueryString("uuid");
+		var path = '[[${session.path}]]';
+		layui.use(['layer','table','form','util'], function(){
+			var form = layui.form;
+			init();
+			function init() {
+				$.post(path+"/wd/chara/getCharaValue",{"gid":uuid,"type":"charaInfo"},function(data){
+					if(data.status == 200) {
+						if(data.data != undefined) {
+							var headImg = path+"/static/sys/img/wd/";
+							var chara = data.data.chara;
+							var afterChara = data.data.afterChara;
+							//判断职业
+							if(chara.polar == 1) {
+								if(chara.sex == 1) {
+									//男
+									headImg+="06001.png";
+								}else {
+									headImg+="07001.png";
+								}
+							}else if(chara.polar == 2) {
+								if(chara.sex == 1) {
+									//男
+									headImg+="07002.png";
+								}else {
+									headImg+="06002.png";
+								}
+							}else if(chara.polar == 3) {
+								if(chara.sex == 1) {
+									//男
+									headImg+="07003.png";
+								}else {
+									headImg+="06003.png";
+								}
+							}else if(chara.polar == 4) {
+								if(chara.sex == 1) {
+									//男
+									headImg+="06004.png";
+								}else {
+									headImg+="07004.png";
+								}
+							}else if(chara.polar == 5) {
+								if(chara.sex == 1) {
+									//男
+									headImg+="06005.png";
+								}else {
+									headImg+="07005.png";
+								}
+							}
+							$(".charaName").text(chara.name);
+							$(".uuid").text(chara.uuid);
+							$(".headImg").attr("src",headImg);
+							for(var o in chara.chenghao){  
+								$("select[name='chengwei']").append("<option value='"+chara.chenghao[o]+"'>"+chara.chenghao[o]+"</option>");
+					      	}
+							form.val("charaInfo",{
+								realLevel:chara.realLevel,
+								tao:chara.tao,
+								chengwei:chara.chenhao,
+								upgrade_level:chara.upgrade_level,
+								lock_exp:chara.lock_exp,
+								isFeisheng:chara.isFeisheng,
+								qumoxiang:chara.qumoxiang,
+								max_life:afterChara.max_life,
+								dex:afterChara.dex,
+								accurate:afterChara.accurate,
+								mana:afterChara.mana,
+								wiz:afterChara.wiz,
+								parry:afterChara.parry,
+								cash:chara.cash,
+								goldCoin:chara.goldCoin,
+								silverCoin:chara.silverCoin,
+								chargeScore:chara.chargeScore,
+								shadow_self:chara.shadow_self,
+								attribPoint:chara.attribPoint,
+								life:chara.life,
+								mag_power:chara.mag_power,
+								phy_power:chara.phy_power,
+								speed:chara.speed,
+								xiangxingshangxian:30,
+								polarPoint:chara.polarPoint,
+								metal:chara.metal,
+								wood:chara.wood,
+								water:chara.water,
+								fire:chara.fire,
+								earth:chara.earth,
+								shenHunPhyPower:chara.shenHunPhyPower,
+								shenHunMagPower:chara.shenHunMagPower,
+								shenHunmaxLife:chara.shenHunmaxLife,
+								shenHunDef:chara.shenHunDef,
+								shenHunSpeed:chara.shenHunSpeed,
+								shenHunDataSate:chara.shenHunDataSate,
+								shenHunDataLaye:chara.shenHunDataLaye
+							});
+							$("#submit").attr("data-status","1")
+						}else {
+							layer.msg("玩家不在线！");
+						}
+					}
+				});
+			}
+			
+			form.on('submit(*)', function(data){
+				if($("#submit").attr("data-status") == 0) {
+					layer.msg("获取数据中。");
+				}else {
+					var obj = data.field;
+					obj.gid = uuid;
+					obj.type = "updateCharaInfo";
+					var load = $.load();
+					$.post(path+"/wd/chara/updateValue",obj,function(data){
+						layer.msg(data.retmsg);
+						layer.close(load);
+						init();
+					})
+				}
+				return false;
+			});
+			form.on("switch(feisheng)",function(data){
+				var sendObject = {};
+				var obj = data.field;
+				if(data.elem.checked) {
+					sendObject.isFeisheng = 1;
+				}else {
+					sendObject.isFeisheng = 0;
+				}
+				sendObject.gid = uuid;
+				sendObject.type = "updateCharaInfoToFeisheng";
+				var load = $.load();
+				$.post(path+"/wd/chara/updateValue",sendObject,function(data){
+					layer.msg(data.retmsg);
+					layer.close(load);
+				})
+			})
+			form.on("switch(qumoxiang)",function(data){
+				var sendObject = {};
+				var obj = data.field;
+				if(data.elem.checked) {
+					sendObject.qumoxiang = 1;
+				}else {
+					sendObject.qumoxiang = 0;
+				}
+				sendObject.gid = uuid;
+				sendObject.type = "updateCharaInfoToQuMoXiang";
+				var load = $.load();
+				$.post(path+"/wd/chara/updateValue",sendObject,function(data){
+					layer.msg(data.retmsg);
+					layer.close(load);
+				})
+			})
+			
+			$("#resetCharaAttrInfo").click(function(){
+				var obj = {};
+				obj.gid = uuid;
+				obj.type = "resetCharaAttrInfo";
+				var load = $.load("正在重置...");
+				$.post(path+"/wd/chara/updateValue",obj,function(data){
+					layer.msg(data.retmsg);
+					layer.close(load);
+					//重新加载
+					init();
+				})
+			})
+			$("#deleteChara").click(function(){
+				layer.confirm("确认删除吗？删除后无法恢复",function(){
+					var obj = {};
+					obj.gid = uuid;
+					obj.type = "deleteChara";
+					var load = $.load("正在注销...");
+					$.post(path+"/wd/chara/updateValue",obj,function(data){
+						window.parent.successDelChara();
+					})
+				})
+			})
+		})
+	</script>
+</body>
+
+</html>

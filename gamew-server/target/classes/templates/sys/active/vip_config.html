@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+    <title>VIP福利配置</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="favicon.ico"> 
+    <link rel="stylesheet" th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" />
+    <style type="text/css">
+    	input::-webkit-outer-spin-button,
+	    input::-webkit-inner-spin-button {
+	        -webkit-appearance: none;
+	    }
+	    input[type="number"]{
+	        -moz-appearance: textfield;
+	    }
+    </style>
+</head>
+
+<body>
+	<div class="layui-form" style="width: 90%;margin: 0 auto;">
+		<table class="layui-table">
+		  <thead>
+		    <tr>
+		      <th>最小金额</th>
+		      <th>最大金额</th>
+		      <th>任务奖励</th>
+		      <th>数值奖励</th>
+		      <th>操作</th>
+		    </tr> 
+		  </thead>
+		  <tbody id="body">
+		  	
+		  </tbody>
+		</table>
+		<div class="layui-form-item">
+			<a class="layui-btn layui-btn-danger layui-btn" id="add">新增</a>
+		</div>
+		</div>
+		<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+		<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+		<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+		<script th:src="@{/static/sys/js/public.js}"></script>
+		<script th:line="javascript">
+		var path = '[[${session.path}]]';
+		var layer;
+		var table;
+		var params;
+		var util;
+		layui.use(['layer','table','form','util', "laydate"], function(){
+			util = layui.util;
+		  	layer = layui.layer;
+		  	table = layui.table;
+		  	form = layui.form;
+		  	var laydate = layui.laydate;
+		  	//加载信息
+		  	$.post(path+"/ws/configInfo/getOneConfigInfoData",{"keyName":"VIP_FULI_CONFIG"},function(data){
+		  		if(data.status == 200) {
+		  			var config = data.data;
+		  			var configJson = JSON.parse(config.data);
+		  			configJson.sort(sortMoney);
+		  			var html = "";
+		  			$(configJson).each(function(i,o){
+		  				html+="<tr>";
+		  				html+="<td>"+o.minMoney+"</td>";
+		  				html+="<td>"+o.maxMoney+"</td>";
+		  				html+="<td>"+JSON.stringify(o.reward.task)+"</td>";
+		  				html+="<td>"+JSON.stringify(o.reward.value)+"</td>";
+		  				html+="<td><button type='button' class='layui-btn layui-btn-xs edit' data-uid='"+o.uuid+"'>编辑</button><button type='button' class='layui-btn layui-btn-xs del' data-uid='"+o.uuid+"'>删除</button></td>";
+		  				html+="</tr>";
+		  			})
+		  			$("#body").html(html);
+		  		}
+		  	})
+		  	$(document).keydown(function(e) {
+			    var key = undefined;
+			    var possible = [ e.key, e.keyIdentifier, e.keyCode, e.which ];
+			    while (key === undefined && possible.length > 0) {
+			        key = possible.pop();
+			    }
+			    if (key && (key == '115' || key == '83' ) && (e.ctrlKey || e.metaKey) && !(e.altKey)){
+			        e.preventDefault();
+			        save();
+			        return false;
+			    }
+			    return true;
+			}); 
+			$(document).on("click",".edit",function(){
+				var uid = $(this).attr("data-uid");
+				layer.open({
+					title:"修改配置(最小金额和最大金额不能重复否则领取会出现异常)",
+					type:2,
+					content:path+"/sys/jump?page=/active/vipConfigEdit.html&rtype=edit&uid="+uid,
+					maxmin:true,
+					area:["95%","95%"]
+				})
+		  	})
+			$(document).on("click","#add",function(){
+				var uid = $(this).attr("data-uid");
+				layer.open({
+					title:"新增(最小金额和最大金额不能重复否则领取会出现异常)",
+					type:2,
+					content:path+"/sys/jump?page=/active/vipConfigEdit.html&rtype=add&uid="+uid,
+					maxmin:true,
+					area:["95%","95%"]
+				})
+		  	})
+			$(document).on("click",".del",function(){
+				var uid = $(this).attr("data-uid");
+				$.post(path+"/ws/configInfo/delVipConfig",{"uid":uid},function(data){
+		  			layer.msg(data.retmsg);
+		  			setTimeout(function(){
+		  				window.location.reload();
+		  			},500)
+			  	})
+		  	})
+		  	function sortMoney(a,b){
+			  return a.minMoney-b.minMoney
+			}
+		});
+	</script>
+</body>
+
+</html>

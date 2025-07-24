@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fengshen.db.dao.FightObjectInfoMapper">
+    <resultMap id="BaseResultMap" type="com.fengshen.db.domain.FightObjectInfo">
+        <constructor>
+            <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="type" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="name" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="show_name" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="life" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="mana" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="phy_attack" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="mag_attack" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="polar" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="speed" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="def" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="icon" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="daohang" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="pet_martial" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="skill" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="pet_tianshu" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="add_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+            <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+            <arg column="deleted" javaType="java.lang.Boolean" jdbcType="BIT"/>
+        </constructor>
+    </resultMap>
+</mapper>

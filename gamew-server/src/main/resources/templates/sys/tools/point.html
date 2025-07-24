@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>坐标拾取</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="stylesheet"
+	th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" />
+<style type="text/css">
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield;
+}
+</style>
+</head>
+
+<body>
+	<div style="width:98%; margin: 45px auto;">
+		<div class="layui-form" lay-filter="formData">
+			<a class="layui-btn" id="start" style="width:30%; position: fixed; left:1%; top: 3px;" data-status="start">开始</a>
+			<a class="layui-btn layui-btn-warm" id="clear" style="width:33%; position: fixed; left:32%; top: 3px;">清除</a>
+			<a class="layui-btn layui-btn-danger" id="convert" style="width:30%; position: fixed; left:68%; top: 3px;">转换</a>
+			<table class="layui-table" lay-even>
+				<thead>
+					<tr>
+						<td>地图</td>
+						<td>X</td>
+						<td>Y</td>
+					</tr>
+				</thead>
+				<tbody id="tbody">
+				</tbody>
+			</table>
+
+		</div>
+	</div>
+
+
+	<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+	<script th:src="@{/static/sys/js/public.js}"></script>
+	<script th:line="javascript">
+		var path = '[[${session.path}]]';
+		var layer;
+		var util;
+		layui.use([ 'layer', 'table', 'form', 'util' ], function() {
+			util = layui.util;
+			layer = layui.layer;
+			form = layui.form;
+			//最后一次信息
+			var x = 0;
+			var y = 0;
+			var timer;
+			$("#start").click(function() {
+				layer.msg("开始拾取坐标");
+				var charaName = window.parent.getCharaName();
+				if (charaName == "") {
+					layer.msg("请输入角色名");
+					return;
+				}
+				var status = $(this).attr("data-status");
+				if(status == "start") {
+					$(this).html("暂停");
+					$(this).attr("data-status","stop")
+					//开始1秒钟请求一次服务器
+					timer = setInterval(function(){
+						$.post(path+"/wd/chara/getPointInfo",{"name":charaName},function(d){
+							if(d.status == 200) {
+								if(d.data.x != x && d.data.y != y) {
+									x = d.data.x;
+									y = d.data.y;
+									if($("#tbody tr").length == 0) {
+										$("#tbody").html("<tr><td>"+d.data.map+"</td><td>"+x+"</td><td>"+y+"</td></tr>")
+									}else {
+										$("#tbody").children(":first").before("<tr><td>"+d.data.map+"</td><td>"+x+"</td><td>"+y+"</td></tr>")
+									}
+								}
+							}
+						})
+					},1000)
+				}else {
+					layer.msg("暂停拾取坐标");
+					$(this).html("开始");
+					$(this).attr("data-status","start");
+					clearInterval(timer);
+				}
+			});
+			//清除
+			$("#clear").click(function(){
+				$("#tbody").html("");
+			})
+			//转换
+			$("#convert").click(function(){
+				var info = "";
+				$("#tbody tr").each(function(i,o){
+					var tr = $(o);
+					var tds = tr.find("td");
+					var mapName = $(tds.get(0)).text();
+					info+=mapName;
+					info+=",";
+					var x = $(tds.get(1)).text();
+					info+=x;
+					info+=",";
+					var y = $(tds.get(2)).text();
+					info+=y;
+					info+="|";
+				})
+				layer.open({
+				  title: '请复制转换后的结果',
+				  content: info
+				});  
+			})
+		});
+	</script>
+</body>
+
+</html>

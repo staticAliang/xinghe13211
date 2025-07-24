@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+    <title>强制切磋配置</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="favicon.ico"> 
+    <link rel="stylesheet" th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" />
+    <style type="text/css">
+    	input::-webkit-outer-spin-button,
+	    input::-webkit-inner-spin-button {
+	        -webkit-appearance: none;
+	    }
+	    input[type="number"]{
+	        -moz-appearance: textfield;
+	    }
+    </style>
+</head>
+
+<body>
+	<div class="layui-form" style="width: 90%; margin-top: 31px;"
+		lay-filter="showForm">
+		<div class="layui-form-item">
+			<label class="layui-form-label" style="width: 70px;">最低等级</label>
+			<div class="layui-input-block">
+				<input type="number" name="lowLevel" class="layui-input"
+					autocomplete="off">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label" style="width: 70px;">禁闭(分)</label>
+			<div class="layui-input-block">
+				<input type="number" name="zuolaoTime" class="layui-input"
+					autocomplete="off">
+				<div class="layui-form-mid layui-word-aux">禁闭时间,每杀一个人增加多少以此类推</div>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label" style="width: 70px;">保释价(时)</label>
+			<div class="layui-input-block">
+				<input type="number" name="releasePrice" class="layui-input"
+					autocomplete="off">
+			</div>
+		</div>
+		<!-- <div class="layui-form-item">
+			<label class="layui-form-label" style="width: 70px;">上涨价格</label>
+			<div class="layui-input-block">
+				<input type="number" name="zuolaoTime" class="layui-input"
+					autocomplete="off">
+				<div class="layui-form-mid layui-word-aux">杀了人之后购买东西上涨价格多少百分比,不支持小数点</div>
+			</div>
+		</div> -->
+		<div class="layui-form-item">
+			<label class="layui-form-label" style="width: 70px;">安全区</label>
+			<div class="layui-input-block">
+				<textarea name="securityMap" placeholder="每个地图用逗号隔开" class="layui-textarea"></textarea>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label" style="width: 70px;">复活点</label>
+			<div class="layui-input-block">
+				<input type="text" name="reviveMap" class="layui-input"
+					autocomplete="off">
+				<div class="layui-form-mid layui-word-aux">复活点加坐标示例:天墉城,50,20<br/>第一个数字是X,第二个数字是Y</div>
+			</div>
+		</div>
+		<div class="layui-form-item">
+		    <label class="layui-form-label">是否开启</label>
+		    <div class="layui-input-block">
+		      <input type="checkbox" name="enableForcePk" lay-skin="switch">
+		    </div>
+  		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label" style="width: 77px;">PK条件</label>
+			<div class="layui-input-inline" style="margin-left:4px;">
+				<select name="pkMoneys">
+					<option value='积分'>积分</option>
+					<option value='金元宝'>金元宝</option>
+					<option value='银元宝'>银元宝</option>
+				</select>
+			</div>
+			<div class="layui-input-inline" style="width:100px;">
+				<input type="number" class="layui-input attriValue" name="pkMoneyv"
+					style="margin-left: -65px;">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label" style="width: 70px;">死亡惩罚</label>
+			<div class="layui-input-block">
+				<textarea name="dieSubInfo" placeholder="每个分类用;符号隔开" class="layui-textarea"></textarea>
+				<div class="layui-form-mid layui-word-aux">严格按照格式来填写(每个分类用;隔开)<br/>道具:超级女娲石;积分:10;道行:0;经验:0;潜能:0</div>
+			</div>
+		</div>
+		
+		<div class="layui-form-item">
+			<a class="layui-btn layui-btn-danger layui-btn" style="margin-left: 109px;" id="save">保存</a>
+		</div>
+		</div>
+		<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+		<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+		<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+		<script th:src="@{/static/sys/js/public.js}"></script>
+		<script th:line="javascript">
+		var path = '[[${session.path}]]';
+		var layer;
+		var table;
+		var params;
+		var util;
+		var mapId;
+		layui.use(['layer','table','form','util'], function(){
+			util = layui.util;
+		  	layer = layui.layer;
+		  	table = layui.table;
+		  	form = layui.form;
+		  	//加载信息
+		  	$.post(path+"/wdForcePk/getForce",function(data){
+		  		if(data.status == 200) {
+		  			var config = data.data;
+		  			var pkMoneys = "";
+		  			var pkMoneyv = "";
+		  			//解析PK条件
+		  			if(config.pkMoney!=undefined) {
+		  				pkMoneys = config.pkMoney.split(":")[0];
+		  				pkMoneyv = config.pkMoney.split(":")[1];
+		  			}
+		  			form.val("showForm",{
+		  				"lowLevel":config.lowLevel,
+		  				"zuolaoTime":config.zuolaoTime,
+		  				"releasePrice":config.releasePrice,
+		  				"priceRise":config.priceRise,
+		  				"securityMap":config.securityMap,
+		  				"reviveMap":config.reviveMap,
+		  				"enableForcePk":config.enableForcePk,
+		  				"pkMoneys":pkMoneys,
+		  				"pkMoneyv":pkMoneyv,
+		  				"dieSubInfo":config.dieSubInfo,
+		  			});
+		  			
+		  		}
+		  	})
+		  	$(document).keydown(function(e) {
+			    var key = undefined;
+			    var possible = [ e.key, e.keyIdentifier, e.keyCode, e.which ];
+			    while (key === undefined && possible.length > 0) {
+			        key = possible.pop();
+			    }
+			    if (key && (key == '115' || key == '83' ) && (e.ctrlKey || e.metaKey) && !(e.altKey)){
+			        e.preventDefault();
+			        save();
+			        return false;
+			    }
+			    return true;
+			}); 
+			$(document).on("click","#save",function(){
+				save();
+		  	})
+		  	function save(){
+				var da = form.val("showForm");
+				if(da.enableForcePk == "on") {
+					da.enableForcePk = 1;
+				}else {
+					da.enableForcePk = 0;
+				}
+				var pkMoney = da.pkMoneys+":"+da.pkMoneyv;
+				da.pkMoney = pkMoney;
+		  		var load = $.load("正在保存...");
+		  		$.post(path+"/wdForcePk/updateForce",da,function(data){
+	  				if(data.status == 200) {
+	  					layer.msg("保存成功");
+	  				}else {
+	  					layer.msg(data.retmsg);
+	  				}
+					layer.close(load);				
+	  			})
+			}
+		});
+	</script>
+</body>
+
+</html>

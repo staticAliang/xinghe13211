@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fengshen.db.dao.LuckDrawItemMapper">
+  <resultMap id="BaseResultMap" type="com.fengshen.db.domain.LuckDrawItem">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="item" jdbcType="VARCHAR" property="item" />
+    <result column="level" jdbcType="INTEGER" property="level" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, item, level, add_time
+  </sql>
+</mapper>

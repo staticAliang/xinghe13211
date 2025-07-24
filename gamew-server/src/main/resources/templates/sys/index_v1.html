@@ -1,0 +1,2829 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+		<title>后台管理</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<link th:href="@{/static/sys/css/style.min.css?v=4.0.0}" rel="stylesheet">
+		<link rel="stylesheet" th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" media="all">
+		<link rel="stylesheet" th:href="@{/static/sys/css/admin.css}" media="all">
+		<link th:href="@{/static/sys/favicon.ico}" rel="icon" type="image/x-ico">
+		<link rel="stylesheet" th:href="@{/static/sys/css/global.css}">
+		<style type="text/css">
+			.whLoad {
+				background-repeat: no-repeat;
+				background-position: center center;
+			}
+			
+			.weatherShadow {
+				position: absolute;
+				height: 100%;
+				background: #ff000000;
+				width: 100%;
+				margin-top: -24px;
+			}
+			
+			.layui-table-tool {
+				background-color: #eeffee;
+			}
+			/* 表格头部背景色 */
+			
+			.baseSettings {
+				height: 50px;
+				background: #f5f3f3;
+			}
+			
+			.b-title {
+				background: red;
+				font-size: 14px;
+			}
+			
+			#comment {
+				width: 100%;
+			    height: 243px;
+			    resize: none;
+			    font-size: 20px;
+			    border: 0;
+			    /* border-radius: 5px; */
+			    background-color: rgb(36 36 36);
+			    padding: 10px;
+			    margin-left: -15px;
+			    color: white;
+			    padding-left: 20px;
+			    margin-top: -11px;
+			}
+			
+			/* #comment:hover {
+				box-shadow: 0px 1px 2px 2px #c1c1bd;
+			} */
+			
+			@media screen and (min-width: 991px) {
+				#newCharaSet {}
+			}
+			
+			input[type='number']::-webkit-outer-spin-button,
+			input[type='number']::-webkit-inner-spin-button {
+				-webkit-appearance: none !important;
+				margin: 0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="layui-fluid">
+			<div class="layui-row layui-col-space15">
+				<div class="layui-col-md8">
+					<div class="layui-row layui-col-space15">
+						<div class="layui-col-md12">
+							<div class="layui-card" style="min-height:740px;">
+								<div class="layui-tab layui-tab-brief">
+									<ul class="layui-tab-title">
+										<li class="layui-this">主控面板</li>
+										<li>副本设置</li>
+										<li>游戏工具</li>
+										<li>活动配置</li>
+									</ul>
+									<!-- 角色名 -->
+									<div style="position: relative; height: 20px; width: 158px; left: 100%; top: -36px; margin-left: -220px;">
+										<span>角色名</span>
+										<input type="text" name="charName" class="layui-input" style="position: relative; left: 48px; top: -23px;" id="charName" autocomplete="off">
+									</div>
+									<!-- 角色名 -->
+									<div class="layui-tab-content">
+										<div class="layui-tab-item layui-show">
+											<blockquote class="layui-elem-quote news_search layui-form">
+												<div class="layui-inline">
+													<div class="layui-input-inline">
+														<input type="text" placeholder="请输入角色名" class="layui-input search_btn" id="account" type-close autocomplete="off">
+													</div>
+												</div>
+												<div class="layui-inline">
+													<a class="layui-btn query_btn">查询</a>
+												</div>
+												<div class="layui-inline">
+													<a class="layui-btn stopServer">关闭维护</a>
+												</div>
+												<div class="layui-inline">
+													<a class="layui-btn layui-bg-blue endCombat">结束战斗</a>
+												</div>
+												<div class="layui-inline">
+													<button type="button" class="layui-btn layui-btn-primary flush"><i class="layui-icon layui-icon-refresh"></i></button>
+												</div>
+												<div class="layui-inline">
+													<div style="font-size: 23px; margin-left: 20px;">
+														<span style="color:rgb(16 16 16)">在线人数:</span>
+														<span id="onlineNumber">0</span>
+													</div>
+												</div>
+											</blockquote>
+											<table id="users" lay-filter="users">
+
+											</table>
+										</div>
+										<div class="layui-tab-item">
+											<div class="layui-tab layui-tab-brief">
+												<ul class="layui-tab-title">
+													<li class="layui-this">黑风洞</li>
+													<li>兰若寺</li>
+													<li>烈火涧</li>
+												</ul>
+												<div class="layui-tab-content layui-form">
+													<!-- 副本 -->
+													<div class="layui-tab-item layui-show">
+														<table class="layui-table">
+															<tbody>
+																<tr>
+																	<td>名称</td>
+																	<td>boos</td>
+																	<td>操作</td>
+																</tr>
+																<tr>
+																	<td>黑风洞一层</td>
+																	<td>二当家(1)</td>
+																	<td>
+																		<a class="layui-btn layui-btn-danger layui-btn-xs fbDataSet" data-id="401">配置</a>
+																	</td>
+																</tr>
+																<tr>
+																	<td>黑风洞一层</td>
+																	<td>僵尸怪(4)</td>
+																	<td>
+																		<a class="layui-btn layui-btn-danger layui-btn-xs fbDataSet" data-id="402">配置</a>
+																	</td>
+																</tr>
+																<tr>
+																	<td>黑风洞一层</td>
+																	<td>小喽啰(5)</td>
+																	<td>
+																		<a class="layui-btn layui-btn-danger layui-btn-xs fbDataSet" data-id="403">配置</a>
+																	</td>
+																</tr>
+
+																<tr>
+																	<td>黑风洞二层</td>
+																	<td>土宸(5)</td>
+																	<td>
+																		<a class="layui-btn layui-btn-danger layui-btn-xs fbDataSet" data-id="405">配置</a>
+																	</td>
+																</tr>
+																<tr>
+																	<td>黑风洞二层</td>
+																	<td>木岚(5)</td>
+																	<td>
+																		<a class="layui-btn layui-btn-danger layui-btn-xs fbDataSet" data-id="406">配置</a>
+																	</td>
+																</tr>
+																<tr>
+																	<td>黑风洞三层</td>
+																	<td>妖狼王(1)</td>
+																	<td>
+																		<a class="layui-btn layui-btn-danger layui-btn-xs fbDataSet" data-id="407">配置</a>
+																	</td>
+																</tr>
+																<tr>
+																	<td>黑风洞三层</td>
+																	<td>妖狼王影子(1)</td>
+																	<td>
+																		<a class="layui-btn layui-btn-danger layui-btn-xs fbDataSet" data-id="408">配置</a>
+																	</td>
+																</tr>
+
+															</tbody>
+														</table>
+													</div>
+													<!-- 副本 -->
+
+													<!-- 副本 -->
+													<div class="layui-tab-item">
+														<table class="layui-table">
+															<tbody>
+																<tr>
+																	<td>名称</td>
+																	<td>boos</td>
+																	<td>操作</td>
+																</tr>
+																<tr>
+																	<td>兰若寺后山1</td>
+																	<td>小青(1)</td>
+																	<td>
+																		<a class="layui-btn layui-btn-danger layui-btn-xs fbDataSet" data-id="409">配置</a>
+																	</td>
+																</tr>
+																<tr>
+																	<td>兰若寺后山1</td>
+																	<td>花妖(9)</td>
+																	<td>
+																		<a class="layui-btn layui-btn-danger layui-btn-xs fbDataSet" data-id="410">配置</a>
+																	</td>
+																</tr>
+																<tr>
+																	<td>兰若寺后山2</td>
+																	<td>姥姥(1)</td>
+																	<td>
+																		<a class="layui-btn layui-btn-danger layui-btn-xs fbDataSet" data-id="411">配置</a>
+																	</td>
+																</tr>
+																<tr>
+																	<td>兰若寺后山2</td>
+																	<td>侍女(9)</td>
+																	<td>
+																		<a class="layui-btn layui-btn-danger layui-btn-xs fbDataSet" data-id="412">配置</a>
+																	</td>
+																</tr>
+																<tr>
+																	<td>兰若寺2</td>
+																	<td>黑山老妖(1)</td>
+																	<td>
+																		<a class="layui-btn layui-btn-danger layui-btn-xs fbDataSet" data-id="413">配置</a>
+																	</td>
+																</tr>
+																<tr>
+																	<td>兰若寺2</td>
+																	<td>九幽怨魂(8)</td>
+																	<td>
+																		<a class="layui-btn layui-btn-danger layui-btn-xs fbDataSet" data-id="414">配置</a>
+																	</td>
+																</tr>
+																<tr>
+																	<td>兰若寺2</td>
+																	<td>黑山牛妖(1)</td>
+																	<td>
+																		<a class="layui-btn layui-btn-danger layui-btn-xs fbDataSet" data-id="415">配置</a>
+																	</td>
+																</tr>
+															</tbody>
+														</table>
+													</div>
+													<!-- 副本 -->
+
+													<!-- 副本 -->
+													<div class="layui-tab-item">
+														<table class="layui-table">
+															<tbody>
+																<tr>
+																	<td>名称</td>
+																	<td>boos</td>
+																	<td>操作</td>
+																</tr>
+																<tr>
+																	<td>烈火涧西面</td>
+																	<td>上古雷怪(10)</td>
+																	<td>
+																		<a class="layui-btn layui-btn-danger layui-btn-xs fbDataSet" data-id="416">配置</a>
+																	</td>
+																</tr>
+																<tr>
+																	<td>烈火涧北面</td>
+																	<td>上古云兽(10)</td>
+																	<td>
+																		<a class="layui-btn layui-btn-danger layui-btn-xs fbDataSet" data-id="417">配置</a>
+																	</td>
+																</tr>
+																<tr>
+																	<td>烈火涧东面</td>
+																	<td>上古雨兽(10)</td>
+																	<td>
+																		<a class="layui-btn layui-btn-danger layui-btn-xs fbDataSet" data-id="418">配置</a>
+																	</td>
+																</tr>
+																<tr>
+																	<td>烈火涧2</td>
+																	<td>赤焰兽(1)</td>
+																	<td>
+																		<a class="layui-btn layui-btn-danger layui-btn-xs fbDataSet" data-id="419">配置</a>
+																	</td>
+																</tr>
+																<tr>
+																	<td>烈火涧2</td>
+																	<td>火蛇兽(4)</td>
+																	<td>
+																		<a class="layui-btn layui-btn-danger layui-btn-xs fbDataSet" data-id="420">配置</a>
+																	</td>
+																</tr>
+																<tr>
+																	<td>烈火涧2</td>
+																	<td>火眼兔(5)</td>
+																	<td>
+																		<a class="layui-btn layui-btn-danger layui-btn-xs fbDataSet" data-id="421">配置</a>
+																	</td>
+																</tr>
+															</tbody>
+														</table>
+													</div>
+													<!-- 副本 -->
+												</div>
+											</div>
+										</div>
+										<!-- 副本tab -->
+
+										<!-- 发送数据 开始 -->
+										<div class="layui-tab-item">
+											<div class="layui-tab layui-tab-brief">
+												<ul class="layui-tab-title">
+													<li class="layui-this">角色/装备</li>
+													<li>宠物/法宝/物品</li>
+													<li>工具集</li>
+												</ul>
+												<div class="layui-tab-content">
+													<div class="layui-tab-item layui-show">
+														<!-- 角色数据 -->
+														<div class="layui-col-md4">
+															<div class="layui-card">
+																<div class="layui-card-header carColor">角色</div>
+																<div class="layui-card-body layui-text">
+																	<div class="layui-form" lay-filter="char_info_form">
+																		<div class="layui-form-item">
+																			<div class="layui-inline" style="width:200px">
+																				<label class="layui-form-label" style="width:30px">类型</label>
+																				<div class="layui-input-inline" style="width: 120px;">
+																					<select name="send_char_type" lay-search="">
+																						<option value="经验">经验</option>
+																						<option value="潜能">潜能</option>
+																						<option value="道行">道行</option>
+																						<option value="积分">积分</option>
+																						<option value="抽奖">抽奖</option>
+																						<option value="帮贡">帮贡</option>
+																						<option value="金元宝">金元宝</option>
+																						<option value="银元宝">银元宝</option>
+																					</select>
+																				</div>
+																			</div>
+																		</div>
+																		<div class="layui-form-item">
+																			<div class="layui-inline" style="width:200px">
+																				<label class="layui-form-label" style="width:30px">数值</label>
+																				<div class="layui-input-inline" style="width: 120px;">
+																					<input type="number" name="send_char_number" class="layui-input">
+																				</div>
+																			</div>
+																		</div>
+																		<div class="layui-form-item" style="margin-left: -50px;">
+																			<label class="layui-form-label">类型</label>
+																			<div class="layui-input-block">
+																				<input type="radio" name="sendType" value="1" title="增加" checked="checked">
+																				<input type="radio" name="sendType" value="2" title="扣除">
+																			</div>
+																		</div>
+																		<div class="layui-form-item" style="margin-left: -50px;">
+																			<label class="layui-form-label">全服</label>
+																			<div class="layui-input-block">
+																				<input type="radio" name="sendAllChara" value="0" title="否" checked="checked">
+																				<input type="radio" name="sendAllChara" value="1" title="是">
+																			</div>
+																		</div>
+																	</div>
+																	<div style="margin-left:14px;">
+																		<a class="layui-btn" id="char_info_send">发送</a>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<!-- 角色数据 -->
+
+														<!-- 角色装备 -->
+														<div class="layui-col-md7" style="margin-left: 50px;">
+															<div class="layui-card">
+																<div class="layui-card-header carColor">装备(请按常规输入)</div>
+																<div class="layui-card-body layui-text">
+																	<div class="layui-form" lay-filter="lanse">
+																		<div class="layui-form-item">
+																			<div class="layui-inline">
+																				<label class="layui-form-label" style="width:30px">类型</label>
+																				<div class="layui-input-inline" style="width: 120px;">
+																					<select name="char_zb_type" lay-filter="char_zb_type_filter">
+																						<option value="">请选择类型</option>
+																						<option value="1">武器</option>
+																						<option value="2">帽子</option>
+																						<option value="3">衣服</option>
+																						<option value="4">鞋子</option>
+																					</select>
+																				</div>
+																				<div class="layui-form-mid">等级</div>
+																				<div class="layui-input-inline" style="width: 120px;">
+																					<select name="level" lay-filter="char_zb_level_filter">
+																						<option value="70">70</option>
+																						<option value="80">80</option>
+																						<option value="90">90</option>
+																						<option value="100">100</option>
+																						<option value="110">110</option>
+																						<option value="120">120</option>
+																						<option value="130">130</option>
+																						<option value="140">140</option>
+																						<option value="150">150</option>
+																						<option value="160">160</option>
+																						<option value="170">170</option>
+																					</select>
+																				</div>
+																			</div>
+																		</div>
+																		<div class="layui-form-item">
+																			<div class="layui-inline">
+																				<label class="layui-form-label" style="width:30px">名字</label>
+																				<div class="layui-input-inline" style="width: 120px;">
+																					<select name="zb_name">
+
+																					</select>
+																				</div>
+																				<div class="layui-form-mid">改造</div>
+																				<div class="layui-input-inline" style="width: 120px;">
+																					<select name="gaizao_number">
+																						<option value="">0</option>
+																						<option value="1">1</option>
+																						<option value="2">2</option>
+																						<option value="3">3</option>
+																						<option value="4">4</option>
+																						<option value="5">5</option>
+																						<option value="6">6</option>
+																						<option value="7">7</option>
+																						<option value="8">8</option>
+																						<option value="9">9</option>
+																						<option value="10">10</option>
+																						<option value="11">11</option>
+																						<option value="12">12</option>
+																					</select>
+																				</div>
+																			</div>
+																		</div>
+																		<div class="layui-form-item">
+																			<div class="layui-inline">
+																				<label class="layui-form-label" style="width:30px">蓝1</label>
+																				<div class="layui-input-inline" style="width: 120px;">
+																					<select name="lanse1">
+																						<option value="">选择属性</option>
+																					</select>
+																				</div>
+																				<div class="layui-form-mid">数值</div>
+																				<div class="layui-input-inline" style="width: 120px;">
+																					<input type="number" name="lanse1Val" class="layui-input" placeholder="输入蓝1数值">
+																				</div>
+																			</div>
+																		</div>
+
+																		<div class="layui-form-item">
+																			<div class="layui-inline">
+																				<label class="layui-form-label" style="width:30px">蓝2</label>
+																				<div class="layui-input-inline" style="width: 120px;">
+																					<select name="lanse2">
+																						<option value="">选择属性</option>
+																					</select>
+																				</div>
+																				<div class="layui-form-mid">数值</div>
+																				<div class="layui-input-inline" style="width: 120px;">
+																					<input type="number" name="lanse2Val" class="layui-input" placeholder="输入蓝2数值">
+																				</div>
+																			</div>
+																		</div>
+																		<div class="layui-form-item">
+																			<div class="layui-inline">
+																				<label class="layui-form-label" style="width:30px">蓝3</label>
+																				<div class="layui-input-inline" style="width: 120px;">
+																					<select name="lanse3">
+																						<option value="">选择属性</option>
+																					</select>
+																				</div>
+																				<div class="layui-form-mid">数值</div>
+																				<div class="layui-input-inline" style="width: 120px;">
+																					<input type="number" name="lanse3Val" class="layui-input" placeholder="输入蓝3数值">
+																				</div>
+																			</div>
+																		</div>
+																		<div class="layui-form-item">
+																			<div class="layui-inline"> <label class="layui-form-label" style="width:30px">粉属</label>
+																				<div class="layui-input-inline" style="width: 120px;">
+																					<select name="fense">
+																						<option value="">选择属性</option>
+																					</select>
+																				</div>
+																				<div class="layui-form-mid">数值</div>
+																				<div class="layui-input-inline" style="width: 120px;"> <input type="number" name="fenseVal" class="layui-input" placeholder="数值"> </div>
+																			</div>
+																		</div>
+																		<div class="layui-form-item">
+																			<div class="layui-inline"> <label class="layui-form-label" style="width:30px">黄属</label>
+																				<div class="layui-input-inline" style="width: 120px;">
+																					<select name="huangse">
+																						<option value="">选择属性</option>
+																					</select>
+																				</div>
+																				<div class="layui-form-mid">数值</div>
+																				<div class="layui-input-inline" style="width: 120px;"> <input type="number" name="huangseVal" class="layui-input" placeholder="数值"> </div>
+																			</div>
+																		</div>
+																		<div class="layui-form-item" style="margin-left: -50px;"> <label class="layui-form-label">相性</label>
+																			<div class="layui-input-block"> <input type="radio" name="xiangxing" value="1" title="金"> <input type="radio" name="xiangxing" value="2" title="木"> <input type="radio" name="xiangxing" value="3" title="水"> <input type="radio" name="xiangxing" value="4" title="火"> <input type="radio" name="xiangxing" value="5" title="土"> </div>
+																		</div>
+																	</div>
+																	<div style="margin-left:14px;">
+																		<a class="layui-btn" id="char_zb_info_send">发送</a>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<!-- 角色数据 -->
+													</div>
+
+													<!-- 宠物与法宝 -->
+													<div class="layui-tab-item">
+														<!-- 宠物 -->
+														<div class="layui-col-md6">
+															<div class="layui-card">
+																<div class="layui-card-header carColor">宠物</div>
+																<div class="layui-card-body layui-text">
+																	<div class="layui-form" lay-filter="pet_info_form">
+																		<div class="layui-form-item">
+																			<div class="layui-inline">
+																				<label class="layui-form-label" style="width:30px">类型</label>
+																				<div class="layui-input-inline">
+																					<select name="pet_send_type" lay-filter="pet_send_type">
+																						<option value="4">神兽</option>
+																						<option value="3">变异</option>
+																						<option value="坐骑">坐骑</option>
+																					</select>
+																				</div>
+																			</div>
+																		</div>
+																		<div class="layui-form-item">
+																			<div class="layui-inline">
+																				<label class="layui-form-label" style="width:30px">名字</label>
+																				<div class="layui-input-inline" style="width: 120px;">
+																					<input type="text" name="pet_send_name" class="layui-input" placeholder="宠物名称" autocomplete="off">
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																	<div style="margin-left:14px;">
+																		<a class="layui-btn" id="pet_info_send">发送</a>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<!-- 宠物 -->
+														<!-- 法宝 -->
+														<div class="layui-col-md6">
+															<div class="layui-card">
+																<div class="layui-card-header carColor">法宝</div>
+																<div class="layui-card-body layui-text">
+																	<div class="layui-form" lay-filter="fabao_info_form">
+																		<div class="layui-form-item">
+																			<div class="layui-inline">
+																				<label class="layui-form-label" style="width:30px">相性</label>
+																				<div class="layui-input-inline">
+																					<select name="fabao_send_type">
+																						<option value="1">金</option>
+																						<option value="2">木</option>
+																						<option value="3">水</option>
+																						<option value="4">火</option>
+																						<option value="5">土</option>
+																					</select>
+																				</div>
+																			</div>
+																		</div>
+																		<div class="layui-form-item">
+																			<div class="layui-inline">
+																				<label class="layui-form-label" style="width:30px">法宝</label>
+																				<div class="layui-input-inline">
+																					<select name="fabao_send_name">
+																						<option value="番天印">番天印</option>
+																						<option value="混元金斗">混元金斗</option>
+																						<option value="定海珠">定海珠</option>
+																						<option value="九龙神火罩">九龙神火罩</option>
+																					</select>
+																				</div>
+																			</div>
+																		</div>
+
+																		<div class="layui-form-item">
+																			<div class="layui-inline" style="width:200px">
+																				<label class="layui-form-label" style="width:30px">数值</label>
+																				<div class="layui-input-inline" style="width: 120px;">
+																					<input type="number" name="fabao_send_level" class="layui-input" placeholder="最高24级">
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																	<div style="margin-left:14px;">
+																		<a class="layui-btn" id="fabao_info_send">发送</a>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<!-- 法宝 -->
+														<!-- 天书 -->
+														<div class="layui-col-md6">
+															<div class="layui-card">
+																<div class="layui-card-header carColor">天书</div>
+																<div class="layui-card-body layui-text">
+																	<div class="layui-form" lay-filter="tianshu_info_form">
+																		<div class="layui-form-item">
+																			<div class="layui-inline">
+																				<label class="layui-form-label" style="width:30px">天书名称</label>
+																				<div class="layui-input-inline">
+																					<select name="tianshu_send_type" lay-filter="tianshu_send_type">
+																						<option value="超级反击">超级反击</option>
+																						<option value="超级惊雷">超级惊雷</option>
+																						<option value="超级尽忠">超级尽忠</option>
+																						<option value="超级烈炎">超级烈炎</option>
+																						<option value="超级碎石">超级碎石</option>
+																						<option value="超级仙风">超级仙风</option>
+																						<option value="超级青木">超级青木</option>
+																						<option value="超级修罗术">超级修罗术</option>
+																						<option value="超级降魔斩">超级降魔斩</option>
+																						<option value="超级狂暴">超级狂暴</option>
+																						<option value="超级寒冰">超级寒冰</option>
+																						<option value="超级云体">超级云体</option>
+																						<option value="超级怒击">超级怒击</option>
+																						<option value="超级破天">超级破天</option>
+																						<option value="超级魔引">超级魔引</option>
+																					</select>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																	<div style="margin-left:14px;">
+																		<a class="layui-btn" id="tianshu_info_send">发送</a>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<!-- 物品 -->
+														<div class="layui-col-md6">
+															<div class="layui-card">
+																<div class="layui-card-header carColor">物品</div>
+																<div class="layui-card-body layui-text">
+																	<div class="layui-form" lay-filter="pet_info_form">
+																		<div class="layui-form-item">
+																			<div class="layui-inline">
+																				<label class="layui-form-label" style="width:30px">名字</label>
+																				<div class="layui-input-inline" style="width: 120px;">
+																					<input type="text" name="itemName" id="itemName" class="layui-input" placeholder="物品名称" autocomplete="off">
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																	<div class="layui-form-item">
+																		<div class="layui-inline" style="width:200px">
+																			<label class="layui-form-label" style="width:30px">数值</label>
+																			<div class="layui-input-inline" style="width: 120px;">
+																				<input type="number" name="itemNum" id="itemNum" class="layui-input" placeholder="物品数量" value="1">
+																			</div>
+																		</div>
+																	</div>
+																	<div style="margin-left:14px;">
+																		<a class="layui-btn" id="itemSend">发送</a>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<!-- 物品 -->
+
+													</div>
+													<!-- 首饰 -->
+													<div class="layui-tab-item">
+														<button type="button" class="layui-btn layui-btn-lg layui-btn-normal iframe_open" data="shoushi" title="首饰发送" data-id="shoushi">首饰工具</button>
+														<button type="button" class="layui-btn layui-btn-warm layui-btn-lg layui-btn-normal iframe_open" data="hunqi" title="魂器发送" data-id="hunqi">魂器工具</button>
+														<button type="button" class="layui-btn layui-btn-danger layui-btn-lg layui-btn-normal iframe_open" data="point" title="坐标拾取" data-id="getPoint">坐标拾取</button>
+														<button type="button" class="layui-btn layui-btn-warm layui-btn-lg layui-btn-normal iframe_open" data="clearChara" title="清理角色和宠物(删除后无法恢复请慎重)" data-id="clearChara">清理角色</button>
+														<button type="button" class="layui-btn layui-btn-danger layui-btn-lg layui-btn-normal export">导出角色</button>
+														<button type="button" class="layui-btn layui-btn-lg layui-btn-lg layui-btn-normal iframe_open" data="hunqiao" title="魂窍发送" data-id="hunqiao" th:if="${session.sh_hunqiao != null}">魂窍工具</button>
+														<button type="button" class="layui-btn layui-btn-lg layui-btn-lg layui-btn-normal testList" data="testList" title="内测名单" data-id="testList">内测名单</button>
+													</div>
+												</div>
+											</div>
+										</div>
+										<!-- 发送数据 结束 -->
+
+										<!-- 任务奖励开始 -->
+										<div class="layui-tab-item">
+											<div class="layui-tab layui-tab-brief">
+												<ul class="layui-tab-title">
+													<!-- <li class="layui-this">副本</li> -->
+													<li class="layui-this">海盗</li>
+													<li>刷星</li>
+												</ul>
+												<div class="layui-tab-content">
+													<!-- <div class="layui-tab-item layui-show">
+														副本奖励
+													</div> -->
+													<!-- 海盗配置 开始 -->
+													<div class="layui-tab-item layui-form  layui-show" lay-filter="haidao_filter">
+														<table class="layui-table">
+															<tbody>
+																<tr>
+																	<td>名称</td>
+																	<td>类型</td>
+																	<td>操作</td>
+																</tr>
+																<tr>
+																	<td>时间</td>
+																	<td>开启时间</td>
+																	<td>
+																		<div style="width: 50px; ">
+																			<a class="layui-btn layui-btn-danger layui-btn-xs" id="haidao_times">配置</a>
+																		</div>
+																	</td>
+																</tr>
+																<tr>
+																	<td>任务奖励</td>
+																	<td>道具</td>
+																	<td>
+																		<a class="layui-btn layui-btn-danger layui-btn-xs" id="haidao_daoju">配置</a>
+																	</td>
+																</tr>
+																<tr>
+																	<td>任务奖励</td>
+																	<td>队伍人数</td>
+																	<td>
+																		<a class="layui-btn layui-btn-danger layui-btn-xs" id="haidao_team">配置</a>
+																	</td>
+																</tr>
+																<tr>
+																	<td>任务奖励</td>
+																	<td>海盗数量</td>
+																	<td>
+																		<a class="layui-btn layui-btn-danger layui-btn-xs" id="haidao_num">配置</a>
+																	</td>
+																</tr>
+																<tr>
+																	<td>任务奖励</td>
+																	<td>奖励次数</td>
+																	<td>
+																		<div style="width: 50px; ">
+																			<a class="layui-btn layui-btn-danger layui-btn-xs" id="haidao_jiangli_count">配置</a>
+																		</div>
+																	</td>
+																</tr>
+																<tr>
+																	<td>海盗成长</td>
+																	<td>海盗技能已开启自动.</td>
+																	<td>
+																		<div style="width: 50px; ">
+																			<a class="layui-btn layui-btn-danger layui-btn-xs fbDataSet" id="haidao_chengzhang" data-id="473">配置</a>
+																		</div>
+																	</td>
+																</tr>
+																<tr>
+																	<td>任务奖励</td>
+																	<td>经验</td>
+																	<td>
+																		<div style="width: 50px; ">
+																			<input type="checkbox" name="jingyan" lay-skin="switch" lay-text="开|关" lay-filter="haidao_filter_sw" value="jingyan">
+																		</div>
+																	</td>
+																</tr>
+																<tr>
+																	<td>任务奖励</td>
+																	<td>道行</td>
+																	<td>
+																		<div style="width: 50px; ">
+																			<input type="checkbox" name="daohang" lay-skin="switch" lay-text="开|关" lay-filter="haidao_filter_sw" value="daohang">
+																		</div>
+																	</td>
+																</tr>
+																<tr>
+																	<td>任务奖励</td>
+																	<td>潜能</td>
+																	<td>
+																		<div style="width: 50px; ">
+																			<input type="checkbox" name="qianneng" lay-skin="switch" lay-text="开|关" lay-filter="haidao_filter_sw" value="qianneng">
+																		</div>
+																	</td>
+																</tr>
+																<tr>
+																	<td>任务奖励</td>
+																	<td>金钱</td>
+																	<td>
+																		<div style="width: 50px; ">
+																			<input type="checkbox" name="jinqian" lay-skin="switch" lay-text="开|关" lay-filter="haidao_filter_sw" value="jinbi">
+																		</div>
+																	</td>
+																</tr>
+																<tr>
+																	<td>任务奖励</td>
+																	<td>装备</td>
+																	<td>
+																		<div style="width: 50px; ">
+																			<input type="checkbox" name="zhuangbei" lay-skin="switch" lay-text="开|关" lay-filter="haidao_filter_sw" value="zhuangbei">
+																		</div>
+																	</td>
+																</tr>
+															</tbody>
+														</table>
+													</div>
+													<!-- 海盗配置 结束 -->
+
+													<!-- 刷新开始 -->
+													<div class="layui-tab-item layui-form" lay-filter="shidao_filter">
+														<table class="layui-table">
+															<tbody>
+																<tr>
+																	<td>名称</td>
+																	<td>类型</td>
+																	<td>操作</td>
+																</tr>
+																<!-- <tr>
+																	<td>时间</td>
+																	<td>定时执行</td>
+																	<td>
+																		<div style="width: 50px; ">
+																			<a class="layui-btn layui-btn-danger layui-btn-xs" id="shuaxing_time">配置</a>
+																		</div>
+																	</td>
+																</tr> -->
+																<tr>
+																	<td>刷新数量</td>
+																	<td>每次</td>
+																	<td>
+																		<div style="width: 50px; ">
+																			<a class="layui-btn layui-btn-danger layui-btn-xs" id="shuaxing_count">配置</a>
+																		</div>
+																	</td>
+																</tr>
+															</tbody>
+														</table>
+													</div>
+													<!-- 刷新结束 -->
+
+												</div>
+											</div>
+										</div>
+										<!-- 任务奖励结束 -->
+
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+				<!-- 基础配置 -->
+				<div class="layui-col-md4">
+					<div class="layui-card">
+						<div class="layui-tab layui-tab-brief">
+							<ul class="layui-tab-title">
+								<li class="layui-this">操作1</li>
+								<li>操作2</li>
+							</ul>
+							<div class="layui-tab-content layui-form" lay-filter="configInit">
+								<div class="layui-tab-item  layui-show">
+									<table class="layui-table">
+										<colgroup>
+											<col width="100">
+											<col>
+										</colgroup>
+										<tbody>
+											<tr>
+												<td>名称</td>
+												<td>操作</td>
+											</tr>
+											<tr>
+												<td>gm指令</td>
+												<td>
+													<a class="layui-btn layui-btn-danger layui-btn-xs" id="gm_settings">配置</a>
+												</td>
+											</tr>
+											<tr>
+												<td>全服禁言</td>
+												<td>
+													<div class="layui-input-inline" style=" height: 20px; margin-top: -19px; width: 50px; ">
+														<input type="checkbox" value="jinyan" lay-skin="switch" lay-text="开|关" name="jinyan" lay-filter="jinyan">
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td>禁止注册</td>
+												<td>
+													<div class="layui-input-inline" style=" height: 20px; margin-top: -19px; width: 50px; ">
+														<input type="checkbox" value="xianZhiZhuCe" lay-skin="switch" lay-text="开|关" name="xianZhiZhuCe" lay-filter="xianZhiZhuCe">
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td>pk锁</td>
+												<td>
+													<div class="layui-input-inline" style=" height: 20px; margin-top: -19px; width: 50px; ">
+														<input type="checkbox" value="pk" lay-skin="switch" lay-text="开|关" name="pk" lay-filter="pk">
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td>
+													<font color="red">WPE</font>
+												</td>
+												<td>
+													<div class="layui-input-inline" style=" height: 20px; margin-top: -19px; width: 50px; ">
+														<input type="checkbox" value="wpe" lay-skin="switch" lay-text="开|关" name="wpe" lay-filter="wpe">
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td>敏感词</td>
+												<td>
+													<div class="layui-input-inline" style=" height: 20px; margin-top: -19px; width: 50px; ">
+														<input type="checkbox" value="mingan" lay-skin="switch" lay-text="开|关" name="mingan" lay-filter="mingan">
+													</div>
+													<a class="layui-btn layui-btn-danger layui-btn-xs" id="mingan_settings">配置</a>
+												</td>
+											</tr>
+											<tr>
+												<td>禁用昵称</td>
+												<td>
+													<a class="layui-btn layui-btn-danger layui-btn-xs" id="filterNickText">配置</a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div class="layui-tab-item">
+									<table class="layui-table">
+										<colgroup>
+											<col width="100">
+											<col>
+										</colgroup>
+										<tbody>
+											<tr>
+												<td>名称</td>
+												<td>操作</td>
+											</tr>
+											<tr>
+												<td>海盗</td>
+												<td>
+													<a class="layui-btn layui-btn-danger layui-btn-xs" id="haidao_settings">刷新</a>
+													<a class="layui-btn layui-btn-danger layui-btn-xs" id="haidao_clean" style="background:#5FB878">清除</a>
+												</td>
+											</tr>
+											<!-- <tr>
+												<td>副本</td>
+												<td>
+													<div class="layui-input-inline" style=" height: 20px; margin-top: -19px; width: 50px; ">
+														<input type="checkbox" value="fb" lay-skin="switch" lay-text="开|关" name="fb" lay-filter="fb">
+													</div>
+													<a class="layui-btn layui-btn-danger layui-btn-xs" id="fb_settings">配置</a>
+												</td>
+											</tr> -->
+											<tr>
+												<td>强制切磋</td>
+												<td>
+													<a class="layui-btn layui-btn-danger layui-btn-xs" id="foracepk_settings">配置</a>
+												</td>
+											</tr>
+											<tr>
+												<td>排行榜</td>
+												<td>
+													<a class="layui-btn layui-btn-danger layui-btn-xs" id="rankRefresh">手动刷新</a>
+												</td>
+											</tr>
+											<tr>
+												<td>天地星</td>
+												<td>
+													<a class="layui-btn layui-btn-danger layui-btn-xs" id="tiandiRefresh">手动刷新</a>
+												</td>
+											</tr>
+											<tr>
+												<td>战神</td>
+												<td>
+													<a class="layui-btn layui-btn-danger layui-btn-xs" id="zhanshenRefresh">手动刷新</a>
+												</td>
+											</tr>
+											<tr>
+												<td>开口费</td>
+												<td>
+													<div class="layui-input-inline" style=" height: 20px; margin-top: -19px; width: 50px; ">
+														<input type="checkbox" value="speakMoney" lay-skin="switch" lay-text="开|关" name="speakMoney" lay-filter="speakMoney">
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td>测试按钮</td>
+												<td>
+													<a class="layui-btn layui-btn-danger layui-btn-xs" id="testBtn">刷新</a>
+													<a class="layui-btn layui-btn-danger layui-btn-xs getFightTeamStatus">战斗信息</a>
+													<span>非专业人员请勿点击</span>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<!-- <div class="layui-tab-item">
+								暂未开放
+								</div> -->
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- 基础配置 -->
+
+				<!-- 游戏消息 -->
+				<div class="layui-col-md4 sendMsg">
+					<div class="layui-card">
+						<div class="layui-card-header">游戏消息</div>
+						<div class="layui-card-body layui-text">
+							<textarea id="comment" name="comment" class="form-control" required="" aria-required="true" placeholder="请输入消息"></textarea>
+							<!-- 1=当前，2=世界，4=组队，5=帮派, 30=喇叭 -->
+							<div style="margin-left: -10px;">
+								<div style="width: 80px; display: inline-block; position: relative; top: 2px;" class="layui-form">
+									<select name="msgType">
+										<option value="19">公告</option>
+										<option value="7">系统</option>
+										<option value="30">喇叭</option>
+										<option value="6">谣言</option>
+									</select>
+								</div>
+								<a class="layui-btn" id="comment_send">发送</a>
+								<div style="width:200px; display: inline-block; float:right;position: relative; top: 2px;" class="layui-form">
+									<select name="records" id="records" lay-filter="records">
+										<option value="-1">发送历史记录</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- 游戏消息 -->
+
+				<!-- 新手配置 -->
+				<div class="layui-col-md12" id="newCharaSet">
+					<div class="layui-card">
+						<div class="layui-card-header">新手配置</div>
+						<div class="layui-card-body layui-text">
+							<table class="layui-table">
+								<tbody>
+									<tr>
+										<td>金元宝</td>
+										<td><input type="number" class="form-control" style="width: 90%;" id="jinyuanbao"></td>
+										<td>银元宝</td>
+										<td><input type="number" class="form-control" style="width: 90%;" id="yinyuanbao"></td>
+										<td>金钱</td>
+										<td><input type="number" class="form-control" style="width: 90%;" id="money"></td>
+									</tr>
+									<tr>
+										<td>积分</td>
+										<td><input type="number" class="form-control" style="width: 90%;" id="jifen"></td>
+										<td>潜能</td>
+										<td><input type="number" class="form-control" style="width: 90%;" id="qianneng"></td>
+										<td>抽奖</td>
+										<td><input type="number" class="form-control" style="width: 90%;" id="choujiang"></td>
+									</tr>
+									
+									<tr colspan="6">
+										<td>称号</td>
+										<td><input type="text" class="form-control" style="width: 90%;" id="chenghao" autocomplete="off"></td>
+									</tr>
+									
+									<tr>
+										<td colspan="6">
+											<a class="layui-btn layui-btn-danger layui-btn" id="saveNewInfos">保存</a>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<!-- 新手配置 -->
+			</div>
+		</div>
+		<!-- gm配置开关 -->
+	</body>
+	<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+	<script th:src="@{/static/sys/js/public.js}"></script>
+
+	<script type="text/javascript" th:line="javascript">
+		var path = '[[${session.path}]]';
+		var table;
+		var layer;
+		var params;
+		layui.use(['element', 'carousel', 'table', "util", "form", "layer", "slider", "laydate"], function() {
+			var e = layui.$;
+			layer = layui.layer;
+			var laydate = layui.laydate;
+			var util = layui.util;
+			var form = layui.form;
+			table = layui.table;
+			var element = layui.element;
+			var carousel = layui.carousel;
+			var slider = layui.slider;
+			var myChartPie;
+			var config;
+			layer.config({
+				skin: 'layer-skin'
+			})
+			e(".layadmin-carousel").each(function(i, o) {
+				var a = e(this);
+				//建造实例
+				carousel.render({
+					elem: this,
+					width: "100%",
+					arrow: "none",
+					interval: -0,
+					autoplay: a.data("autoplay") === !0,
+					trigger: carousel.ios || carousel.android ? "click" : "hover",
+					anim: a.data("anim")
+				})
+			});
+			carousel.on('change(LAY-index-dataview)', function(obj) {});
+			$("#curTime").text(util.toDateString(new Date().getTime(), 'MM-dd HH:mm'));
+			var cols = [{
+					title: 'id',
+					type: 'checkbox',
+					templet: function(value) {
+						return value.id;
+					}
+				},
+				{
+					title: '名称',
+					field: 'name',
+					templet: function(value) {
+
+						return "<a href='javascript:;' lay-event='showCharaDetails' title='" + value.name + "'>" + value.name + "</a>";
+					}
+				},
+				{
+					title: '性别',
+					field: 'sex',
+					width: 60
+				},
+				{
+					title: '等级',
+					field: 'level',
+					width: 60
+				},
+				{
+					title: '门派',
+					field: 'polar',
+					templet: function(value) {
+						var v = "土";
+						if(value.polar == 1) {
+							v = "金"
+						} else if(value.polar == 2) {
+							v = "木";
+						} else if(value.polar == 3) {
+							v = "水";
+						} else if(value.polar == 4) {
+							v = "火"
+						}
+						return v;
+					},
+					width: 60
+				},
+				{
+					title: '位置',
+					field: 'mapName',
+					templet: function(value) {
+						if(value.mapName == undefined) {
+							return "";
+						}
+						return "<span data-x=" + value.x + " data-y=" + value.y + ">" + value.mapName + "</span>"
+					}
+				},
+				{
+					title: '积分',
+					field: 'chargeScore'
+				},
+				{
+					title: '金元宝',
+					field: 'goldCoin',
+					templet: function(value) {
+						return formatMoney(value.goldCoin);
+					}
+				},
+				{
+					title: "状态",
+					field: "onLine",
+					templet: function(value) {
+						if(value.onLine == "在线") {
+							return "<font color='#009688'>在线</font>";
+						}
+						return value.onLine;
+					}
+				}
+			];
+			init();
+
+			function init() {
+				params = $.myRendar({
+					"table": table,
+					"elem": "#users",
+					"url": path + "/sys/wd/getOnLineUsers",
+					"method": "post",
+					"cols": cols,
+					toolbar: false,
+					page: true,
+					width: 350,
+					templet: function(data) {
+						var html = '<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="disable" data="1">禁言</a>';
+						if(data.shut == 1) {
+							html = '<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="disable" data="0">解禁言</a>';
+						} else if(data.shut == 2) {
+							html = '<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="disable" data="0">解禁言</a>';
+						}
+						if(data.isEnable == 1) {
+							html += '<a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="del" data="0">解封</a>';
+						} else {
+							html += '<a class="layui-btn layui-btn-xs" lay-event="del" data="1">封号</a>';
+						}
+						html += '<a class="layui-btn layui-bg-blue layui-btn-xs" lay-event="addBlackList">拉黑</a>';
+						html += '<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="down">踢下线</a>';
+						html += '<a class="layui-btn layui-bg-blue layui-btn-xs" lay-event="resetOneTask">重置任务</a>';
+						return html;
+					},
+					success: function(res) {
+						$("#onlineNumber").text(res.data.onlines);
+					}
+				});
+			}
+
+			function load() {
+				layer.load(2, {
+					time: 10 * 1000
+				});
+			}
+
+			table.on('tool(users)', function(obj) {
+				var data = obj.data;
+				var layEvent = obj.event;
+				var tr = obj.tr;
+				var type = "";
+				var value = $(this).attr("data");
+				var t = $(this);
+				if(layEvent == "disable") {
+					type = "disable";
+					if(value != 0) {
+						layer.prompt({
+							formType: 3,
+							value: '0',
+							title: '0为永久禁言，禁言时间(分)',
+						}, function(value, index, elem) {
+							if(!isNum(value)) {
+								layer.msg("请输入数字");
+								return;
+							}
+							$.post(path + "/wd/chara/shutChara", {
+								"time": value,
+								"gid": data.uuid
+							}, function(d) {
+								if(d.status == 200) {
+									layer.msg("操作成功");
+									t.attr("data", "0");
+									t.html("解禁言");
+									layer.close(index);
+								} else {
+									layer.msg(data.retmsg);
+								}
+							});
+						});
+						return
+					}
+				} else if(layEvent == "del") {
+					//封号
+					type = "del";
+				} else if(layEvent == "down") {
+					//踢下线
+					type = "down";
+				} else if(layEvent == "resetOneTask") {
+					//
+					type = "resetOneTask";
+				} else if(layEvent == "showCharaDetails") {
+					var open = layer.open({
+						title: "查看[<font color='red'>" + data.name + "</font>]详情",
+						type: 2,
+						area: ["80%", "80%"],
+						maxmin: true,
+						shade: false,
+						content: path + "/sys/jump?page=/chara/chara_details.html&uuid=" + data.uuid
+					})
+					return;
+				} else if(layEvent == "addBlackList") {
+					layer.confirm("确定一键拉黑吗?该玩家的注册ip和设备id将被拉入黑名单，请注意！", function(index) {
+						var load = $.load("请稍等...");
+						$.post(path + "/wd/chara/fastAddBlackList", {
+							"gid": data.uuid
+						}, function(data) {
+							if(data.status == 200) {
+								layer.msg("操作成功");
+							} else {
+								layer.msg(data.retmsg);
+							}
+							layer.close(load);
+							layer.close(index);
+						});
+					})
+					return;
+				}
+				$.post(path + "/sys/wd/charOperations", {
+					"type": type,
+					"value": $(this).attr("data") == undefined ? -1 : $(this).attr("data"),
+					"uuid": data.uuid
+				}, function(d) {
+					if(d.status == 200) {
+						if(layEvent == "disable") {
+							//禁言
+							if(value == 0) {
+								t.attr("data", "1");
+								t.html("禁言");
+							} else {
+								t.attr("data", "0");
+								t.html("解禁言");
+							}
+						} else if(layEvent == "del") {
+							//封号
+							if(value == 0) {
+								t.attr("data", "1");
+								t.html("封号");
+								t.removeClass("layui-btn-warm");
+							} else {
+								t.attr("data", "0");
+								t.html("解封");
+								t.addClass("layui-btn-warm");
+							}
+						}
+						layer.msg("操作成功");
+					} else {
+						layer.msg(data.retmsg);
+					}
+				});
+			});
+
+			function uuid() {
+				var s = [];
+				var hexDigits = "0123456789abcdef";
+				for(var i = 0; i < 36; i++) {
+					s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+				}
+				s[14] = "4"; // bits 12-15 of the time_hi_and_version field to 0010
+				s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1); // bits 6-7 of the clock_seq_hi_and_reserved to 01
+				s[8] = s[13] = s[18] = s[23] = "-";
+
+				var uuid = s.join("");
+				return uuid;
+			}
+
+			$(".flush").click(function() {
+				table.render(params.options)
+			})
+
+			//gm配置
+			$("#gm_settings").click(function() {
+				var t = $(this);
+				var html = '<div class="layui-form"> <div class="layui-form-item" style="text-align: center; margin-top: 48px;"> <div class="layui-input-block" style="margin: 0 auto; font-size:0"> <input type="checkbox" name="qianneng" title="潜能" lay-filter="gmSettingsCheckbox"> <input type="checkbox" name="chongzhi" title="充值" lay-filter="gmSettingsCheckbox"> <input type="checkbox" name="daoju" title="道具"  lay-filter="gmSettingsCheckbox"> <input type="checkbox" name="jifen" title="积分" lay-filter="gmSettingsCheckbox"> <input type="checkbox" name="fabao" title="法宝" lay-filter="gmSettingsCheckbox"> <input type="checkbox" name="jingyan" title="经验" lay-filter="gmSettingsCheckbox"> <input type="checkbox" name="zhuangbei" title="装备" lay-filter="gmSettingsCheckbox"> <input type="checkbox" name="shoushi" title="首饰" lay-filter="gmSettingsCheckbox"> <input type="checkbox" name="daohang" title="道行" lay-filter="gmSettingsCheckbox"> <input type="checkbox" name="bianyi" title="变异" lay-filter="gmSettingsCheckbox"> <input type="checkbox" name="shouhu" title="守护" lay-filter="gmSettingsCheckbox"> <input type="checkbox" name="shenshou" title="神兽" lay-filter="gmSettingsCheckbox"> <input type="checkbox" name="zuoji" title="坐骑" lay-filter="gmSettingsCheckbox"> <input type="checkbox" name="guizu" title="鬼卒" lay-filter="gmSettingsCheckbox"><input type="checkbox" name="guijiang" title="鬼将" lay-filter="gmSettingsCheckbox"><input type="checkbox" name="guixian" title="鬼仙" lay-filter="gmSettingsCheckbox"></div> </div> </div>';
+				layer.open({
+					title: false,
+					area: ["400px", "200px"],
+					type: 1,
+					content: html,
+					success: function() {
+						$("input[name='chongzhi']").prop("checked", config.gm.chongzhi)
+						$("input[name='qianneng']").prop("checked", config.gm.qianneng)
+						$("input[name='daoju']").prop("checked", config.gm.daoju)
+						$("input[name='jifen']").prop("checked", config.gm.jifen)
+						$("input[name='fabao']").prop("checked", config.gm.fabao)
+						$("input[name='jingyan']").prop("checked", config.gm.jingyan)
+						$("input[name='zhuangbei']").prop("checked", config.gm.zhuangbei)
+						$("input[name='shoushi']").prop("checked", config.gm.shoushi)
+						$("input[name='daohang']").prop("checked", config.gm.daohang)
+						$("input[name='bianyi']").prop("checked", config.gm.bianyi)
+						$("input[name='shouhu']").prop("checked", config.gm.shouhu)
+						$("input[name='shenshou']").prop("checked", config.gm.shenshou)
+						$("input[name='zuoji']").prop("checked", config.gm.zuoji)
+						$("input[name='guizu']").prop("checked", config.gm.guizu)
+						$("input[name='guijiang']").prop("checked", config.gm.guijiang)
+						$("input[name='guixian']").prop("checked", config.gm.guixian)
+						form.render("checkbox");
+						form.on('checkbox(gmSettingsCheckbox)', function(data) {
+							var checked = data.elem.checked;
+							var name = data.elem.name;
+							$.post(path + "/sys/wd/setConfig", {
+								"name": name,
+								"status": data.elem.checked == true ? 1 : 0,
+								"value": "gmset"
+							}, function(data) {
+								if(data.status == 200) {
+									layer.msg("设置成功");
+									//刷新配置
+									loadConfig();
+								} else {
+									layer.msg(data.retmsg);
+								}
+							})
+						});
+					}
+				});
+			})
+			//禁止喊话
+			form.on('switch(jinyan)', function(data) {
+				$.post(path + "/sys/wd/setConfig", {
+					"name": data.value,
+					"status": data.elem.checked == true ? 1 : 0
+				}, function(data) {
+					if(data.status == 200) {
+						layer.msg("设置成功");
+					} else {
+						layer.msg(data.retmsg);
+					}
+				})
+			});
+			//禁止喊话
+			form.on('switch(xianZhiZhuCe)', function(data) {
+				$.post(path + "/sys/wd/setConfig", {
+					"name": data.value,
+					"status": data.elem.checked == true ? 1 : 0
+				}, function(data) {
+					if(data.status == 200) {
+						layer.msg("设置成功");
+					} else {
+						layer.msg(data.retmsg);
+					}
+				})
+			});
+			//pk锁
+			form.on('switch(pk)', function(data) {
+				$.post(path + "/sys/wd/setConfig", {
+					"name": data.value,
+					"status": data.elem.checked == true ? 1 : 0
+				}, function(data) {
+					if(data.status == 200) {
+						layer.msg("设置成功");
+					} else {
+						layer.msg(data.retmsg);
+					}
+				})
+			});
+			//海盗
+			$("#haidao_switch").click(function() {
+				var t = $(this);
+				if(t.attr("data-status") == undefined) {
+					t.text("关闭");
+					t.attr("data-status", "open")
+					t.addClass("layui-btn-danger");
+				} else {
+					t.removeAttr("data-status");
+					t.text("开启");
+					t.removeClass("layui-btn-danger");
+				}
+			})
+			//海盗刷新
+			$("#haidao_settings").click(function() {
+				var t = $(this);
+				load();
+				$.post(path + "/sys/wd/haidaoSet", {
+					"type": "flush"
+				}, function(data) {
+					if(data.status == 200) {
+						layer.msg("刷新成功");
+					} else {
+						layer.msg(data.msg);
+					}
+				})
+				layer.closeAll('loading');
+			})
+			//海盗清除
+			$("#haidao_clean").click(function() {
+				var t = $(this);
+				load();
+				$.post(path + "/sys/wd/haidaoSet", {
+					"type": "clean"
+				}, function() {
+					layer.msg("清除成功");
+				})
+				layer.closeAll('loading');
+			})
+			//敏感词开关
+			form.on('switch(mingan)', function(data) {
+				$.post(path + "/sys/wd/setConfig", {
+					"name": data.value,
+					"status": data.elem.checked == true ? 1 : 0
+				}, function(data) {
+					if(data.status == 200) {
+						layer.msg("设置成功");
+					} else {
+						layer.msg(data.retmsg);
+					}
+				})
+			});
+			//敏感词配置
+			$("#mingan_settings").click(function() {
+				var t = $(this);
+				console.log(config.mingan.settings.filterText)
+				var html = '<div class="layui-form"> <div class="layui-form-item" style="text-align: center;"> <div class="layui-card-body layui-text">';
+				html += '<!-- 1=当前，2=世界，4=组队，5=帮派, 30=喇叭 --> <textarea style=" height: 120px; width: 349px;resize: none; " id="jinyan_comment" name="comment" class="form-control" placeholder="请输入过滤文字" >' + config.mingan.settings.filterText + '</textarea>';
+				html += '<div> <span style="float: left; margin-left: 9px; display: inline-block; height: 17px; color: #c3c3c3;">ps:文字用、隔开</span><br/><a class="layui-btn" style="margin-left: 8px;float: left;" id="minganFilterText">保存</a> </div> </div></div> </div>';
+				layer.open({
+					title: false,
+					area: ["400px", "220px"],
+					type: 1,
+					content: html
+				});
+			})
+			//敏感词保存提交
+			$(document).on("click", "#minganFilterText", function() {
+				var v = $("#jinyan_comment").val();
+
+				$.post(path + "/sys/wd/setConfig", {
+					"name": "minganText",
+					"value": v
+				}, function(data) {
+					if(data.status == 200) {
+						layer.msg("保存成功");
+						config.mingan.settings.filterText = v;
+						setTimeout(function() {
+							layer.closeAll();
+						}, 500)
+					}
+				})
+			})
+			$("#filterNickText").click(function() {
+				var t = $(this);
+				var html = '<div class="layui-form"> <div class="layui-form-item" style="text-align: center;"> <div class="layui-card-body layui-text">';
+				html += '<textarea style=" height: 120px; width: 349px;resize: none; " id="filterNick" class="layui-textarea" placeholder="请输入禁用昵称" >' + config.mingan.settings.filterNickText + '</textarea>';
+				html += '<div> <span style="float: left; margin-left: 9px; display: inline-block; height: 17px; color: #c3c3c3;">ps:文字用、隔开</span><br/><a class="layui-btn" style="margin-left: 8px;float: left;" id="filterNickTextBtn">保存</a> </div> </div></div> </div>';
+				layer.open({
+					title: false,
+					area: ["400px", "220px"],
+					type: 1,
+					content: html
+				});
+			})
+			//禁用昵称提交
+			$(document).on("click", "#filterNickTextBtn", function() {
+				var v = $("#filterNick").val();
+				$.post(path + "/sys/wd/setConfig", {
+					"name": "filterNickText",
+					"value": v
+				}, function(data) {
+					if(data.status == 200) {
+						layer.msg("保存成功");
+						config.mingan.settings.filterNickText = v;
+						setTimeout(function() {
+							layer.closeAll();
+						}, 500)
+					}
+				})
+			})
+			//新手配置
+			$("#saveNewInfos").click(function() {
+				var jinyuanbao = $("#jinyuanbao").val();
+				var yinyuanbao = $("#yinyuanbao").val();
+				var money = $("#money").val();
+				var jifen = $("#jifen").val();
+				var qianneng = $("#qianneng").val();
+				var choujiang = $("#choujiang").val();
+				var chenghao = $("#chenghao").val();
+				var data = {
+					jinyuanbao: jinyuanbao || 0,
+					yinyuanbao: yinyuanbao || 0,
+					money: money || 0,
+					jifen: jifen || 0,
+					qianneng: qianneng || 0,
+					choujiang: choujiang || 0,
+					chenghao: chenghao || 0,
+					type: "charSet"
+				};
+				load();
+				$.post(path + "/sys/wd/newCharaSettings", data, function(d) {
+					if(d.status == 200) {
+						layer.msg("保存成功");
+					} else {
+						layer.msg(d.retmsg);
+					}
+					layer.closeAll("loading");
+				})
+			})
+			//加载新手配置
+			function loadNewCharInfo() {
+				var d = config.newChara;
+				$("#jinyuanbao").val(d.jinyuanbao);
+				$("#yinyuanbao").val(d.yinyuanbao);
+				$("#money").val(d.money);
+				$("#jifen").val(d.jifen);
+				$("#qianneng").val(d.qianneng);
+				$("#choujiang").val(d.choujiang);
+				$("#chenghao").val(d.chenghao);
+			}
+
+			//消息发送
+			$("#comment_send").click(function() {
+				var t = $("#comment");
+				var msgType = $('select[name="msgType"] option:selected').val();
+				if(t.val() == "" || t.val().length == 0) {
+					layer.msg("请输入内容");
+				} else {
+					$.post(path + "/sys/wd/sendMsg", {
+						"channel": msgType,
+						"content": t.val()
+					}, function(data) {
+						if(data.status == 200) {
+							layer.msg("消息发送成功");
+							//放入缓存
+							var showVal = t.val();
+							if(t.val().length > 10) {
+								showVal = t.val().substring(0, 10) + "...";
+							}
+							var find = false;
+							$("#records option").each(function(i, o) {
+								if($(o).text() == t.val()) {
+									find = true;
+									return false;
+								}
+							})
+							if(!find) {
+								var uid = uuid();
+								$("#records").append('<option value="' + t.val() + '" title="' + t.val() + '">' + showVal + '<option>');
+								form.render('select');
+							}
+						} else {
+							layer.msg(data.retmsg);
+						}
+					})
+				}
+			})
+			//历史记录seletc监听
+			form.on("select(records)", function(data) {
+				var val = data.value;
+				if(val != "-1") {
+					$("#comment").val(val);
+				} else {
+					$("#comment").val("");
+				}
+
+			})
+
+			//fb配置
+			$("#fb_settings").click(function() {
+				var t = $(this);
+				var html = '<div class="layui-form" style="width:90%;margin-top:31px;" lay-filter="fbForm">';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">人数</label> <div class="layui-input-block"> <input type="number" name="fb_number" lay-verify="title" autocomplete="off" placeholder="人数范围1~5" class="layui-input" value="1"> </div></div>';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">难度</label> <div class="layui-input-block"> <select name="fb_nandu" lay-verify=""> <option value="1">一般</option> <option value="2">简单</option> <option value="3">复杂</option> </select></div></div>';
+				html += '<div class="layui-form-item"><a class="layui-btn layui-btn-danger layui-btn" style="margin-left: 109px;" id="saveFbSet">保存</a></div>'
+				html += '</div>';
+				layer.open({
+					title: false,
+					area: ["400px", "250px"],
+					type: 1,
+					content: html,
+					success: function() {
+						form.render("select");
+					}
+				});
+			})
+			//fb开关
+			form.on('switch(fb)', function(data) {
+				$.post(path + "/sys/wd/setConfig", {
+					"name": data.value,
+					"status": data.elem.checked == true ? 1 : 0
+				}, function(data) {
+					if(data.status == 200) {
+						layer.msg("设置成功");
+					} else {
+						layer.msg(data.retmsg);
+					}
+				})
+			});
+
+			//提交副本设置
+			$(document).on("click", "#saveFbSet", function() {
+				var fbForm = form.val("fbForm");
+				var fbNumber = parseInt(fbForm.fb_number);
+				if(fbNumber <= 0 || fbNumber > 5 || isNaN(fbNumber)) {
+					layer.msg("副本人数范围1~5");
+					return;
+				}
+			})
+			//打开副本boos属性设置
+			$(".fbDataSet").click(function() {
+				var t = $(this);
+				var html = '<div class="layui-form" style="width:90%;margin-top:31px;" lay-filter="fbDataSetForm">';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">名字</label> <div class="layui-input-block"> <input type="text" name="fb_data_name" class="layui-input" style="background:#f5f2f2" disabled> </div></div>';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">生命</label> <div class="layui-input-block"> <input type="number" name="fb_data_life" class="layui-input"> </div></div>';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">物攻</label> <div class="layui-input-block"> <input type="number" name="fb_data_phy_attack" class="layui-input"> </div></div>';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">法攻</label> <div class="layui-input-block"> <input type="number" name="fb_data_mag_attack" class="layui-input"> </div></div>';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">道行</label> <div class="layui-input-block"> <input type="number" name="fb_data_daohang" class="layui-input"> </div></div>';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">技能</label> <div class="layui-input-block"> <textarea type="text" name="fb_data_skill" placeholder="技能用逗号隔开" style="resize:none;height:100px;width:100%"></textarea> <span>技能用逗号隔开</span></div></div>';
+				html += '<div class="layui-form-item"><a class="layui-btn layui-btn-danger layui-btn" style="margin-left: 109px;" id="saveDataSetForm" data-id="' + t.attr("data-id") + '">保存</a></div>'
+				html += '</div>';
+				//请求数据.
+				$.post(path + "/sys/wd/getTobjectById", {
+					"id": t.attr("data-id")
+				}, function(data) {
+					if(data.status == 200) {
+						var d = data.data;
+						$("input[name='fb_data_name']").val(d.name);
+						$("input[name='fb_data_life']").val(d.life);
+						$("input[name='fb_data_phy_attack']").val(d.phyAttack);
+						$("input[name='fb_data_mag_attack']").val(d.magAttack);
+						$("input[name='fb_data_daohang']").val(d.daohang);
+						$("textarea[name='fb_data_skill']").val(d.skill);
+					}
+				})
+				layer.open({
+					title: false,
+					area: ["400px"],
+					type: 1,
+					shadeClose: true,
+					content: html,
+					success: function() {
+						form.render("select");
+					}
+				});
+			})
+			//保存副本对象设置监听
+			$(document).on("click", "#saveDataSetForm", function() {
+				var fbForm = form.val("fbDataSetForm");
+				var t = $(this);
+				var id = t.attr("data-id");
+				$.post(path + "/sys/wd/updateTobjectById", {
+					"id": id,
+					"daohang": fbForm.fb_data_life,
+					"skill": fbForm.fb_data_skill,
+					"magAttack": fbForm.fb_data_mag_attack,
+					"phyAttack": fbForm.fb_data_phy_attack,
+					"life": fbForm.fb_data_life
+				}, function(data) {
+					if(data.status == 200) {
+						layer.msg("修改成功");
+						setTimeout(function() {
+							layer.closeAll();
+						}, 500)
+					} else {
+						layer.msg(data.retmsg);
+					}
+				})
+			})
+			//角色装备类型点击监听
+			var selectData = [];
+			var zbInfo = {
+				"70": {
+					"wuqi": ["暴雨梨花枪", "幽冥鬼爪", "追魂剑", "晃金锤", "流云扇"],
+					"yifu": ["八卦衣", "狐皮袄"],
+					"xiezi": ["疾风履"],
+					"maozi": ["乾坤冠", "鱼尾冠"]
+				},
+				"80": {
+					"wuqi": ["云龙枪", "噬魂魔爪", "九黎剑", "蔽日扇", "撼地锤"],
+					"yifu": ["连环甲", "蛟皮袄"],
+					"xiezi": ["无影靴"],
+					"maozi": ["龙冠", "凤冠"]
+				},
+				"90": {
+					"wuqi": ["蕴雷枪", "拂兰指", "轩辕剑", "乾坤扇", "破天锤"],
+					"yifu": ["金缕衣", "天蚕衣"],
+					"xiezi": ["天行履"],
+					"maozi": ["蟠龙冠", "金霞冠"]
+				},
+				"100": {
+					"wuqi": ["乙木神剑", "风火游龙枪", "啼血爪", "五彩神焰扇", "加持杵"],
+					"yifu": ["天衣", "霓裳羽衣"],
+					"xiezi": ["踏云靴"],
+					"maozi": ["九霄烈焰冠", "九霄凤鸣冠"]
+				},
+				"110": {
+					"wuqi": ["九转金刚刃", "七巧玲珑爪", "紫青玄魔剑", "离火七翎扇", "炼狱麒麟杵"],
+					"yifu": ["瀚宇法袍", "星晶法衣"],
+					"xiezi": ["御风履"],
+					"maozi": ["星耀冠", "凌波霞冠"]
+				},
+				"120": {
+					"wuqi": ["混元斩龙戟", "镇魂摄天刺", "封神诛仙剑", "赤霄烈焰扇", "风雷如意杵"],
+					"yifu": ["诸天法袍", "神鸢凤裘"],
+					"xiezi": ["钧天履"],
+					"maozi": ["七星宝冠", "天灵宝冠"]
+				},
+				"130": {
+					"wuqi": ["赤眼神龙枪", "红绫火毒爪", "九天玄冥剑", "红云火霞扇", "玄黄破坚锤"],
+					"yifu": ["天玄真神甲", "万霞霓罗裳"],
+					"xiezi": ["雷弧闪"],
+					"maozi": ["白玉星冠", "九彩玲珠冠"]
+				},
+				"140": {
+					"wuqi": ["九天祥云戟", "九幽伏魔爪", "赤魇遁龙剑", "熠焰通灵扇", "玄天火龙锤"],
+					"yifu": ["赤金磐龙甲", "玄女绛绡衣"],
+					"xiezi": ["惊虹战靴"],
+					"maozi": ["双翼灵枭冠", "赤鸾翎羽冠"]
+				},
+				"150": {
+					"wuqi": ["赤封侠胆戟", "刺骨追魂爪", "聚灵神风剑", "降魔诛宇扇", "四海镇天锤"],
+					"yifu": ["紫金神风甲", "凤翼轻裘"],
+					"xiezi": ["煞影履"],
+					"maozi": ["金翼龙冠", "菁麟宝冠"]
+				},
+				"160": {
+					"wuqi": ["天赐鸿福枪", "赤目锥心爪", "倚天玄霜剑", "幽冥天使扇", "九天炼狱锤"],
+					"yifu": ["五方银龙铠", "烟罗紫轻绡"],
+					"xiezi": ["奔逸绝尘靴"],
+					"maozi": ["太清玄冠", "玉清仙冠"]
+				},
+				"170": {
+					"wuqi": ["白虹贯日枪", "蚀骨绝殇爪", "紫宸仙霞剑", "参商拓风扇", "魔枭嗜血锤"],
+					"yifu": ["鸿溟混元铠", "紫翠丹霞衣"],
+					"xiezi": ["杳冥寂风履"],
+					"maozi": ["云根沧霞冠", "飘渺琼华冠"]
+				}
+			};
+			var data = {
+				"no1": [{
+					"name": "所有相性",
+					"value": "all_resist_polar"
+				}, {
+					"name": "物理必杀率",
+					"value": "damage_sel"
+				}, {
+					"name": "物理连击率",
+					"value": "stunt_rate"
+				}, {
+					"name": "金相性",
+					"value": "wood"
+				}, {
+					"name": "木相性",
+					"value": "water"
+				}, {
+					"name": "水相性",
+					"value": "fire"
+				}, {
+					"name": "火相性",
+					"value": "earth"
+				}, {
+					"name": "土相性",
+					"value": "resist_metal"
+				}, {
+					"name": "天伤",
+					"value": "skill_low_cost"
+				}],
+				"no2": [{
+					"name": "所有属性",
+					"value": "all_polar"
+				}, {
+					"name": "敏捷",
+					"value": "speed"
+				}, {
+					"name": "力量",
+					"value": "phy_power"
+				}, {
+					"name": "体质",
+					"value": "life"
+				}, {
+					"name": "灵力",
+					"value": "mag_power"
+				}, {
+					"name": "速度",
+					"value": "parry"
+				}],
+				"no3": [{
+					"name": "所有属性",
+					"value": "all_polar"
+				}, {
+					"name": "敏捷",
+					"value": "speed"
+				}, {
+					"name": "力量",
+					"value": "phy_power"
+				}, {
+					"name": "体质",
+					"value": "life"
+				}, {
+					"name": "灵力",
+					"value": "mag_power"
+				}],
+				"no4": [{
+					"name": "所有属性",
+					"value": "all_polar"
+				}, {
+					"name": "敏捷",
+					"value": "speed"
+				}, {
+					"name": "力量",
+					"value": "phy_power"
+				}, {
+					"name": "体质",
+					"value": "life"
+				}, {
+					"name": "灵力",
+					"value": "mag_power"
+				}]
+			};
+			form.on('select(char_zb_type_filter)', function(d) {
+				var l = form.val("lanse");
+				var level = l.level;
+				var zbi = [];
+				switch(d.value) {
+					//武器
+					case "1":
+						zbi = zbInfo[level].wuqi;
+						selectData = data.no1;
+						break;
+						//鞋子
+					case "4":
+						zbi = zbInfo[level].xiezi;
+						selectData = data.no2;
+						break;
+						//衣服
+					case "3":
+						zbi = zbInfo[level].yifu;
+						selectData = data.no3;
+						break;
+						//帽子
+					case "2":
+						zbi = zbInfo[level].maozi;
+						selectData = data.no4;
+						break;
+					default:
+						selectData = [];
+						zbi = [];
+						break;
+				}
+				var html = "<option value>选择属性</option>";
+				$(selectData).each(function(i, o) {
+					var name = o.name;
+					var value = o.value;
+					html += "<option value=" + value + ">" + name + "</option>";
+					$("select[name='lanse1']").html(html);
+					$("select[name='lanse2']").html(html);
+					$("select[name='lanse3']").html(html);
+					$("select[name='fense']").html(html);
+					$("select[name='huangse']").html(html);
+					form.render("select", "lanse");
+				})
+				var html2 = "";
+				$(zbi).each(function(i, o) {
+					html2 += "<option value=" + o + ">" + o + "</option>";
+					$("select[name='zb_name']").html(html2);
+					form.render("select");
+				})
+
+			});
+			//等级监听
+			form.on('select(char_zb_level_filter)', function(d) {
+				var l = form.val("lanse");
+				var level = l.level;
+				var zbi = [];
+				switch(l.char_zb_type) {
+					//武器
+					case "1":
+						zbi = zbInfo[level].wuqi;
+						break;
+						//鞋子
+					case "4":
+						zbi = zbInfo[level].xiezi;
+						break;
+						//衣服
+					case "3":
+						zbi = zbInfo[level].yifu;
+						break;
+						//帽子
+					case "2":
+						zbi = zbInfo[level].maozi;
+						break;
+					default:
+						zbi = [];
+						break;
+				}
+				var html2 = "";
+				$(zbi).each(function(i, o) {
+					html2 += "<option value=" + o + ">" + o + "</option>";
+					$("select[name='zb_name']").html(html2);
+					form.render("select");
+				})
+			})
+			//角色装备发送
+			$("#char_zb_info_send").click(function() {
+				var l = form.val("lanse");
+				if(zbSendvalidate(l)) {
+					l.name = $("input[name='charName']").val();
+					$.post(path + "/sys/wd/attrSendToChara", l, function(data) {
+						if(data.status == 200) {
+							layer.msg("发送成功");
+						} else {
+							layer.msg(data.retmsg);
+						}
+					})
+				}
+			})
+			//装备发送校验
+			function zbSendvalidate(l) {
+				//判断是否选择装备类型
+				if(l.char_zb_type == "") {
+					layer.msg("请选择装备类型", {
+						anim: 6
+					});
+					return false;
+				} else if(l.lanse1 == "" && l.lanse2 == "" && l.lanse3 == "") {
+					layer.msg("至少选中一条属性", {
+						anim: 6
+					});
+					return false;
+				}
+				//装载蓝色属性
+				var lanseData = [];
+				if(l.lanse1 != "") {
+					lanseData.push(l.lanse1);
+					if(l.lanse1Val == "" || l.lanse1Val <= 0) {
+						layer.msg("请输入正确的值", {
+							anim: 6
+						});
+						return false;
+					}
+				}
+				if(l.lanse2 != "") {
+					lanseData.push(l.lanse2);
+					if(l.lanse2Val == "" || l.lanse2Val <= 0) {
+						layer.msg("请输入正确的值", {
+							anim: 6
+						});
+						return false;
+					}
+				}
+				if(l.lanse3 != "") {
+					lanseData.push(l.lanse3);
+					if(l.lanse3Val == "" || l.lanse3Val <= 0) {
+						layer.msg("请输入正确的值", {
+							anim: 6
+						});
+						return false;
+					}
+				}
+				if(lanseData.length > 0) {
+					if(isRepeat(lanseData)) {
+						layer.msg("蓝色属性不允许重复", {
+							anim: 6
+						});
+						return false;
+					}
+				}
+				//接下来判断粉色和黄色是否重复.
+				if(l.fense != "") {
+					lanseData.push(l.fense);
+					//搜索
+					var count = charNum(l.fense, lanseData);
+					if(count > 2) {
+						layer.msg("重复属性最多2条", {
+							anim: 6
+						});
+						return false;
+					}
+				}
+				if(l.huangse != "") {
+					lanseData.push(l.huangse);
+					//搜索
+					var count = charNum(l.huangse, lanseData);
+					if(count > 2) {
+						layer.msg("重复属性最多2条", {
+							anim: 6
+						});
+						return false;
+					}
+				}
+				if($("input[name='charName']").val().trim() == "") {
+					layer.msg("请输入角色名", {
+						anim: 6
+					});
+					return false;
+				}
+				return true;
+			}
+
+			function isRepeat(arr) {
+				var hash = {};
+				for(var i in arr) {
+					if(hash[arr[i]]) {
+						return true;
+					}
+					// 不存在该元素，则赋值为true，可以赋任意值，相应的修改if判断条件即可
+					hash[arr[i]] = true;
+				}
+				return false;
+			}
+
+			function charNum(thisArr, arr) {
+				var count = 0;
+				for(var i = 0; i < arr.length; i++) {
+					if(thisArr == arr[i]) {
+						count++;
+					}
+				}
+				return count;
+			}
+			//角色经验、潜能发送监听
+			$("#char_info_send").click(function() {
+				var v = form.val("char_info_form");
+				console.log(v.sendAllChara);
+				var name = $("#charName");
+				if(v.sendAllChara == 0) {
+					if(name.val() == "" || name.val().length == 0) {
+						layer.msg("请输入角色名");
+						return false;
+					}
+				} else if(v.send_char_number == "" || parseInt(v.send_char_number) <= 0) {
+					layer.msg("请输入正确的数值");
+					return false;
+				}
+				$.post(path + "/sys/wd/sendCharInfo", {
+					"name": name.val(),
+					"type": v.send_char_type + "-" + v.sendType,
+					"sendAllChara": v.sendAllChara,
+					"value": v.send_char_number
+				}, function(data) {
+					if(data.status == 200) {
+						layer.msg("发送成功");
+					} else {
+						layer.msg(data.retmsg);
+					}
+				})
+			})
+			loadConfig();
+
+			function loadConfig() {
+				//加载配置操作信息
+				$.post(path + "/sys/wd/getConfig", function(data) {
+					config = data.data;
+					form.val("configInit", {
+						"pk": config.pkLock,
+						"jinyan": config.allJinyan,
+						"mingan": config.mingan.status,
+						"fb": config.fb.status,
+						"wpe": config.wpeConfig.status,
+						"speakMoney": config.baseConfig.isChargeSpeak,
+						"xianZhiZhuCe":config.xianZhiZhuCe
+					});
+					loadNewCharInfo();
+					setHaidaoView();
+					$(".stopServer").show();
+					if(config.baseConfig.stopServer == 1) {
+						//开启了停机维护
+						$(".stopServer").html("关闭维护");
+						$(".stopServer").removeClass("layui-btn-danger");
+						$(".stopServer").attr("data", "0");
+					} else {
+						$(".stopServer").html("开启维护");
+						$(".stopServer").addClass("layui-btn-danger");
+						$(".stopServer").attr("data", "1");
+					}
+				})
+			}
+			var petList = {
+				"shenshou": ["疆良", "东山神灵", "玄武", "朱雀", "九尾狐", "白矖"],
+				"zuoqi": ["仙阳剑", "岳麓剑", "古鹿", "玉豹", "仙葫芦", "无极熊", "北极熊", "太极熊", "筋斗云", "墨麒麟"],
+				"bianyi": ["伶俐鼠", "笨笨牛", "威威虎", "跳跳兔", "酷酷龙", "花花蛇", "溜溜马", "咩咩羊", "帅帅猴", "蛋蛋鸡", "乖乖狗", "招财猪"]
+			};
+			//宠物类型选择
+			form.on('select(pet_send_type)', function(d) {
+				if(d.value == "4") {
+					//神兽
+					var html = "";
+					$(petList.shenshou).each(function(i, o) {
+						html += "<option value=" + o + ">" + o + "</option>";
+					})
+					$("select[name='pet_send_name']").html(html);
+				} else if(d.value == "3") {
+					//变异
+					var html = "";
+					$(petList.bianyi).each(function(i, o) {
+						html += "<option value=" + o + ">" + o + "</option>";
+					})
+					$("select[name='pet_send_name']").html(html);
+				} else {
+					//坐骑
+					var html = "";
+					$(petList.zuoqi).each(function(i, o) {
+						html += "<option value=" + o + ">" + o + "</option>";
+					})
+					$("select[name='pet_send_name']").html(html);
+				}
+				form.render("select");
+			})
+			//发送宠物和法宝
+			$("#pet_info_send").click(function() {
+				var v = form.val("pet_info_form");
+				console.log(v);
+				var data = {
+					"charName": $("#charName").val(),
+					"sw": "pet",
+					"type": v.pet_send_type,
+					"name": v.pet_send_name
+				}
+				petAndFabaoSendInfo(data);
+			})
+			//发送满属性天书
+			$("#tianshu_info_send").click(function() {
+				var v = form.val("tianshu_info_form");
+				console.log(v);
+				var data = {
+					"charaName": $("#charName").val(),
+					"name": v.tianshu_send_type
+				}
+				tianshuSendInfo(data);
+			})
+			$("#fabao_info_send").click(function() {
+				var v = form.val("fabao_info_form");
+				if(v.fabao_send_level < 0 && v.fabao_send_level > 24) {
+					layer.msg("法宝等级最高24");
+					return;
+				}
+				var data = {
+					"charName": $("#charName").val(),
+					"sw": "fabao",
+					"type": "1",
+					"name": v.fabao_send_name,
+					"xiangxin": v.fabao_send_type,
+					"level": v.fabao_send_level
+				}
+				petAndFabaoSendInfo(data);
+			})
+
+			function petAndFabaoSendInfo(data) {
+				if($("#charName").val() == "" || $("#charName").val().length == 0) {
+					layer.msg("请输入角色名");
+					return;
+				}
+				$.post(path + "/sys/wd/getFabaoAndPets", data, function(d) {
+					if(d.status == 200) {
+						layer.msg("发送成功");
+					} else {
+						layer.msg(d.retmsg);
+					}
+				})
+			}
+			function tianshuSendInfo(data) {
+				if($("#charName").val() == "" || $("#charName").val().length == 0) {
+					layer.msg("请输入角色名");
+					return;
+				}
+				$.post(path + "/wd/config/sendTianshu", data, function(d) {
+					if(d.status == 200) {
+						layer.msg("发送成功");
+					} else {
+						layer.msg(d.retmsg);
+					}
+				})
+			}
+			//海盗奖励
+			form.on("switch(haidao_filter_sw)", function(d) {
+				var d = {
+					"type": d.value,
+					"value": d.elem.checked == true ? 1 : 0
+				};
+				haidaoRequest(d);
+			})
+			//海盗各项配置弹出窗
+			$("#haidao_num").click(function() {
+				layer.prompt({
+					title: '海盗刷新数量',
+					formType: 0,
+					value: config.haidao.haidaoNum
+				}, function(val, index) {
+					if(checkNum(val)) {
+						haidaoRequest({
+							"type": "haidaoNum",
+							"value": val
+						})
+						layer.close(index);
+					} else {
+						layer.msg("请输入数字");
+					}
+				});
+
+			})
+			$("#haidao_team").click(function() {
+				layer.prompt({
+					title: '海盗战斗队伍人数',
+					formType: 0,
+					value: config.haidao.teamNumber
+				}, function(val, index) {
+					if(checkNum(val)) {
+						//校验人数
+						if(parseInt(val) > 0 && parseInt(val) < 5) {
+							haidaoRequest({
+								"type": "teamNumber",
+								"value": val
+							})
+							layer.close(index);
+						} else {
+							layer.msg("队伍人数范围在1~5");
+						}
+					} else {
+						layer.msg("请输入数字");
+					}
+				});
+			})
+			$("#haidao_times").click(function() {
+				var html = '<table class="layui-table" id="haidao_times_table"><tbody><tr> <td>时间</td> <td>操作</td> ';
+				//请求接口获取历史时间
+				$.post(path + "/sys/wd/haidaoSet", {
+					"type": "getTimes"
+				}, function(data) {
+					if(data.status == 200) {
+						$(data.data).each(function(i, o) {
+							console.log(o)
+							html += '</tr> <tr> <td class="haidao_time_td">' + o + '</td> <td> <a class="layui-btn layui-btn-danger layui-btn-xs del_haidao_time">删除</a> </td> </tr>';
+						})
+						html += '</tbody></table>';
+						layer.open({
+							title: "海盗刷新时间配置(点击框弹出时间选择)",
+							type: 1,
+							area: ["500px", "500px"],
+							content: '<div style="margin: 12px auto; text-align: center;"><input type="button" style="width: 200px; margin: 0 auto;" class="layui-input" id="haidao_times_btn"><button type="button" class="layui-btn" id="addFlushHaidaoTimes" style="position: relative; left: 155px; top: -37px;">增加</button><div style="margin-top: 26px; height: 74px; width: 95%; margin: 0 auto;" >' + html + '</div></div>',
+							success: function() {
+								laydate.render({
+									elem: '#haidao_times_btn',
+									type: 'time',
+									format: "HH:mm:ss"
+								});
+							}
+						})
+					}
+				})
+			})
+			//删除海盗时间
+			$(document).on("click", ".del_haidao_time", function() {
+				$(this).parent().parent().remove();
+
+				var d = {
+					"type": "times",
+					"value": haidaoTimesF()
+				};
+				haidaoRequest(d);
+			})
+			//点击增加刷新时间
+			$(document).on("click", "#addFlushHaidaoTimes", function() {
+				var s = $("#haidao_times_btn").val();
+				if(s == "" || s.length == 0) {
+					layer.msg("请选择时间");
+					return;
+				}
+				$("#haidao_times_table").find("tbody").append('<tr><td class="haidao_time_td">' + s + '</td><td><a class="layui-btn layui-btn-danger layui-btn-xs del_haidao_time">删除</a></td></tr>');
+				var d = {
+					"type": "times",
+					"value": haidaoTimesF()
+				};
+				haidaoRequest(d);
+			})
+
+			function haidaoTimesF() {
+				var t = "";
+				$(".haidao_time_td").each(function(i, o) {
+					var time = $(o).text();
+					t += time;
+					t += ",";
+				})
+				if(t != "") {
+					t = t.substring(0, t.length - 1);
+				}
+				return t;
+			}
+
+			$("#haidao_daoju").click(function() {
+				var daoju = "";
+				$(config.haidao.daoju).each(function(i, o) {
+					daoju += o;
+					daoju += ",";
+				})
+				if(daoju != "") {
+					daoju = daoju.substring(0, daoju.length - 1);
+				}
+				layer.prompt({
+					title: '海盗奖励道具,道具用英文逗号隔开',
+					formType: 2,
+					value: daoju
+				}, function(val, index) {
+					layer.close(index);
+					haidaoRequest({
+						"type": "daoju",
+						"value": val
+					})
+				});
+			})
+			$("#haidao_jiangli_count").click(function() {
+				layer.prompt({
+					title: '海盗奖励次数',
+					formType: 0,
+					value: config.haidao.count
+				}, function(val, index) {
+					layer.close(index);
+					if(checkNum(val)) {
+						haidaoRequest({
+							"type": "count",
+							"value": val
+						})
+					} else {
+						layer.msg("请输入数字");
+					}
+				});
+			})
+			//海盗请求
+			function haidaoRequest(d) {
+				$.post(path + "/sys/wd/haidaoSet", d, function(data) {
+					if(data.status == 200) {
+						layer.msg("设置成功");
+					} else {
+						layer.msg(data.retmsg);
+					}
+				})
+			}
+			//渲染海盗信息
+			function setHaidaoView() {
+				form.val("haidao_filter", {
+					"jingyan": config.haidao.jingyan,
+					"daohang": config.haidao.daohang,
+					"qianneng": config.haidao.qianneng,
+					"jinqian": config.haidao.jinbi,
+					"zhuangbei": config.haidao.weijianding
+				})
+			}
+
+			function checkNum(val) {
+				var reg = /^[0-9]+.?[0-9]*$/
+				if(reg.test(val)) {
+					return true
+				}
+				return false;
+			}
+
+			//强制切磋
+			$("#foracepk_settings").click(function() {
+				var open = layer.open({
+					title: "强制切磋配置(ctrl+s可快速保存)",
+					type: 2,
+					area: ["600px", "98%"],
+					content: path + "/sys/jump?page=/game/forace_pk.html"
+				})
+			});
+			//停机维护
+			$(".stopServer").click(function() {
+				var t = $(this);
+				if(t.attr("data") == 1) {
+					layer.confirm('确定开启维护吗?', function(index) {
+						weihu(t);
+					});
+				} else {
+					weihu(t);
+				}
+			});
+
+			function weihu(t) {
+				var load = $.load("正在请求,请稍后。");
+				$.post(path + "/sys/wd/stopServer", {
+					"status": t.attr("data")
+				}, function(data) {
+					if(data.status == 200) {
+						layer.msg("操作成功.");
+						if(t.attr("data") == 1) {
+							//开启了停机维护
+							$(".stopServer").html("关闭维护");
+							$(".stopServer").removeClass("layui-btn-danger");
+							$(".stopServer").attr("data", "0");
+						} else {
+							$(".stopServer").html("开启维护");
+							$(".stopServer").addClass("layui-btn-danger");
+							$(".stopServer").attr("data", "1");
+						}
+					}
+					layer.close(load);
+				})
+			}
+			$(".moveChara").click(function() {
+				$.post(path + "/sys/wd/moveChara", function(data) {
+					if(data.status == 200) {
+						layer.msg("操作成功.");
+					}
+				})
+			})
+			$("#shuaxing_time").click(function() {
+				layer.prompt({
+					title: 'cron表达式(<a href="https://cron.qqe2.com">在线cron生成</a>)',
+					formType: 0,
+					value: config.baseConfig.shuaxing.cron
+				}, function(val, index) {
+					//请求后端.
+					$.post(path + "/sys/wd/setBaseConfig", {
+						"cron": val
+					}, function(data) {
+						if(data.status == 200) {
+							layer.msg("操作成功.");
+							layer.close(index);
+							//刷新配置
+							loadConfig();
+						}
+					})
+				});
+			})
+			$("#shuaxing_count").click(function() {
+				layer.prompt({
+					title: '每次刷新数量',
+					formType: 0,
+					value: config.baseConfig.shuaxing.count
+				}, function(val, index) {
+					//请求后端.
+					if(!isNum(val)) {
+						layer.msg("请输入数字");
+						return;
+					}
+					$.post(path + "/sys/wd/setBaseConfig", {
+						"count": val
+					}, function(data) {
+						if(data.status == 200) {
+							layer.msg("操作成功.");
+							layer.close(index);
+							//刷新配置
+							loadConfig();
+						}
+					})
+				});
+			})
+			$("#yuanmoTime").click(function() {
+				layer.prompt({
+					title: '击杀元魔时间(单位分)',
+					formType: 0,
+					value: config.shidao.f1 / 1000 / 60
+				}, function(val, index) {
+					if(checkNum(val)) {
+						//校验人数
+						if(parseInt(val) > 0) {
+							//请求后端.
+							var d = {
+								"type": "f1",
+								"value": val
+							};
+							shidaoSubmit(d);
+							layer.close(index);
+						} else {
+							layer.msg("请输入正确的时间");
+						}
+					} else {
+						layer.msg("请输入数字");
+					}
+				});
+			})
+			$("#pkTime").click(function() {
+				layer.prompt({
+					title: '玩家pk时间(单位分)',
+					formType: 0,
+					value: config.shidao.f2 / 1000 / 60
+				}, function(val, index) {
+					if(checkNum(val)) {
+						//校验人数
+						if(parseInt(val) > 0) {
+							//请求后端.
+							var d = {
+								"type": "f2",
+								"value": val
+							};
+							shidaoSubmit(d);
+							layer.close(index);
+						} else {
+							layer.msg("请输入正确的时间");
+						}
+					} else {
+						layer.msg("请输入数字");
+					}
+				});
+			})
+			$("#rankRefresh").click(function() {
+				$.load("正在刷新");
+				//刷新排行榜
+				$.post(path + "/sys/wd/rankRefresh", function(data) {
+					if(data.status == 200) {
+						layer.msg("排行榜刷新成功。");
+					} else {
+						layer.msg(data.retmsg);
+					}
+				})
+			})
+			$("#tiandiRefresh").click(function() {
+				layer.prompt({
+					title: '请输入刷新数量',
+					formType: 0
+				}, function(val, index) {
+					if(checkNum(val)) {
+						//校验人数
+						if(parseInt(val) > 0) {
+							//请求后端.
+							$.load("正在刷新");
+							$.post(path + "/sys/wd/refreshXing", {
+								"size": val
+							}, function(data) {
+								if(data.status == 200) {
+									layer.msg("刷新成功");
+								} else {
+									layer.msg(data.retmsg);
+								}
+								layer.closeAll();
+							})
+						}
+					} else {
+						layer.msg("请输入数字");
+					}
+				});
+			})
+			$("#zhanshenRefresh").click(function() {
+				layer.prompt({
+					title: '请输入刷新数量',
+					formType: 0
+				}, function(val, index) {
+					if(checkNum(val)) {
+						//校验人数
+						if(parseInt(val) > 0) {
+							//请求后端.
+							$.load("正在刷新");
+							$.post(path + "/sys/wd/refreshZhanShen", {
+								"size": val
+							}, function(data) {
+								if(data.status == 200) {
+									layer.msg("刷新成功");
+								} else {
+									layer.msg(data.retmsg);
+								}
+								layer.closeAll();
+							})
+						}
+					} else {
+						layer.msg("请输入数字");
+					}
+				});
+			})
+			$(".query_btn").click(function() {
+				var name = $("#account").val();
+				if(name.trim() != "" && name.length > 0) {
+					params.options.where = {
+						"name": name
+					};
+				} else {
+					params.options.where = {};
+				}
+				table.render(params.options);
+			})
+			//wpe
+			form.on('switch(wpe)', function(data) {
+				$.post(path + "/sys/wd/setConfig", {
+					"name": data.value,
+					"status": data.elem.checked == true ? 1 : 0
+				}, function(data) {
+					if(data.status == 200) {
+						layer.msg("设置成功");
+					} else {
+						layer.msg(data.retmsg);
+					}
+				})
+			});
+			$("#testBtn").click(function() {
+				$.post(path + "/sys/wd/testBtn", function(data) {
+					if(data.status == 200) {
+						layer.msg("设置成功");
+					} else {
+						layer.msg(data.retmsg);
+					}
+				})
+			})
+			//开口费
+			form.on("switch(speakMoney)", function(d) {
+				$.post(path + "/wd/charge/setChargeStatus", {
+					"status": d.elem.checked == true ? 1 : 0
+				}, function(data) {
+					if(data.status == 200) {
+						layer.msg("操作成功.");
+					}
+				})
+			});
+			//结束卡战斗
+			$(".endCombat").click(function() {
+				layer.prompt({
+					title: '请输入玩家姓名',
+					formType: 0
+				}, function(val, index) {
+					$.post(path + "/sys/wd/endCombat", {
+						"name": val
+					}, function(data) {
+						if(data.status == 200) {
+							layer.msg("操作成功");
+						} else {
+							layer.msg(data.retmsg);
+						}
+					})
+				});
+			});
+			$(".clearDatabase").click(function() {
+				layer.prompt({
+					title: '此操作将无法恢复,请确认密码？',
+					formType: 1
+				}, function(val, index) {
+					$.post(path + "/sys/wd/clearDatabase", {
+						"pwd": val
+					}, function(data) {
+						if(data.status == 200) {
+							layer.msg("操作成功");
+						} else {
+							layer.msg(data.retmsg);
+						}
+					})
+				});
+			});
+
+			$(".iframe_open").click(function() {
+				var paths = $(this).attr("data");
+				var title = $(this).attr("title");
+				var dataId = $(this).attr("data-id");
+				layer.open({
+					title: title,
+					type: 2,
+					maxmin: true,
+					shade: false,
+					area: ["700px", "620px"],
+					id: dataId,
+					content: path + "/sys/jump?page=/tools/" + paths + ".html"
+				})
+			});
+			$(".export").click(function() {
+				layer.prompt({
+					formType: 2,
+					shade: 0,
+					title: '导出角色(多个角色请用、隔开)',
+				}, function(value, index, elem) {
+					var download = window.open(path + "/sys/wd/exportCharas?name=" + value);
+					var load = $.load("正在下载...");
+					var timer = setInterval(function() {
+						if(download != null && download.closed) {
+							layer.close(load);
+							layer.msg("导出成功");
+							clearInterval(timer);
+						}
+					}, 500)
+				});
+			});
+			//获取队伍战斗详情
+			$(document).on("click",".getFightTeamStatus",function(){
+				if(getCharaName() == "") {
+					layer.msg("请输入角色名");
+					return;
+				}
+				$.post(path+"/wd/chara/getFightTeamStatus",{name:getCharaName()},function(data){
+					if(data.status == 200) {
+						if(data.data.fightObjects == undefined) {
+							layer.msg("该玩家不在战斗");
+							return;
+						}
+						var html = "";
+						html+="<div style='width: 120px;margin: 21px auto;'>";
+						html+="<p>回合:<span>"+data.data.round+"</span></p>";
+						html+="<p>时间:<span>"+util.toDateString(data.data.time,"HH:mm:ss")+"</span></p>";
+						$(data.data.fightObjects).each(function(i,o){
+							html+="<p>名字:<span>"+o.name+"</span></p>";
+							html+="<p>状态:<span>"+o.status+"</span></p>";
+							html+="<p>死亡:<span>"+o.dead+"</span></p>";
+							html+="<p>后台:<span>"+o.back+"</span></p>";
+							html+="<hr class='layui-bg-red'>";
+						})
+						html+="</div>";
+						layer.open({
+							  title:getCharaName()+"战斗信息",
+							  type:1,
+							  maxmin:true,
+							  id:"getFightTeamStatusf",
+							  shade:false,
+							  area:["700px"],
+							  content:html,
+					  	})
+					}
+				})
+			})
+			
+			$("#itemSend").click(function(){
+				var data = {
+					"charName": $("#charName").val(),
+					"sw": "item",
+					"type": "1",
+					"name": $("#itemName").val(),
+					"level": $("#itemNum").val()
+				}
+				petAndFabaoSendInfo(data);
+			})
+			$(".testList").click(function(){
+				
+				$.post(path+"/system/getTestList",function(data){
+					layer.prompt({
+						  formType: 2,
+						  value:data.data,
+						  title: '内测账号多个账号以、号分隔(半小时后自动失效)',
+						  area: ['800px', '350px']
+						}, function(value, index, elem){
+							$.post(path+"/system/addTestList",{"list":value},function(data){
+								layer.msg(data.retmsg);
+							})
+					});
+				})
+				
+			})
+		});
+
+		function successDelChara() {
+			layer.closeAll();
+			table.render(params.options)
+			layer.msg("注销成功");
+		}
+
+		function getCharaName() {
+			return $("input[name='charName']").val();
+		}
+	</script>
+
+</html>

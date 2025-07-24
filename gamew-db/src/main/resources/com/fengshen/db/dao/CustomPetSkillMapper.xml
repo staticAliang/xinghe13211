@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fengshen.db.dao.CustomPetSkillMapper">
+  <resultMap id="BaseResultMap" type="com.fengshen.db.domain.CustomPetSkill">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="pet_name" jdbcType="VARCHAR" property="petName" />
+    <result column="skill_name" jdbcType="VARCHAR" property="skillName" />
+    <result column="skill_range" jdbcType="INTEGER" property="skillRange" />
+    <result column="skill_round" jdbcType="INTEGER" property="skillRound" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, pet_name, skill_name, skill_range, skill_round, add_time
+  </sql>
+</mapper>

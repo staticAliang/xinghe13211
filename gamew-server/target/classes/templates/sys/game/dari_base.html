@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+		<title>大日金乌基础</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<link rel="stylesheet" th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" media="all">
+		<link rel="stylesheet" th:href="@{/static/sys/css/admin.css}" media="all">
+		<link rel="stylesheet" th:href="@{/static/sys/css/global.css}">
+		<style type="text/css">
+			.whLoad {
+				background-repeat: no-repeat;
+				background-position: center center;
+			}
+			.weatherShadow {
+				position: absolute;
+				height: 100%;
+				background: #ff000000;
+				width: 100%;
+				margin-top: -24px;
+			}
+			
+			.layui-table tbody tr:hover,
+			.layui-table-hover {
+				background-color: #eeffee;
+			}
+			/* 表格头部工具栏背景色 */
+			
+			.layui-table-tool {
+				background-color: #eeffee;
+			}
+			
+			.baseSettings {
+				height: 50px;
+				background: #f5f3f3;
+			}
+			
+			.b-title {
+				background: red;
+				font-size: 14px;
+			}
+			
+			#comment {
+				width: 100%;
+				height: 243px;
+				resize: none;
+				font-size: 20px;
+				border: 0;
+				border-radius: 5px;
+				background-color: rgba(245, 245, 245, 0.98);
+				padding: 10px;
+				margin-left: -10px;
+			}
+			
+			#comment:hover {
+				box-shadow: 0px 1px 2px 2px #efeee5;
+			}
+			/* 大于等于991px */
+			
+			@media screen and (min-width: 991px) {
+				#newCharaSet {}
+			}
+			
+			input[type='number']::-webkit-outer-spin-button,
+			input[type='number']::-webkit-inner-spin-button {
+				-webkit-appearance: none !important;
+				margin: 0;
+			}
+			
+			.carColor {
+				background: #e4e4e4
+			}
+			.layui-tab-title li{
+				-webkit-user-select:none;
+			   -moz-user-select:none;
+			   -ms-user-select:none;
+			   user-select:none;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="layui-fluid">
+			<div class="layui-row layui-col-space15">
+				<div class="layui-col-md12">
+					<div class="layui-row layui-col-space15">
+						<div class="layui-col-md12">
+							<div class="layui-card" style="min-height:740px;">
+								<div class="layui-tab layui-tab-brief" lay-filter="tabs">
+									<ul class="layui-tab-title">
+										<li class="layui-this">基础配置</li>
+									</ul>
+									<div class="layui-tab-content">
+										<div class="layui-tab-item layui-form layui-show" lay-filter="dariForm">
+											<table class="layui-table">
+												<tbody>
+													<tr>
+														<td>名称</td>
+														<td>类型</td>
+														<td>操作</td>
+													</tr>
+													<tr>
+														<td>大日金乌</td>
+														<td>最大血量</td>
+														<td>
+															<div style="width: 50px; ">
+																<a class="layui-btn layui-btn-danger layui-btn-xs" id="dari_max_life_str">配置</a>
+															</div>
+														</td>
+													</tr>
+													<tr>
+														<td>大日金乌</td>
+														<td>当前血量</td>
+														<td>
+															<div style="width: 50px; ">
+																<a class="layui-btn layui-btn-danger layui-btn-xs" id="dari_life_str">配置</a>
+															</div>
+														</td>
+													</tr>
+													<tr>
+														<td>消灭大日金乌</td>
+														<td>获得伤害</td>
+														<td>
+															<div style="width: 50px; ">
+																<a class="layui-btn layui-btn-danger layui-btn-xs" id="darijinwu_left">配置</a>
+															</div>
+														</td>
+													</tr>
+													<tr>
+														<td>消灭金乌之灵</td>
+														<td>获得伤害</td>
+														<td>
+															<a class="layui-btn layui-btn-danger layui-btn-xs" id="jingwuzhiling_left">配置</a>
+														</td>
+													</tr>
+													<tr>
+														<td>消灭火狮兽</td>
+														<td>获得伤害</td>
+														<td>
+															<a class="layui-btn layui-btn-danger layui-btn-xs" id="huoshishou_left">配置</a>
+														</td>
+													</tr>
+													<tr>
+														<td>消灭火焰之灵</td>
+														<td>获得伤害</td>
+														<td>
+															<a class="layui-btn layui-btn-danger layui-btn-xs" id="huoyanzhiling_left">配置</a>
+														</td>
+													</tr>
+													<tr>
+														<td>第一名</td>
+														<td>奖励</td>
+														<td>
+															<a class="layui-btn layui-btn-danger layui-btn-xs" id="dari_1_1_reward">配置</a>
+														</td>
+													</tr>
+													<tr>
+														<td>第二名</td>
+														<td>奖励</td>
+														<td>
+															<a class="layui-btn layui-btn-danger layui-btn-xs" id="dari_1_2_reward">配置</a>
+														</td>
+													</tr>
+													<tr>
+														<td>第三名</td>
+														<td>奖励</td>
+														<td>
+															<a class="layui-btn layui-btn-danger layui-btn-xs" id="dari_1_3_reward">配置</a>
+														</td>
+													</tr>
+													<tr>
+														<td>第四名</td>
+														<td>奖励</td>
+														<td>
+															<a class="layui-btn layui-btn-danger layui-btn-xs" id="dari_1_4_reward">配置</a>
+														</td>
+													</tr>
+													<tr>
+														<td>第五名</td>
+														<td>奖励</td>
+														<td>
+															<a class="layui-btn layui-btn-danger layui-btn-xs" id="dari_1_5_reward">配置</a>
+														</td>
+													</tr>
+													<tr>
+														<td>第六名</td>
+														<td>奖励</td>
+														<td>
+															<a class="layui-btn layui-btn-danger layui-btn-xs" id="dari_1_6_reward">配置</a>
+														</td>
+													</tr>
+													<tr>
+														<td>第七名</td>
+														<td>奖励</td>
+														<td>
+															<a class="layui-btn layui-btn-danger layui-btn-xs" id="dari_1_7_reward">配置</a>
+														</td>
+													</tr>
+													<tr>
+														<td>第八名</td>
+														<td>奖励</td>
+														<td>
+															<a class="layui-btn layui-btn-danger layui-btn-xs" id="dari_1_8_reward">配置</a>
+														</td>
+													</tr>
+													<tr>
+														<td>第九名</td>
+														<td>奖励</td>
+														<td>
+															<a class="layui-btn layui-btn-danger layui-btn-xs" id="dari_1_9_reward">配置</a>
+														</td>
+													</tr>
+													<tr>
+														<td>第十名</td>
+														<td>奖励</td>
+														<td>
+															<a class="layui-btn layui-btn-danger layui-btn-xs" id="dari_1_10_reward">配置</a>
+														</td>
+													</tr>
+													<tr>
+														<td>第十一名</td>
+														<td>奖励</td>
+														<td>
+															<a class="layui-btn layui-btn-danger layui-btn-xs" id="dari_1_11_reward">配置</a>
+														</td>
+													</tr>
+													<tr>
+														<td>第十二名</td>
+														<td>奖励</td>
+														<td>
+															<a class="layui-btn layui-btn-danger layui-btn-xs" id="dari_1_12_reward">配置</a>
+														</td>
+													</tr>
+													<tr>
+														<td>第十三名</td>
+														<td>奖励</td>
+														<td>
+															<a class="layui-btn layui-btn-danger layui-btn-xs" id="dari_1_13_reward">配置</a>
+														</td>
+													</tr>
+													<tr>
+														<td>第十四名</td>
+														<td>奖励</td>
+														<td>
+															<a class="layui-btn layui-btn-danger layui-btn-xs" id="dari_1_14_reward">配置</a>
+														</td>
+													</tr>
+													<tr>
+														<td>第十五名</td>
+														<td>奖励</td>
+														<td>
+															<a class="layui-btn layui-btn-danger layui-btn-xs" id="dari_1_15_reward">配置</a>
+														</td>
+													</tr>
+													<tr>
+														<td>第十六名</td>
+														<td>奖励</td>
+														<td>
+															<a class="layui-btn layui-btn-danger layui-btn-xs" id="dari_1_16_reward">配置</a>
+														</td>
+													</tr>
+													<tr>
+														<td>第十七名</td>
+														<td>奖励</td>
+														<td>
+															<a class="layui-btn layui-btn-danger layui-btn-xs" id="dari_1_17_reward">配置</a>
+														</td>
+													</tr>
+													<tr>
+														<td>第十八名</td>
+														<td>奖励</td>
+														<td>
+															<a class="layui-btn layui-btn-danger layui-btn-xs" id="dari_1_18_reward">配置</a>
+														</td>
+													</tr>
+													<tr>
+														<td>第十九名</td>
+														<td>奖励</td>
+														<td>
+															<a class="layui-btn layui-btn-danger layui-btn-xs" id="dari_1_19_reward">配置</a>
+														</td>
+													</tr>
+													<tr>
+														<td>第二十名</td>
+														<td>奖励</td>
+														<td>
+															<a class="layui-btn layui-btn-danger layui-btn-xs" id="dari_1_20_reward">配置</a>
+														</td>
+													</tr>
+													<tr>
+														<td>其他</td>
+														<td>奖励</td>
+														<td>
+															<a class="layui-btn layui-btn-danger layui-btn-xs" id="dari_20_30002_reward">配置</a>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- gm配置开关 -->
+	</body>
+	<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+	<script th:src="@{/static/sys/js/public.js}"></script>
+	<script th:src="@{/static/sys/js/echats/echarts.min.js}"></script>
+
+	<script type="text/javascript" th:line="javascript">
+		var path = '[[${session.path}]]';
+		layui.use(['element', 'carousel', 'table', "util", "form", "layer", "slider", "laydate"], function() {
+			var e = layui.$;
+			var layer = layui.layer;
+			var laydate = layui.laydate;
+			var util = layui.util;
+			var form = layui.form;
+			var table = layui.table;
+			var element = layui.element;
+			var carousel = layui.carousel;
+			var slider = layui.slider;
+			var myChartPie;
+			var config ={};
+			function load() {
+				layer.load(2, {
+					time: 10 * 1000
+				});
+			}
+			$(".flush").click(function() {
+				table.render(params.options)
+			})
+
+			function isRepeat(arr) {
+				var hash = {};
+				for(var i in arr) {
+					if(hash[arr[i]]) {
+						return true;
+					}
+					// 不存在该元素，则赋值为true，可以赋任意值，相应的修改if判断条件即可
+					hash[arr[i]] = true;
+				}
+				return false;
+			}
+
+			function charNum(thisArr, arr) {
+				var count = 0;
+				for(var i = 0; i < arr.length; i++) {
+					if(thisArr == arr[i]) {
+						count++;
+					}
+				}
+				return count;
+			}
+			loadConfig();
+
+			function loadConfig() {
+				//加载配置操作信息
+				$.post(path+"/sys/wd/getDariConfig",{"configName":"dari"}, function(data) {
+					config.dari = data.data;
+					var huoyanzhiling_left = config.dari.huoyanzhiling_left;
+					var jingwuzhiling_left = config.dari.jingwuzhiling_left;
+					var huoshishou_left = config.dari.huoshishou_left;
+					var darijinwu_left = config.dari.darijinwu_left;
+					var dari_life_str = config.dari.dari_life_str;
+					var dari_max_life_str = config.dari.dari_max_life_str;
+
+					form.val("dariForm", {
+					  "huoyanzhiling_left":data.data.huoyanzhiling_left,
+					  "jingwuzhiling_left":data.data.jingwuzhiling_left,
+					  "huoshishou_left":data.data.huoshishou_left,
+					  "darijinwu_left":data.data.darijinwu_left,
+					  "dari_life_str":data.data.dari_life_str,
+					  "dari_max_life_str":data.data.dari_max_life_str
+					});
+				})
+			}
+
+			function checkNum(val) {
+				var reg = /^[0-9]+.?[0-9]*$/
+				if(reg.test(val)) {
+					return true
+				}
+				return false;
+			}
+
+			$("#dari_max_life_str").click(function() {
+				layer.prompt({
+					title: '大日金乌最大血量',
+					formType: 0,
+					value: config.dari.dari_max_life_str
+				}, function(val, index) {
+					if(checkNum(val)) {
+						//校验人数
+						if(parseInt(val) > 0) {
+							//请求后端.
+							var d = {
+								"type": "dari_max_life_str",
+								"value": val
+							};
+							shidaoSubmit(d);
+							layer.close(index);
+						} else {
+							layer.msg("请输入数字");
+						}
+					} else {
+						layer.msg("请输入数字");
+					}
+				});
+			})
+
+
+			$("#dari_life_str").click(function() {
+				layer.prompt({
+					title: '大日金乌当前血量',
+					formType: 0,
+					value: config.dari.dari_life_str
+				}, function(val, index) {
+					if(checkNum(val)) {
+						//校验人数
+						if(parseInt(val) > 0) {
+							//请求后端.
+							var d = {
+								"type": "dari_life_str",
+								"value": val
+							};
+							shidaoSubmit(d);
+							layer.close(index);
+						} else {
+							layer.msg("请输入数字");
+						}
+					} else {
+						layer.msg("请输入数字");
+					}
+				});
+			})
+
+
+			$("#darijinwu_left").click(function() {
+				layer.prompt({
+					title: '大日金乌击杀后获得伤害',
+					formType: 0,
+					value: config.dari.darijinwu_left
+				}, function(val, index) {
+					if(checkNum(val)) {
+						//校验人数
+						if(parseInt(val) > 0) {
+							//请求后端.
+							var d = {
+								"type": "darijinwu_left",
+								"value": val
+							};
+							shidaoSubmit(d);
+							layer.close(index);
+						} else {
+							layer.msg("请输入数字");
+						}
+					} else {
+						layer.msg("请输入数字");
+					}
+				});
+			})
+
+
+			$("#jingwuzhiling_left").click(function() {
+				layer.prompt({
+					title: '金乌之灵击杀后获得伤害',
+					formType: 0,
+					value: config.dari.jingwuzhiling_left
+				}, function(val, index) {
+					if(checkNum(val)) {
+						//校验人数
+						if(parseInt(val) > 0) {
+							//请求后端.
+							var d = {
+								"type": "jingwuzhiling_left",
+								"value": val
+							};
+							shidaoSubmit(d);
+							layer.close(index);
+						} else {
+							layer.msg("请输入数字");
+						}
+					} else {
+						layer.msg("请输入数字");
+					}
+				});
+			})
+
+
+			$("#huoshishou_left").click(function() {
+				layer.prompt({
+					title: '火狮兽杀后获得伤害',
+					formType: 0,
+					value: config.dari.huoshishou_left
+				}, function(val, index) {
+					if(checkNum(val)) {
+						//校验人数
+						if(parseInt(val) > 0) {
+							//请求后端.
+							var d = {
+								"type": "huoshishou_left",
+								"value": val
+							};
+							shidaoSubmit(d);
+							layer.close(index);
+						} else {
+							layer.msg("请输入数字");
+						}
+					} else {
+						layer.msg("请输入数字");
+					}
+				});
+			})
+
+
+			$("#huoyanzhiling_left").click(function() {
+				layer.prompt({
+					title: '火焰之灵杀后获得伤害',
+					formType: 0,
+					value: config.dari.huoyanzhiling_left
+				}, function(val, index) {
+					if(checkNum(val)) {
+						//校验人数
+						if(parseInt(val) > 0) {
+							//请求后端.
+							var d = {
+								"type": "huoyanzhiling_left",
+								"value": val
+							};
+							shidaoSubmit(d);
+							layer.close(index);
+						} else {
+							layer.msg("请输入数字");
+						}
+					} else {
+						layer.msg("请输入数字");
+					}
+				});
+			})
+
+			$("#dari_1_1_reward").click(function() {
+				layer.prompt({
+					title: '大日金乌第一名奖励',
+					formType: 0,
+					value: config.dari.dari_1_1_reward
+				}, function(val, index) {
+					//请求后端.
+					var d = {
+						"type": "dari_1_1_reward",
+						"value": val
+					};
+					shidaoSubmit(d);
+					layer.close(index);
+				});
+			})
+
+			$("#dari_1_2_reward").click(function() {
+				layer.prompt({
+					title: '大日金乌第二名奖励',
+					formType: 0,
+					value: config.dari.dari_1_2_reward
+				}, function(val, index) {
+					//请求后端.
+					var d = {
+						"type": "dari_1_2_reward",
+						"value": val
+					};
+					shidaoSubmit(d);
+					layer.close(index);
+				});
+			})
+
+			$("#dari_1_3_reward").click(function() {
+				layer.prompt({
+					title: '大日金乌第三名奖励',
+					formType: 0,
+					value: config.dari.dari_1_3_reward
+				}, function(val, index) {
+					//请求后端.
+					var d = {
+						"type": "dari_1_3_reward",
+						"value": val
+					};
+					shidaoSubmit(d);
+					layer.close(index);
+				});
+			})
+
+			$("#dari_1_4_reward").click(function() {
+				layer.prompt({
+					title: '大日金乌第四名奖励',
+					formType: 0,
+					value: config.dari.dari_1_4_reward
+				}, function(val, index) {
+					//请求后端.
+					var d = {
+						"type": "dari_1_4_reward",
+						"value": val
+					};
+					shidaoSubmit(d);
+					layer.close(index);
+				});
+			})
+
+			$("#dari_1_5_reward").click(function() {
+				layer.prompt({
+					title: '大日金乌第五名奖励',
+					formType: 0,
+					value: config.dari.dari_1_5_reward
+				}, function(val, index) {
+					//请求后端.
+					var d = {
+						"type": "dari_1_5_reward",
+						"value": val
+					};
+					shidaoSubmit(d);
+					layer.close(index);
+				});
+			})
+
+			$("#dari_1_6_reward").click(function() {
+				layer.prompt({
+					title: '大日金乌第六名奖励',
+					formType: 0,
+					value: config.dari.dari_1_6_reward
+				}, function(val, index) {
+					//请求后端.
+					var d = {
+						"type": "dari_1_6_reward",
+						"value": val
+					};
+					shidaoSubmit(d);
+					layer.close(index);
+				});
+			})
+
+			$("#dari_1_7_reward").click(function() {
+				layer.prompt({
+					title: '大日金乌第七名奖励',
+					formType: 0,
+					value: config.dari.dari_1_7_reward
+				}, function(val, index) {
+					//请求后端.
+					var d = {
+						"type": "dari_1_7_reward",
+						"value": val
+					};
+					shidaoSubmit(d);
+					layer.close(index);
+				});
+			})
+
+			$("#dari_1_8_reward").click(function() {
+				layer.prompt({
+					title: '大日金乌第八名奖励',
+					formType: 0,
+					value: config.dari.dari_1_8_reward
+				}, function(val, index) {
+					//请求后端.
+					var d = {
+						"type": "dari_1_8_reward",
+						"value": val
+					};
+					shidaoSubmit(d);
+					layer.close(index);
+				});
+			})
+
+			$("#dari_1_9_reward").click(function() {
+				layer.prompt({
+					title: '大日金乌第九名奖励',
+					formType: 0,
+					value: config.dari.dari_1_9_reward
+				}, function(val, index) {
+					//请求后端.
+					var d = {
+						"type": "dari_1_9_reward",
+						"value": val
+					};
+					shidaoSubmit(d);
+					layer.close(index);
+				});
+			})
+
+			$("#dari_1_10_reward").click(function() {
+				layer.prompt({
+					title: '大日金乌第十名奖励',
+					formType: 0,
+					value: config.dari.dari_1_10_reward
+				}, function(val, index) {
+					//请求后端.
+					var d = {
+						"type": "dari_1_10_reward",
+						"value": val
+					};
+					shidaoSubmit(d);
+					layer.close(index);
+				});
+			})
+
+			$("#dari_1_11_reward").click(function() {
+				layer.prompt({
+					title: '大日金乌第十一名奖励',
+					formType: 0,
+					value: config.dari.dari_1_11_reward
+				}, function(val, index) {
+					//请求后端.
+					var d = {
+						"type": "dari_1_11_reward",
+						"value": val
+					};
+					shidaoSubmit(d);
+					layer.close(index);
+				});
+			})
+
+			$("#dari_1_12_reward").click(function() {
+				layer.prompt({
+					title: '大日金乌第十二名奖励',
+					formType: 0,
+					value: config.dari.dari_1_12_reward
+				}, function(val, index) {
+					//请求后端.
+					var d = {
+						"type": "dari_1_12_reward",
+						"value": val
+					};
+					shidaoSubmit(d);
+					layer.close(index);
+				});
+			})
+
+			$("#dari_1_13_reward").click(function() {
+				layer.prompt({
+					title: '大日金乌第十三名奖励',
+					formType: 0,
+					value: config.dari.dari_1_13_reward
+				}, function(val, index) {
+					//请求后端.
+					var d = {
+						"type": "dari_1_13_reward",
+						"value": val
+					};
+					shidaoSubmit(d);
+					layer.close(index);
+				});
+			})
+
+			$("#dari_1_14_reward").click(function() {
+				layer.prompt({
+					title: '大日金乌第十四名奖励',
+					formType: 0,
+					value: config.dari.dari_1_14_reward
+				}, function(val, index) {
+					//请求后端.
+					var d = {
+						"type": "dari_1_14_reward",
+						"value": val
+					};
+					shidaoSubmit(d);
+					layer.close(index);
+				});
+			})
+
+			$("#dari_1_15_reward").click(function() {
+				layer.prompt({
+					title: '大日金乌第十五名奖励',
+					formType: 0,
+					value: config.dari.dari_1_15_reward
+				}, function(val, index) {
+					//请求后端.
+					var d = {
+						"type": "dari_1_15_reward",
+						"value": val
+					};
+					shidaoSubmit(d);
+					layer.close(index);
+				});
+			})
+
+			$("#dari_1_16_reward").click(function() {
+				layer.prompt({
+					title: '大日金乌第十六名奖励',
+					formType: 0,
+					value: config.dari.dari_1_16_reward
+				}, function(val, index) {
+					//请求后端.
+					var d = {
+						"type": "dari_1_16_reward",
+						"value": val
+					};
+					shidaoSubmit(d);
+					layer.close(index);
+				});
+			})
+
+			$("#dari_1_17_reward").click(function() {
+				layer.prompt({
+					title: '大日金乌第十七名奖励',
+					formType: 0,
+					value: config.dari.dari_1_17_reward
+				}, function(val, index) {
+					//请求后端.
+					var d = {
+						"type": "dari_1_17_reward",
+						"value": val
+					};
+					shidaoSubmit(d);
+					layer.close(index);
+				});
+			})
+
+			$("#dari_1_18_reward").click(function() {
+				layer.prompt({
+					title: '大日金乌第十八名奖励',
+					formType: 0,
+					value: config.dari.dari_1_18_reward
+				}, function(val, index) {
+					//请求后端.
+					var d = {
+						"type": "dari_1_18_reward",
+						"value": val
+					};
+					shidaoSubmit(d);
+					layer.close(index);
+				});
+			})
+
+			$("#dari_1_19_reward").click(function() {
+				layer.prompt({
+					title: '大日金乌第十九名奖励',
+					formType: 0,
+					value: config.dari.dari_1_19_reward
+				}, function(val, index) {
+					//请求后端.
+					var d = {
+						"type": "dari_1_19_reward",
+						"value": val
+					};
+					shidaoSubmit(d);
+					layer.close(index);
+				});
+			})
+
+			$("#dari_1_20_reward").click(function() {
+				layer.prompt({
+					title: '大日金乌第二十名奖励',
+					formType: 0,
+					value: config.dari.dari_1_20_reward
+				}, function(val, index) {
+					//请求后端.
+					var d = {
+						"type": "dari_1_20_reward",
+						"value": val
+					};
+					shidaoSubmit(d);
+					layer.close(index);
+				});
+			})
+
+			$("#dari_20_30002_reward").click(function() {
+				layer.prompt({
+					title: '其他排名奖励',
+					formType: 0,
+					value: config.dari.dari_20_30002_reward
+				}, function(val, index) {
+					//请求后端.
+					var d = {
+						"type": "dari_20_30002_reward",
+						"value": val
+					};
+					shidaoSubmit(d);
+					layer.close(index);
+				});
+			})
+
+
+
+
+			function shidaoSubmit(d) {
+				var load = $.load("请求中");
+				$.post(path+"/sys/wd/dariSet", d, function(data) {
+					if(data.status == 200) {
+						loadConfig();
+						layer.msg("操作成功");
+						setTimeout(function() {
+							layer.closeAll();
+						}, 500)
+					} else {
+						layer.msg(data.retmsg);
+					}
+					layer.close(load);
+				})
+			}
+		});
+	</script>
+
+</html>

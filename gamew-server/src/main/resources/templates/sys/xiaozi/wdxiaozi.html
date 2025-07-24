@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<title>问道小子模拟角色</title>
+		<meta name="keywords" content="">
+		<meta name="description" content="">
+
+		<link rel="shortcut icon" href="favicon.ico">
+		<link th:href="@{/static/sys/css/bootstrap.min.css?v=3.3.5}" rel="stylesheet">
+		<link th:href="@{/static/sys/css/plugins/sweetalert/sweetalert.css}" rel="stylesheet">
+		<link th:href="@{/static/sys/css/font-awesome.min.css?v=4.4.0}" rel="stylesheet">
+		<link th:href="@{/static/sys/css/animate.min.css}" rel="stylesheet">
+		<link th:href="@{/static/sys/css/style.min.css?v=4.0.0}" rel="stylesheet">
+		<link th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" rel="stylesheet" />
+		<link rel="stylesheet" th:href="@{/static/sys/css/global.css}">
+		<style>
+			.openMaxImg:hover {
+				box-shadow: 0px 0px 4px 1px #4e4e4e;
+				cursor: pointer;
+			}
+			/* 鼠标指向表格时,奇数行背景颜色 */
+			
+			.layui-table tbody tr:hover,
+			.layui-table-hover {
+				background-color: #eeffee;
+			}
+			
+			.news_search {
+				font-size: 14px;
+			}
+			
+			.layui-form-label {
+				padding: 9px 0;
+				left: 18px;
+				color: black;
+				font-size: 15px;
+				top: 1px;
+				width: 35px;
+			}
+			
+			.layui-form-select {
+				max-width: 12.5rem;
+			}
+			
+			input::-webkit-outer-spin-button,
+			input::-webkit-inner-spin-button {
+				-webkit-appearance: none;
+			}
+			
+			input[type="number"] {
+				-moz-appearance: textfield;
+			}
+			
+			.layui-icon {
+				height: 30px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="wrapper wrapper-content animated fadeInRight">
+			<!-- Panel Other -->
+			<div class="ibox float-e-margins">
+				<div class="row row-lg">
+					<div class="col-sm-12">
+						<!-- Example Events -->
+						<div class="example">
+							<blockquote class="layui-elem-quote news_search">
+								<div class="layui-inline">
+									<div class="layui-input-inline">
+										<input type="text" placeholder="名字" class="layui-input search_btn" type-close autocomplete="off">
+									</div>
+								</div>
+								<div class="layui-inline">
+									<a class="layui-btn" id="query">查询</a>
+								</div>
+								<div class="layui-inline">
+									<a class="layui-btn layui-btn-danger" id="controlAllXiaoZi">全局控制</a>
+								</div>
+								<button type="button" class="layui-btn" id="addXiaoZi">
+						  <i class="layui-icon">&#xe608;</i> 创建小子
+						</button>
+								<div class="layui-inline">
+									<button type="button" class="layui-btn layui-btn-primary flush"><i class="layui-icon layui-icon-refresh"></i></button>
+								</div>
+							</blockquote>
+							<table id="users" lay-filter="users">
+
+							</table>
+						</div>
+						<!-- End Example Events -->
+					</div>
+				</div>
+			</div>
+			<!-- End Panel Other -->
+		</div>
+
+		<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+		<script th:src="@{/static/sys/js/bootstrap.min.js?v=3.3.5}"></script>
+		<script th:src="@{/static/sys/js/content.min.js}"></script>
+		<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+		<script th:src="@{/static/sys/js/plugins/sweetalert/sweetalert.min.js}"></script>
+		<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+		<script th:src="@{/static/sys/js/public.js}"></script>
+
+		<script th:line="javascript">
+			var path = '[[${session.path}]]';
+			var layer;
+			var table;
+			var params;
+			var util;
+			var mapId;
+			var ps = $.getQueryString("ps");
+			var type = $.getQueryString("type");
+			var where = {};
+			var form;
+			var pageNum;
+			layui.use(['layer', 'table', 'form', 'util'], function() {
+				util = layui.util;
+				layer = layui.layer;
+				table = layui.table;
+				form = layui.form;
+
+				var cols = [{
+						title: 'id',
+						templet: function(value) {
+							return value.id;
+						}
+					},
+					{
+						title: '角色名',
+						field: 'name',
+						templet: function(value) {
+							return "<a href='javascript:;' lay-event='showCharaDetails'>" + value.name + "</a>";
+						}
+					},
+					{
+						title: '性别',
+						field: 'sex',
+						width: 60
+					},
+					{
+						title: '等级',
+						field: 'level',
+						width: 60
+					},
+					{
+						title: '门派',
+						field: 'polar',
+						templet: function(value) {
+							var v = "土";
+							if(value.polar == 1) {
+								v = "金"
+							} else if(value.polar == 2) {
+								v = "木";
+							} else if(value.polar == 3) {
+								v = "水";
+							} else if(value.polar == 4) {
+								v = "火"
+							}
+							return v;
+						},
+						width: 60
+					},
+					{
+						title: '当前位置',
+						field: 'mapName',
+						templet: function(value) {
+							if(value.mapName == undefined) {
+								return "";
+							}
+							return "<span data-x=" + value.x + " data-y=" + value.y + ">" + value.mapName + "(" + value.x + "," + value.y + ")" + "</span>"
+						}
+					},
+					{
+						title: "状态",
+						field: "onLine",
+						templet: function(value) {
+							if(value.onLine == "在线") {
+								return "<font color='#009688'>在线</font>";
+							}
+							return value.onLine;
+						}
+					}
+				];
+				var url = path + "/wd/xiaozi/getOnLineUsers";
+				if(type == "getRole") {
+					where = {
+						"id": ps
+					};
+					$("blockquote").hide();
+				}
+				init();
+
+				function init() {
+					params = $.myRendar({
+						"table": table,
+						"elem": "#users",
+						"url": url,
+						"method": "post",
+						"cols": cols,
+						toolbar: false,
+						where: where,
+						page: true,
+						templet: function(data) {
+							var html = '';
+							if(data.onLine == "离线") {
+								html += '<a class="layui-btn btn-primary layui-btn-xs" lay-event="online">上线</a>';
+							} else {
+								html += '<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="down">下线</a>';
+							}
+							html += '<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="position">控制</a>';
+							html += '<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
+							return html;
+						},
+						success: function(res, curr, count) {
+							params.options.page.curr = curr;
+						}
+					});
+				}
+				table.on('tool(users)', function(obj) {
+					var data = obj.data;
+					var layEvent = obj.event;
+					var tr = obj.tr;
+					var type = "";
+					var value = $(this).attr("data");
+					var t = $(this);
+					if(layEvent == "createTeam") {
+						type = "createTeam";
+						$.post(path + "/wd/xiaozi/wdXiaoZiOp", {
+							"type": type,
+							"value": $(this).attr("data") == undefined ? -1 : $(this).attr("data"),
+							"uuid": data.uuid
+						}, function(d) {
+							if(d.status == 200) {
+								layer.msg("操作成功");
+							} else {
+								layer.msg(data.retmsg);
+							}
+						});
+						return;
+					} else if(layEvent == "jiesanTeam") {
+						$.post(path + "/wd/xiaozi/wdXiaoZiOp", {
+							"type": layEvent,
+							"value": $(this).attr("data") == undefined ? -1 : $(this).attr("data"),
+							"uuid": data.uuid
+						}, function(d) {
+							if(d.status == 200) {
+								layer.msg("操作成功");
+							} else {
+								layer.msg(data.retmsg);
+							}
+						});
+						return;
+					} else if(layEvent == "position") {
+						var open = layer.open({
+							title: "控制[<font color='red'>" + data.name + "</font>](请勿与非问道小子组队)",
+							type: 2,
+							maxmin: true,
+							shade: false,
+							content: path + "/sys/jump?page=/xiaozi/char_controll.html&uuid=" + data.uuid
+						})
+						layer.full(open);
+						return;
+					} else if(layEvent == "down") {
+						//踢下线
+						type = "down";
+					} else if(layEvent == "showCharaDetails") {
+						var open = layer.open({
+							title: "查看[<font color='red'>" + data.name + "</font>]详情",
+							type: 2,
+							area: ["80%", "80%"],
+							maxmin: true,
+							shade: false,
+							content: path + "/sys/jump?page=/chara/chara_details.html&uuid=" + data.uuid
+						})
+						return;
+					} else if(layEvent == "del") {
+						layer.confirm("此操作将无法恢复,确定是否删除?", function(index) {
+							$.post(path + "/wd/xiaozi/delWenDaoXiaoZi", {
+								"id": data.id
+							}, function(d) {
+								layer.msg(d.retmsg);
+								obj.del();
+								layer.close(index);
+							});
+						})
+						return;
+					} else if(layEvent == "online") {
+						//角色上线
+						var load = $.load("正在上线...");
+						$.post(path + "/wd/xiaozi/switchCharaLogin", {
+							"name": data.name
+						}, function(d) {
+							layer.msg(d.retmsg);
+							layer.close(load);
+							table.render(params.options);
+						});
+						return;
+					}
+					$.post(path + "/sys/wd/charOperations", {
+						"type": type,
+						"value": $(this).attr("data") == undefined ? -1 : $(this).attr("data"),
+						"uuid": data.uuid
+					}, function(d) {
+						if(d.status == 200) {
+							if(layEvent == "disable") {
+								//禁言
+								if(value == 0) {
+									t.attr("data", "1");
+									t.html("禁言");
+								} else {
+									t.attr("data", "0");
+									t.html("解禁言");
+								}
+							} else if(layEvent == "del") {
+								//封号
+								if(value == 0) {
+									t.attr("data", "1");
+									t.html("封号");
+									t.removeClass("layui-btn-warm");
+								} else {
+									t.attr("data", "0");
+									t.html("解封");
+									t.addClass("layui-btn-warm");
+								}
+							}
+							layer.msg("操作成功");
+						} else {
+							layer.msg(data.retmsg);
+						}
+					});
+				});
+				//查询
+				$("#query").click(function(data) {
+					var name = $(".search_btn").val();
+					if(name.trim() != "" && name.length > 0) {
+						params.options.where = {
+							"name": name
+						};
+					} else {
+						params.options.where = {};
+					}
+					table.render(params.options);
+				})
+
+				$(document).on("click", ".posBtn", function() {
+					var value = $(this).attr("data");
+					var uuid = $(this).attr("data-id");
+					$.post(path + "/wd/xiaozi/wdXiaoZiOp", {
+						"type": "posi",
+						"value": value,
+						"uuid": uuid
+					}, function(d) {});
+				})
+				$(".flush").click(function() {
+					table.render(params.options)
+				})
+				$("#controlAllXiaoZi").click(function() {
+					var open = layer.open({
+						title: "全局控制[<font color='red'>问道小子</font>](请勿与非问道小子组队)",
+						type: 2,
+						maxmin: true,
+						shade: false,
+						content: path + "/sys/jump?page=/xiaozi/char_controll.html&uuid=1" + "&isAll=1"
+					})
+					layer.full(open);
+				})
+				//添加问道小子
+				$("#addXiaoZi").click(function() {
+					var open = layer.open({
+						title: "创建[<font color='red'>问道小子</font>](请勿与非问道小子组队)",
+						type: 2,
+						shade: false,
+						area: ["500px", "400px"],
+						content: path + "/sys/jump?page=/xiaozi/addXiaoZi.html&openType=wendaoxiaozi"
+					})
+				})
+			})
+			//重新加载
+			function reloadData() {
+				table.render(params.options);
+			}
+		</script>
+	</body>
+
+</html>

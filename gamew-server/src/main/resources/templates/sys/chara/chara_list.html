@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+    <title>角色管理</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="favicon.ico"> 
+	<link th:href="@{/static/sys/css/bootstrap.min.css?v=3.3.5}" rel="stylesheet">
+<link th:href="@{/static/sys/css/plugins/sweetalert/sweetalert.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/font-awesome.min.css?v=4.4.0}" rel="stylesheet">
+<link th:href="@{/static/sys/css/animate.min.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/style.min.css?v=4.0.0}" rel="stylesheet">
+<link th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" rel="stylesheet" />
+<link rel="stylesheet" th:href="@{/static/sys/css/global.css}">
+
+     <style>
+    	.openMaxImg:hover{
+   		    box-shadow: 0px 0px 4px 1px #4e4e4e;
+   		    cursor: pointer;
+    	}
+		
+		/* 鼠标指向表格时,奇数行背景颜色 */
+		.layui-table tbody tr:hover,.layui-table-hover {
+		    background-color: #eeffee;
+		}
+		/* 表格头部工具栏背景色 */
+		.layui-table-tool {
+		    background-color: #eeffee;
+		}
+		.news_search{
+			font-size:14px;
+		}
+		.layui-form-label{
+			padding: 9px 0;
+		    left: 18px;
+		    color: black;
+		    font-size: 15px;
+		    top: 1px;
+	        width: 35px;
+		}
+		.layui-form-select {
+		    max-width:12.5rem;
+		}
+		input::-webkit-outer-spin-button,
+	    input::-webkit-inner-spin-button {
+	        -webkit-appearance: none;
+	    }
+	    input[type="number"]{
+	        -moz-appearance: textfield;
+	    }
+	    .layui-icon{
+	    	height: 30px;
+	    }
+    </style>
+</head>
+
+<body>
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<!-- Panel Other -->
+		<div class="ibox float-e-margins">
+			<div class="row row-lg">
+				<div class="col-sm-12">
+					<!-- Example Events -->
+					<div class="example">
+						<blockquote class="layui-elem-quote news_search">
+							<div class="layui-inline">
+							<div class="layui-input-inline">
+								<input type="text" placeholder="名字"
+									class="layui-input search_btn" type-close autocomplete="off">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<a class="layui-btn" id="query">查询</a>
+						</div>
+						<div class="layui-inline">
+							<a class="layui-btn layui-btn-danger" id="resetAllToDayTask">重置全部日常任务</a>
+						</div>
+						</blockquote>
+						<table id="users" lay-filter="users">
+							
+						</table>
+					</div>
+					<!-- End Example Events -->
+				</div>
+			</div>
+		</div>
+		<!-- End Panel Other -->
+	</div>
+
+	<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/js/bootstrap.min.js?v=3.3.5}"></script>
+	<script th:src="@{/static/sys/js/content.min.js}"></script>
+	<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/plugins/sweetalert/sweetalert.min.js}"></script>
+	<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+	<script th:src="@{/static/sys/js/public.js}"></script>
+	<script th:line="javascript">
+		var path = '[[${session.path}]]';
+		var layer;
+		var table;
+		var params;
+		var util;
+		var mapId;
+		var ps = $.getQueryString("ps");
+		var type = $.getQueryString("type");
+		var where = {};
+		var  form;
+		layui.use(['layer','table','form','util'], function(){
+			util = layui.util;
+		  	layer = layui.layer;
+		  	table = layui.table;
+		  	form = layui.form;
+		  	
+		  	var cols = [{
+				title: 'id',
+				type: 'checkbox',
+				templet: function(value) {
+					return value.id;
+				}
+			},
+			{
+				title: '角色名',
+				field: 'name',
+				templet:function(value){
+					return "<a href='javascript:;' lay-event='showCharaDetails'>"+value.name+"</a>";
+				}
+			},
+			{
+				title: '性别',
+				field: 'sex',
+				width: 60
+			},
+			{
+				title: '等级',
+				field: 'level',
+				width: 60
+			},
+			{
+				title: '门派',
+				field: 'polar',
+				templet: function(value) {
+					var v = "土";
+					if(value.polar == 1) {
+						v = "金"
+					} else if(value.polar == 2) {
+						v = "木";
+					} else if(value.polar == 3) {
+						v = "水";
+					} else if(value.polar == 4) {
+						v = "火"
+					}
+					return v;
+				},
+				width: 60
+			},
+			{
+				title: '当前位置',
+				field: 'mapName',
+				templet: function(value) {
+					if(value.mapName == undefined) {
+						return "";
+					}
+					return "<span data-x=" + value.x + " data-y=" + value.y + ">" + value.mapName + "</span>"
+				}
+			},
+			{
+				title: '充值积分',
+				field: 'chargeScore'
+			},
+			{
+				title:"状态",
+				field:"onLine",
+				templet: function(value) {
+					if(value.onLine == "在线") {
+						return "<font color='#009688'>在线</font>";
+					}
+					return value.onLine;				
+				}
+			},
+			{
+				title: '注册时间',
+				templet: function(value) {
+					if(value.addTime != undefined){
+						return util.timeAgo(value.addTime);
+					}else {
+						return "";
+					}
+				}
+			}
+		];
+		var url = path+"/sys/wd/getOnLineUsers";
+		if(type == "getRole") {
+			where = {"id":ps};
+			$("blockquote").hide();
+		}
+		init();
+		var params;
+		function init() {
+			where.flag = 1;
+			params = $.myRendar({
+				"table": table,
+				"elem": "#users",
+				"url": url,
+				"method": "post",
+				"cols": cols,
+				toolbar: false,
+				where:where,
+				page: true,
+				width:400,
+				templet:function(data){
+					var html = '<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="disable" data="1">禁言</a>';
+					if(data.jinyan == 1) {
+						html = '<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="disable" data="0">解禁言</a>';
+					}
+					if(data.isEnable == 1) {
+						html+='<a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="del" data="0">解封</a>';
+					}else {
+						html+='<a class="layui-btn layui-btn-xs" lay-event="del" data="1">封号</a>';
+					}
+					html+='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="down">踢下线</a>';
+					html+='<a class="layui-btn layui-bg-blue layui-btn-xs" lay-event="resetToDayTask">重置日常</a>';
+					html+='<a class="layui-btn layui-bg-blue layui-btn-xs" lay-event="xiaozi">构建小子</a>';
+					html+='<a class="layui-btn layui-bg-blue layui-btn-xs" lay-event="showAccount">查看账号</a>';
+					return html;
+				},
+				success:function(res){
+					$("#onlineNumber").text(res.data.onlines)
+				}
+			});
+		}
+		table.on('tool(users)', function(obj){
+			  var data = obj.data;
+			  var layEvent = obj.event;
+			  var tr = obj.tr;
+			  var type = "";
+			  var value = $(this).attr("data");
+			  var t = $(this);
+			  if(layEvent == "disable") {
+				  type = "disable";
+			  }else if(layEvent == "del") {
+				  //封号
+				  type = "del";
+			  }else if(layEvent == "down") {
+				  //踢下线
+				  type = "down";
+			  }
+			  else if(layEvent == "showCharaDetails") {
+				  	var open = layer.open({
+						title:"查看[<font color='red'>"+data.name+"</font>]详情",
+						type:2,
+						area:["80%","80%"],
+						maxmin:true,
+						shade:false,
+						content:path+"/sys/jump?page=/chara/chara_details.html&uuid="+data.uuid
+					})
+				  	return;
+			  }else if(layEvent == "resetToDayTask") {
+				 	var html = '<div class="layui-form" lay-filter="taskForm">';
+				  	
+					html+='<div class="layui-form-item" style="text-align: center; margin-top: 48px;" >';
+					html+='<div class="layui-input-block" style="margin: 0 auto;"> ';
+					html+='<input type="checkbox" name="shuadao" title="刷道" >';
+					html+='<input type="checkbox" name="chubao" title="除暴" >';
+					html+='<input type="checkbox" name="baibangmang" title="白帮忙" >';
+					html+='<input type="checkbox" name="shimencishu" title="师门" >';
+					html+='<input type="checkbox" name="fabaorenwu" title="法宝" >';
+					html+='<input type="checkbox" name="xiuxingcishu" title="修行" >';
+					html+='<input type="checkbox" name="xuanshangcishu" title="悬赏" >';
+					html+='<input type="checkbox" name="zhangmentiaozhan" title="掌门" >';
+					html+='<input type="checkbox" name="baxiantiaozhan" title="八仙" >';
+					html+='<input type="checkbox" name="fb_num" title="副本" >';
+					html+='<input type="checkbox" name="mapguardcishu" title="地图守护神" >';
+					html+='<input type="checkbox" name="zhengdaodiancishu" title="证道殿" >';
+					html+='<input type="checkbox" name="heropubcishu" title="英雄会" >';
+					html+='<input type="checkbox" name="gongchengcishu" title="攻城" >';
+					html+='<input type="checkbox" name="zhanshencishu" title="战神" >';
+					html+='<input type="checkbox" name="haidaocishu" title="海盗" >';
+					html+='<input type="checkbox" name="shanggucishu" title="上古" >';
+					html+='<input type="checkbox" name="wanniancishu" title="万年" >';
+					html+='<input type="checkbox" name="xiufacishu" title="修法" >';
+					html+='<input type="checkbox" name="tongttcishu" title="通天塔" >';
+					html+='<input type="checkbox" name="superBossNum" title="超级boss" >';
+					html+='<input type="checkbox" name="partyFightNum" title="帮派挑战" >';
+					html+='<input type="checkbox" name="partyNum" title="帮派日常" >';
+					html+='<input type="checkbox" name="newYearBeastNum" title="年兽活动" >';
+					html+='</div>';
+					html+='</div>';
+					
+					html+='<div class="layui-form-item" style="text-align: center">';
+					html+='<div class="layui-input-block" style="margin: 0 auto;"> ';
+					html+='<button class="layui-btn" id="resetTask" data-id="'+data.uuid+'">立即提交</button>';
+					html+='<button class="layui-btn layui-btn-danger" id="resetOneTask" data-id="'+data.uuid+'">单个全部重置</button>';
+					html+='</div>';
+					html+='</div>';
+					
+				  	html+='</div>';
+					layer.open({
+						title: false,
+						area: ["500px", "320px"],
+						type: 1,
+						content: html,
+						success: function() {
+							form.render("checkbox");
+						}
+					});
+				  return;
+			  }else if(layEvent == "xiaozi") {
+				  var load = $.load();
+				  $.post(path+"/wd/xiaozi/wdXiaoZiOp",{"type":"builderWdXiaozi","uuid":data.uuid},function(datas){
+					  //问道小子数据
+					  var html = '<div class="layui-form" style="width:90%;margin-top:31px;">';
+						html += '<div class="layui-form-item"> <label class="layui-form-label">数据</label> <div class="layui-input-block"> <textarea type="text" name="data" class="layui-textarea" style="height:500px"> '+JSON.stringify(datas.data)+'</textarea> </div></div>';
+						html += '<div class="layui-form-item"> <label class="layui-form-label"></label> <div class="layui-input-block"><h1>该数据可用于问道小子模板</h1></div></div>';
+						html += '</div>';
+						layer.open({
+							title: false,
+							area: ["95%","95%"],
+							type: 1,
+							shadeClose:true,
+							content: html,
+							success: function() {
+							}
+						});
+						layer.close(load);
+				  })
+				  return;
+			  }else if(layEvent = "showAccount") {
+				  //查询账号
+				  $.post(path+"/account/getAccountName",{"id":data.accountid},function(datas){
+					  layer.msg(datas.retmsg, {
+						  time: 5000
+						}, function(){
+						});					
+				  })
+				  return;
+			  }
+			  $.post(path+"/sys/wd/charOperations",{"type":type,"value":$(this).attr("data")==undefined?-1:$(this).attr("data"),"uuid":data.uuid},function(d){
+			  		if(d.status == 200) {
+			  			if(layEvent == "disable") {
+			  				//禁言
+			  				if(value == 0) {
+			  					t.attr("data","1");
+			  					t.html("禁言");
+			  				}else {
+			  					t.attr("data","0");
+			  					t.html("解禁言");
+			  				}
+						}else if(layEvent == "del") {
+						 	 //封号
+						 	if(value == 0) {
+			  					t.attr("data","1");
+			  					t.html("封号");
+			  					t.removeClass("layui-btn-warm");
+			  				}else {
+			  					t.attr("data","0");
+			  					t.html("解封");
+			  					t.addClass("layui-btn-warm");
+			  				}
+						}
+						layer.msg("操作成功");
+					}else {
+						layer.msg(data.retmsg);
+					}
+			  });
+		});
+		
+		  	function u(obj) {
+		  		 $.post(path+"/updateParty",obj,function(d){
+				  		if(d.status == 200) {
+							layer.msg("操作成功");
+							setTimeout(function(){
+								params.options.page.curr = pageNum
+								table.render(params.options)
+							},500)
+						}else {
+							layer.msg(d.retmsg);
+						}
+				  });
+		  	}
+		  	//查询
+		  	$("#query").click(function(data){
+				var name = $(".search_btn").val();
+				if(name.trim() != "" && name.length > 0) {
+					params.options.where = {"name":name};
+				}else {
+					params.options.where = {};
+				}
+				params.options.where.flag = 1;
+				table.render(params.options);
+			})
+			
+			//选择性重置个人任务
+			$(document).on("click","#resetTask",function(){
+				var data = form.val("taskForm");
+				if(!$.isEmptyObject(data)) {
+					var taskNames = "";
+					$.each(data, function(i) {
+						taskNames+=i;
+						taskNames+=",";
+					});
+					taskNames = taskNames.substring(0,taskNames.length-1);
+					var uuid = $(this).attr("data-id");
+					var load = $.load("请求中...");
+					$.post(path+"/wd/chara/resetToDayTask",{"uuid":uuid,"taskNames":taskNames},function(d){
+					  	if(d.status == 200) {
+							layer.msg("重置成功");
+						}else {
+							layer.msg(data.retmsg);
+						}
+					  	layer.close(load);
+					}).error(function(){
+						layer.msg("网络异常");
+						layer.close(load);
+					});
+					
+				}
+			})
+			//重置单个人全部日常任务
+			$(document).on("click","#resetOneTask",function(){
+				var uuid = $(this).attr("data-id");
+				var load = $.load("请求中...");
+				$.post(path+"/sys/wd/charOperations",{"type":"resetOneTask","uuid":uuid},function(d){
+				  	if(d.status == 200) {
+						layer.msg("重置成功");
+					}else {
+						layer.msg(data.retmsg);
+					}
+				  	layer.close(load);
+				}).error(function(){
+					layer.msg("网络异常");
+					layer.close(load);
+				});
+			})
+			//重置全服人员的日常任务
+			$("#resetAllToDayTask").click(function(){
+				var load = $.load("请求中...");
+				$.post(path+"/wd/chara/resetAllToDayTask",function(d){
+				  	if(d.status == 200) {
+						layer.msg("重置成功");
+					}else {
+						layer.msg(data.retmsg);
+					}
+				  	layer.close(load);
+				}).error(function(){
+					layer.msg("网络异常");
+					layer.close(load);
+				});
+			})
+		});
+	</script>
+</body>
+
+</html>

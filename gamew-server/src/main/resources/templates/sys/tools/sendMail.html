@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>发送邮件</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="stylesheet"
+	th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/static/sys/css/global.css}">
+<style type="text/css">
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield;
+}
+</style>
+</head>
+
+<body>
+	<div style="width: 665px; margin: 45px auto;">
+		<div class="layui-form" lay-filter="formData">
+			<div class="layui-form">
+				<div class="layui-form-item">
+					<label class="layui-form-label">标题</label>
+					<div class="layui-input-block">
+						<input type="text" name="title" required
+							placeholder="请输入邮件标题" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">收件人</label>
+					<div class="layui-input-block">
+						<input type="text" name="toName" placeholder="多个收件人用#I分开"
+							autocomplete="off" class="layui-input" id="toName">
+						<div class="layui-form-mid layui-word-aux">多个用#I分开例如:张三#I李四，如果开启全服此项则无效</div>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">地图</label>
+					<div class="layui-input-block">
+						<input type="text" name="maps" placeholder="指定地图，多个地图用#I分开"
+							autocomplete="off" class="layui-input" id="maps">
+						<div class="layui-form-mid layui-word-aux">指定地图，多个地图用#I分开.全地图的话就不要填</div>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">类型</label>
+					<div class="layui-input-block">
+						<input type="radio" name="type"
+							value="1" title="全服" lay-filter="typer" checked>
+						<input type="radio" name="type" value="0" title="指定"
+							lay-filter="typer"> 
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">状态</label>
+					<div class="layui-input-block">
+						<select name="online" lay-verify="" lay-search>
+						  <option value="0" selected>全部</option>
+						  <option value="1">在线</option>
+						  <option value="2">离线</option>
+						</select> 
+					</div>
+				</div>
+				  
+				<div class="layui-form-item layui-form-text">
+					<label class="layui-form-label">附件内容</label>
+					<div class="layui-input-block">
+						<textarea name="attachment" placeholder="附件格式，#I物品|超级女娲石#r1#I#I积分|积分#r1000#I" class="layui-textarea"  ></textarea>
+						<div class="layui-form-mid layui-word-aux">请严格按照示例:示例请看积分抽奖格式#I为分隔符</div>
+					</div>
+				</div>
+				<div class="layui-form-item layui-form-text">
+					<label class="layui-form-label">内容</label>
+					<div class="layui-input-block">
+						<textarea name="msg" placeholder="请输入内容" class="layui-textarea" id ="msg"></textarea>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-input-block">
+						<button class="layui-btn" id="send">立即提交</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+	<script th:src="@{/static/sys/js/public.js}"></script>
+	<script th:line="javascript">
+		var path = '[[${session.path}]]';
+		var layer;
+		var table;
+		var params;
+		var util;
+		var mapId;
+		layui.use([ 'layer', 'table', 'form', 'util' ], function() {
+			util = layui.util;
+			layer = layui.layer;
+			table = layui.table;
+			form = layui.form;
+
+			form.on('radio(typer)', function(data) {
+				if (data.value == "0") {
+					//指定
+					$("#toName").prop('disabled', false);
+				} else if (data.value == 1) {
+					//全部，设置收件人为禁用状态
+					$("#toName").prop('disabled', true);
+				}
+			});
+
+			$("#send").click(function() {
+				var data = form.val("formData");
+				if(data.title.length == 0 || data.title == "") {
+					layer.msg("标题不能为空");
+					return false;
+				}
+				var t = "全服";
+				if (data.type == "0") {
+					if(data.toName.length == 0 || data.toName == "") {
+						layer.msg("收件人不能为空");
+						return false;
+					}
+					t = "指定";
+				}
+				layer.confirm("当前选择类型为<font color='red'>"+t+"</font>,是否发送？",function(){
+					//发送邮件
+					var load = $.load("正在发送...");
+					$.post(path+"/sys/wd/mail/sendMail",data,function(d){
+						layer.msg(d.retmsg);
+						layer.close(load);
+					})
+				})
+			});
+		});
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fengshen.db.dao.FightObjectInfoMapper">
+  <resultMap id="BaseResultMap" type="com.fengshen.db.domain.FightObjectInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="show_name" jdbcType="VARCHAR" property="showName" />
+    <result column="level" jdbcType="INTEGER" property="level" />
+    <result column="life" jdbcType="INTEGER" property="life" />
+    <result column="mana" jdbcType="INTEGER" property="mana" />
+    <result column="phy_attack" jdbcType="INTEGER" property="phyAttack" />
+    <result column="mag_attack" jdbcType="INTEGER" property="magAttack" />
+    <result column="polar" jdbcType="VARCHAR" property="polar" />
+    <result column="speed" jdbcType="INTEGER" property="speed" />
+    <result column="def" jdbcType="INTEGER" property="def" />
+    <result column="icon" jdbcType="INTEGER" property="icon" />
+    <result column="daohang" jdbcType="INTEGER" property="daohang" />
+    <result column="pet_martial" jdbcType="INTEGER" property="petMartial" />
+    <result column="pet_tianshu" jdbcType="VARCHAR" property="petTianshu" />
+    <result column="all_resist_polar" jdbcType="INTEGER" property="allResistPolar" />
+    <result column="resist_metal" jdbcType="INTEGER" property="resistMetal" />
+    <result column="resist_wood" jdbcType="INTEGER" property="resistWood" />
+    <result column="resist_water" jdbcType="INTEGER" property="resistWater" />
+    <result column="resist_fire" jdbcType="INTEGER" property="resistFire" />
+    <result column="resist_earth" jdbcType="INTEGER" property="resistEarth" />
+    <result column="double_hit_rate" jdbcType="INTEGER" property="doubleHitRate" />
+    <result column="double_hit" jdbcType="INTEGER" property="doubleHit" />
+    <result column="mstunt_rate" jdbcType="INTEGER" property="mstuntRate" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="deleted" jdbcType="BIT" property="deleted" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.fengshen.db.domain.FightObjectInfo">
+    <result column="skill" jdbcType="LONGVARCHAR" property="skill" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, type, name, show_name, level, life, mana, phy_attack, mag_attack, polar, speed, 
+    def, icon, daohang, pet_martial, pet_tianshu, all_resist_polar, resist_metal, resist_wood, 
+    resist_water, resist_fire, resist_earth, double_hit_rate, double_hit, mstunt_rate, 
+    add_time, update_time, deleted
+  </sql>
+  <sql id="Blob_Column_List">
+    skill
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from fight_object_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from fight_object_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.fengshen.db.domain.FightObjectInfo">
+    insert into fight_object_info (id, type, name, 
+      show_name, level, life, 
+      mana, phy_attack, mag_attack, 
+      polar, speed, def, 
+      icon, daohang, pet_martial, 
+      pet_tianshu, all_resist_polar, resist_metal, 
+      resist_wood, resist_water, resist_fire, 
+      resist_earth, double_hit_rate, double_hit, 
+      mstunt_rate, add_time, update_time, 
+      deleted, skill)
+    values (#{id,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{showName,jdbcType=VARCHAR}, #{level,jdbcType=INTEGER}, #{life,jdbcType=INTEGER}, 
+      #{mana,jdbcType=INTEGER}, #{phyAttack,jdbcType=INTEGER}, #{magAttack,jdbcType=INTEGER}, 
+      #{polar,jdbcType=VARCHAR}, #{speed,jdbcType=INTEGER}, #{def,jdbcType=INTEGER}, 
+      #{icon,jdbcType=INTEGER}, #{daohang,jdbcType=INTEGER}, #{petMartial,jdbcType=INTEGER}, 
+      #{petTianshu,jdbcType=VARCHAR}, #{allResistPolar,jdbcType=INTEGER}, #{resistMetal,jdbcType=INTEGER}, 
+      #{resistWood,jdbcType=INTEGER}, #{resistWater,jdbcType=INTEGER}, #{resistFire,jdbcType=INTEGER}, 
+      #{resistEarth,jdbcType=INTEGER}, #{doubleHitRate,jdbcType=INTEGER}, #{doubleHit,jdbcType=INTEGER}, 
+      #{mstuntRate,jdbcType=INTEGER}, #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{deleted,jdbcType=BIT}, #{skill,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fengshen.db.domain.FightObjectInfo">
+    insert into fight_object_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="showName != null">
+        show_name,
+      </if>
+      <if test="level != null">
+        level,
+      </if>
+      <if test="life != null">
+        life,
+      </if>
+      <if test="mana != null">
+        mana,
+      </if>
+      <if test="phyAttack != null">
+        phy_attack,
+      </if>
+      <if test="magAttack != null">
+        mag_attack,
+      </if>
+      <if test="polar != null">
+        polar,
+      </if>
+      <if test="speed != null">
+        speed,
+      </if>
+      <if test="def != null">
+        def,
+      </if>
+      <if test="icon != null">
+        icon,
+      </if>
+      <if test="daohang != null">
+        daohang,
+      </if>
+      <if test="petMartial != null">
+        pet_martial,
+      </if>
+      <if test="petTianshu != null">
+        pet_tianshu,
+      </if>
+      <if test="allResistPolar != null">
+        all_resist_polar,
+      </if>
+      <if test="resistMetal != null">
+        resist_metal,
+      </if>
+      <if test="resistWood != null">
+        resist_wood,
+      </if>
+      <if test="resistWater != null">
+        resist_water,
+      </if>
+      <if test="resistFire != null">
+        resist_fire,
+      </if>
+      <if test="resistEarth != null">
+        resist_earth,
+      </if>
+      <if test="doubleHitRate != null">
+        double_hit_rate,
+      </if>
+      <if test="doubleHit != null">
+        double_hit,
+      </if>
+      <if test="mstuntRate != null">
+        mstunt_rate,
+      </if>
+      <if test="addTime != null">
+        add_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="deleted != null">
+        deleted,
+      </if>
+      <if test="skill != null">
+        skill,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="showName != null">
+        #{showName,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null">
+        #{level,jdbcType=INTEGER},
+      </if>
+      <if test="life != null">
+        #{life,jdbcType=INTEGER},
+      </if>
+      <if test="mana != null">
+        #{mana,jdbcType=INTEGER},
+      </if>
+      <if test="phyAttack != null">
+        #{phyAttack,jdbcType=INTEGER},
+      </if>
+      <if test="magAttack != null">
+        #{magAttack,jdbcType=INTEGER},
+      </if>
+      <if test="polar != null">
+        #{polar,jdbcType=VARCHAR},
+      </if>
+      <if test="speed != null">
+        #{speed,jdbcType=INTEGER},
+      </if>
+      <if test="def != null">
+        #{def,jdbcType=INTEGER},
+      </if>
+      <if test="icon != null">
+        #{icon,jdbcType=INTEGER},
+      </if>
+      <if test="daohang != null">
+        #{daohang,jdbcType=INTEGER},
+      </if>
+      <if test="petMartial != null">
+        #{petMartial,jdbcType=INTEGER},
+      </if>
+      <if test="petTianshu != null">
+        #{petTianshu,jdbcType=VARCHAR},
+      </if>
+      <if test="allResistPolar != null">
+        #{allResistPolar,jdbcType=INTEGER},
+      </if>
+      <if test="resistMetal != null">
+        #{resistMetal,jdbcType=INTEGER},
+      </if>
+      <if test="resistWood != null">
+        #{resistWood,jdbcType=INTEGER},
+      </if>
+      <if test="resistWater != null">
+        #{resistWater,jdbcType=INTEGER},
+      </if>
+      <if test="resistFire != null">
+        #{resistFire,jdbcType=INTEGER},
+      </if>
+      <if test="resistEarth != null">
+        #{resistEarth,jdbcType=INTEGER},
+      </if>
+      <if test="doubleHitRate != null">
+        #{doubleHitRate,jdbcType=INTEGER},
+      </if>
+      <if test="doubleHit != null">
+        #{doubleHit,jdbcType=INTEGER},
+      </if>
+      <if test="mstuntRate != null">
+        #{mstuntRate,jdbcType=INTEGER},
+      </if>
+      <if test="addTime != null">
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleted != null">
+        #{deleted,jdbcType=BIT},
+      </if>
+      <if test="skill != null">
+        #{skill,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fengshen.db.domain.FightObjectInfo">
+    update fight_object_info
+    <set>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="showName != null">
+        show_name = #{showName,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null">
+        level = #{level,jdbcType=INTEGER},
+      </if>
+      <if test="life != null">
+        life = #{life,jdbcType=INTEGER},
+      </if>
+      <if test="mana != null">
+        mana = #{mana,jdbcType=INTEGER},
+      </if>
+      <if test="phyAttack != null">
+        phy_attack = #{phyAttack,jdbcType=INTEGER},
+      </if>
+      <if test="magAttack != null">
+        mag_attack = #{magAttack,jdbcType=INTEGER},
+      </if>
+      <if test="polar != null">
+        polar = #{polar,jdbcType=VARCHAR},
+      </if>
+      <if test="speed != null">
+        speed = #{speed,jdbcType=INTEGER},
+      </if>
+      <if test="def != null">
+        def = #{def,jdbcType=INTEGER},
+      </if>
+      <if test="icon != null">
+        icon = #{icon,jdbcType=INTEGER},
+      </if>
+      <if test="daohang != null">
+        daohang = #{daohang,jdbcType=INTEGER},
+      </if>
+      <if test="petMartial != null">
+        pet_martial = #{petMartial,jdbcType=INTEGER},
+      </if>
+      <if test="petTianshu != null">
+        pet_tianshu = #{petTianshu,jdbcType=VARCHAR},
+      </if>
+      <if test="allResistPolar != null">
+        all_resist_polar = #{allResistPolar,jdbcType=INTEGER},
+      </if>
+      <if test="resistMetal != null">
+        resist_metal = #{resistMetal,jdbcType=INTEGER},
+      </if>
+      <if test="resistWood != null">
+        resist_wood = #{resistWood,jdbcType=INTEGER},
+      </if>
+      <if test="resistWater != null">
+        resist_water = #{resistWater,jdbcType=INTEGER},
+      </if>
+      <if test="resistFire != null">
+        resist_fire = #{resistFire,jdbcType=INTEGER},
+      </if>
+      <if test="resistEarth != null">
+        resist_earth = #{resistEarth,jdbcType=INTEGER},
+      </if>
+      <if test="doubleHitRate != null">
+        double_hit_rate = #{doubleHitRate,jdbcType=INTEGER},
+      </if>
+      <if test="doubleHit != null">
+        double_hit = #{doubleHit,jdbcType=INTEGER},
+      </if>
+      <if test="mstuntRate != null">
+        mstunt_rate = #{mstuntRate,jdbcType=INTEGER},
+      </if>
+      <if test="addTime != null">
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleted != null">
+        deleted = #{deleted,jdbcType=BIT},
+      </if>
+      <if test="skill != null">
+        skill = #{skill,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.fengshen.db.domain.FightObjectInfo">
+    update fight_object_info
+    set type = #{type,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      show_name = #{showName,jdbcType=VARCHAR},
+      level = #{level,jdbcType=INTEGER},
+      life = #{life,jdbcType=INTEGER},
+      mana = #{mana,jdbcType=INTEGER},
+      phy_attack = #{phyAttack,jdbcType=INTEGER},
+      mag_attack = #{magAttack,jdbcType=INTEGER},
+      polar = #{polar,jdbcType=VARCHAR},
+      speed = #{speed,jdbcType=INTEGER},
+      def = #{def,jdbcType=INTEGER},
+      icon = #{icon,jdbcType=INTEGER},
+      daohang = #{daohang,jdbcType=INTEGER},
+      pet_martial = #{petMartial,jdbcType=INTEGER},
+      pet_tianshu = #{petTianshu,jdbcType=VARCHAR},
+      all_resist_polar = #{allResistPolar,jdbcType=INTEGER},
+      resist_metal = #{resistMetal,jdbcType=INTEGER},
+      resist_wood = #{resistWood,jdbcType=INTEGER},
+      resist_water = #{resistWater,jdbcType=INTEGER},
+      resist_fire = #{resistFire,jdbcType=INTEGER},
+      resist_earth = #{resistEarth,jdbcType=INTEGER},
+      double_hit_rate = #{doubleHitRate,jdbcType=INTEGER},
+      double_hit = #{doubleHit,jdbcType=INTEGER},
+      mstunt_rate = #{mstuntRate,jdbcType=INTEGER},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      deleted = #{deleted,jdbcType=BIT},
+      skill = #{skill,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fengshen.db.domain.FightObjectInfo">
+    update fight_object_info
+    set type = #{type,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      show_name = #{showName,jdbcType=VARCHAR},
+      level = #{level,jdbcType=INTEGER},
+      life = #{life,jdbcType=INTEGER},
+      mana = #{mana,jdbcType=INTEGER},
+      phy_attack = #{phyAttack,jdbcType=INTEGER},
+      mag_attack = #{magAttack,jdbcType=INTEGER},
+      polar = #{polar,jdbcType=VARCHAR},
+      speed = #{speed,jdbcType=INTEGER},
+      def = #{def,jdbcType=INTEGER},
+      icon = #{icon,jdbcType=INTEGER},
+      daohang = #{daohang,jdbcType=INTEGER},
+      pet_martial = #{petMartial,jdbcType=INTEGER},
+      pet_tianshu = #{petTianshu,jdbcType=VARCHAR},
+      all_resist_polar = #{allResistPolar,jdbcType=INTEGER},
+      resist_metal = #{resistMetal,jdbcType=INTEGER},
+      resist_wood = #{resistWood,jdbcType=INTEGER},
+      resist_water = #{resistWater,jdbcType=INTEGER},
+      resist_fire = #{resistFire,jdbcType=INTEGER},
+      resist_earth = #{resistEarth,jdbcType=INTEGER},
+      double_hit_rate = #{doubleHitRate,jdbcType=INTEGER},
+      double_hit = #{doubleHit,jdbcType=INTEGER},
+      mstunt_rate = #{mstuntRate,jdbcType=INTEGER},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      deleted = #{deleted,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

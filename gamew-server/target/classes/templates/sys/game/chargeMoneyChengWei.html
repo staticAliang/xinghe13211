@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>充值称号</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="shortcut icon" href="favicon.ico">
+<link th:href="@{/static/sys/css/bootstrap.min.css?v=3.3.5}" rel="stylesheet">
+<link th:href="@{/static/sys/css/plugins/sweetalert/sweetalert.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/font-awesome.min.css?v=4.4.0}" rel="stylesheet">
+<link th:href="@{/static/sys/css/animate.min.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/style.min.css?v=4.0.0}" rel="stylesheet">
+<link th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" rel="stylesheet" />
+<link rel="stylesheet" th:href="@{/static/sys/css/global.css}">
+<style>
+.openMaxImg:hover {
+	box-shadow: 0px 0px 4px 1px #4e4e4e;
+	cursor: pointer;
+}
+
+/* 鼠标指向表格时,奇数行背景颜色 */
+.layui-table tbody tr:hover, .layui-table-hover {
+	background-color: #eeffee;
+}
+/* 表格头部工具栏背景色 */
+.layui-table-tool {
+	background-color: #eeffee;
+}
+
+.news_search {
+	font-size: 14px;
+}
+
+.layui-form-label {
+	padding: 9px 0;
+	left: 18px;
+	color: black;
+	font-size: 15px;
+	top: 1px;
+	width: 35px;
+}
+
+.layui-form-select {
+	max-width: 8.5rem;
+}
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield;
+}
+</style>
+</head>
+
+<body>
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<!-- Panel Other -->
+		<div class="ibox float-e-margins">
+			<div class="row row-lg">
+				<div class="col-sm-12">
+					<div class="example layui-form" lay-filter="baseForm">
+						<table class="layui-table" >
+							<tbody>
+								<tr>
+									<th>名称</th>
+									<th>操作</th>
+								</tr>
+								<tr>
+									<td>人物经验</td>
+									<td>
+										<a class="layui-btn layui-btn-danger layui-btn" data-name="">刷新缓存</a>
+									</td>
+								</tr>
+								<tr>
+									<td>道法经验</td>
+									<td>
+										<a class="layui-btn layui-btn-danger layui-btn" data-name="">刷新缓存</a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End Panel Other -->
+	</div>
+
+		<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/js/bootstrap.min.js?v=3.3.5}"></script>
+	<script th:src="@{/static/sys/js/content.min.js}"></script>
+	<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/plugins/sweetalert/sweetalert.min.js}"></script>
+	<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+	<script th:src="@{/static/sys/js/public.js}"></script>
+	<script th:line="javascript">
+	
+	var path = '[[${session.path}]]';
+	layui.use(["form", "layer"], function() {
+		var layer = layui.layer;
+		var form = layui.form;
+		var config;
+		loadConfig();
+		function loadConfig() {
+			//加载配置操作信息
+			$.post(path+"/shenhun/getShenHunConfig",function(data){
+				config = data.data;
+				var a = config.attri;
+				var j = config.value;
+				//设置信息
+				form.val("baseForm", {
+					  "n1": j["1"].jifen,
+					  "n2": j["2"].jifen,
+					  "n3": j["3"].jifen,
+					  "n4": j["4"].jifen,
+					  "n5": j["5"].jifen,
+					  "n6": j["6"].jifen,
+					  "n7": j["7"].jifen,
+					  "n8": j["8"].jifen,
+					  "n9": j["9"].jifen,
+					  "n10": j["10"].jifen,
+					  "d1":a["1"].value,
+					  "d2":a["2"].value,
+					  "d3":a["3"].value,
+					  "d4":a["4"].value,
+					  "d5":a["5"].value,
+					  "d6":a["6"].value,
+					  "d7":a["7"].value,
+					  "d8":a["8"].value,
+					  "d9":a["9"].value,
+					  "d10":a["10"].value,
+					  "s1":a["1"].name,
+					  "s2":a["2"].name,
+					  "s3":a["3"].name,
+					  "s4":a["4"].name,
+					  "s5":a["5"].name,
+					  "s6":a["6"].name,
+					  "s7":a["7"].name,
+					  "s8":a["8"].name,
+					  "s9":a["9"].name,
+					  "s10":a["10"].name,
+				});
+			})
+		}
+		$("#save").click(function(){
+			//请求后端修改
+			var val = form.val("baseForm");
+			$.post(path+"/shenhun/updateShenHun",val,function(data){
+				if(data.status == 200) {
+					layer.msg("修改成功");
+				}else {
+					layer.msg(data.retmsg);
+				}
+			})
+		})
+	})
+	
+	
+		
+	</script>
+</body>
+
+</html>

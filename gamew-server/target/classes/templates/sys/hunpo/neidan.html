@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>神魂配置</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+
+<link rel="shortcut icon" href="favicon.ico">
+<link th:href="@{/static/sys/css/bootstrap.min.css?v=3.3.5}" rel="stylesheet">
+<link th:href="@{/static/sys/css/plugins/sweetalert/sweetalert.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/font-awesome.min.css?v=4.4.0}" rel="stylesheet">
+<link th:href="@{/static/sys/css/animate.min.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/style.min.css?v=4.0.0}" rel="stylesheet">
+<link rel="stylesheet" th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/static/sys/css/global.css}">
+<style>
+.openMaxImg:hover {
+	box-shadow: 0px 0px 4px 1px #4e4e4e;
+	cursor: pointer;
+}
+
+
+/* 鼠标指向表格时,奇数行背景颜色 */
+.layui-table tbody tr:hover, .layui-table-hover {
+	background-color: #eeffee;
+}
+/* 表格头部工具栏背景色 */
+.layui-table-tool {
+	background-color: #eeffee;
+}
+
+.news_search {
+	font-size: 14px;
+}
+
+.layui-form-label {
+	padding: 9px 0;
+	left: 18px;
+	color: black;
+	font-size: 15px;
+	top: 1px;
+	width: 35px;
+}
+
+.layui-form-select {
+	max-width: 8.5rem;
+}
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield;
+}
+</style>
+</head>
+
+<body>
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<!-- Panel Other -->
+		<div class="ibox float-e-margins">
+			<div class="row row-lg">
+				<div class="col-sm-12">
+					<div class="example layui-form" lay-filter="baseForm">
+						<table class="layui-table" >
+							<tbody>
+								<tr style="background-color: #0e9aef;color:white">
+									<td colspan="10" align="center">下一阶段精气数值</td>
+								</tr>
+								<tr>
+									<td>1/1</td>
+									<td>
+										<input type="number" class="form-control" name="no1-1-nextExp">
+									</td>
+									
+									<td>1/2</td>
+									<td>
+										<input type="number" class="form-control" name="no1-2-nextExp">
+									</td>
+									
+									<td>1/3</td>
+									<td>
+										<input type="number" class="form-control" name="no1-3-nextExp">
+									</td>
+									
+									<td>1/4</td>
+									<td>
+										<input type="number" class="form-control" name="no1-4-nextExp">
+									</td>
+									
+									<td>1/5</td>
+									<td>
+										<input type="number" class="form-control" name="no1-5-nextExp">
+									</td>
+									
+								</tr>
+								<!-- 第二阶 -->
+								<tr>
+									<td>2/1</td>
+									<td>
+										<input type="number" class="form-control" name="no2-1-nextExp">
+									</td>
+									
+									<td>2/2</td>
+									<td>
+										<input type="number" class="form-control" name="no2-2-nextExp">
+									</td>
+									
+									<td>2/3</td>
+									<td>
+										<input type="number" class="form-control" name="no2-3-nextExp">
+									</td>
+									
+									<td>2/4</td>
+									<td>
+										<input type="number" class="form-control" name="no2-4-nextExp">
+									</td>
+									
+									<td>2/5</td>
+									<td>
+										<input type="number" class="form-control" name="no2-5-nextExp">
+									</td>
+								</tr>
+								
+								<!-- 第三阶 -->
+								<tr>
+									<td>3/1</td>
+									<td>
+										<input type="number" class="form-control" name="no3-1-nextExp">
+									</td>
+									
+									<td>3/2</td>
+									<td>
+										<input type="number" class="form-control" name="no3-2-nextExp">
+									</td>
+									
+									<td>3/3</td>
+									<td>
+										<input type="number" class="form-control" name="no3-3-nextExp">
+									</td>
+									
+									<td>3/4</td>
+									<td>
+										<input type="number" class="form-control" name="no3-4-nextExp">
+									</td>
+									
+									<td>3/5</td>
+									<td>
+										<input type="number" class="form-control" name="no3-5-nextExp">
+									</td>
+									
+								</tr>
+								
+								<!-- 第四阶 -->
+								<tr>
+									<td>4/1</td>
+									<td>
+										<input type="number" class="form-control" name="no4-1-nextExp">
+									</td>
+									
+									<td>4/2</td>
+									<td>
+										<input type="number" class="form-control" name="no4-2-nextExp">
+									</td>
+									
+									<td>4/3</td>
+									<td>
+										<input type="number" class="form-control" name="no4-3-nextExp">
+									</td>
+									
+									<td>4/4</td>
+									<td>
+										<input type="number" class="form-control" name="no4-4-nextExp">
+									</td>
+									
+									<td>4/5</td>
+									<td>
+										<input type="number" class="form-control" name="no4-5-nextExp">
+									</td>
+								</tr>
+								
+								<!-- 第五阶 -->
+								<tr>
+									<td>5/1</td>
+									<td>
+										<input type="number" class="form-control" name="no5-1-nextExp">
+									</td>
+									
+									<td>5/2</td>
+									<td>
+										<input type="number" class="form-control" name="no5-2-nextExp">
+									</td>
+									
+									<td>5/3</td>
+									<td>
+										<input type="number" class="form-control" name="no5-3-nextExp">
+									</td>
+									
+									<td>5/4</td>
+									<td>
+										<input type="number" class="form-control" name="no5-4-nextExp">
+									</td>
+									
+									<td>5/5</td>
+									<td>
+										<input type="number" class="form-control" name="no5-5-nextExp">
+									</td>
+								</tr>
+								
+								<!-- 每阶段可分配属性点 -->
+								<tr style="background-color: #0e9aef;color:white">
+									<td colspan="10" align="center">每阶段可分配属性点</td>
+								</tr>
+								<tr>
+									<td>1/1</td>
+									<td>
+										<input type="number" class="form-control" name="no1-1-attribPoint">
+									</td>
+									
+									<td>1/2</td>
+									<td>
+										<input type="number" class="form-control" name="no1-2-attribPoint">
+									</td>
+									
+									<td>1/3</td>
+									<td>
+										<input type="number" class="form-control" name="no1-3-attribPoint">
+									</td>
+									
+									<td>1/4</td>
+									<td>
+										<input type="number" class="form-control" name="no1-4-attribPoint">
+									</td>
+									
+									<td>1/5</td>
+									<td>
+										<input type="number" class="form-control" name="no1-5-attribPoint">
+									</td>
+									
+								</tr>
+								<!-- 第二阶 -->
+								<tr>
+									<td>2/1</td>
+									<td>
+										<input type="number" class="form-control" name="no2-1-attribPoint">
+									</td>
+									
+									<td>2/2</td>
+									<td>
+										<input type="number" class="form-control" name="no2-2-attribPoint">
+									</td>
+									
+									<td>2/3</td>
+									<td>
+										<input type="number" class="form-control" name="no2-3-attribPoint">
+									</td>
+									
+									<td>2/4</td>
+									<td>
+										<input type="number" class="form-control" name="no2-4-attribPoint">
+									</td>
+									
+									<td>2/5</td>
+									<td>
+										<input type="number" class="form-control" name="no2-5-attribPoint">
+									</td>
+								</tr>
+								
+								<!-- 第三阶 -->
+								<tr>
+									<td>3/1</td>
+									<td>
+										<input type="number" class="form-control" name="no3-1-attribPoint">
+									</td>
+									
+									<td>3/2</td>
+									<td>
+										<input type="number" class="form-control" name="no3-2-attribPoint">
+									</td>
+									
+									<td>3/3</td>
+									<td>
+										<input type="number" class="form-control" name="no3-3-attribPoint">
+									</td>
+									
+									<td>3/4</td>
+									<td>
+										<input type="number" class="form-control" name="no3-4-attribPoint">
+									</td>
+									
+									<td>3/5</td>
+									<td>
+										<input type="number" class="form-control" name="no3-5-attribPoint">
+									</td>
+									
+								</tr>
+								
+								<!-- 第四阶 -->
+								<tr>
+									<td>4/1</td>
+									<td>
+										<input type="number" class="form-control" name="no4-1-attribPoint">
+									</td>
+									
+									<td>4/2</td>
+									<td>
+										<input type="number" class="form-control" name="no4-2-attribPoint">
+									</td>
+									
+									<td>4/3</td>
+									<td>
+										<input type="number" class="form-control" name="no4-3-attribPoint">
+									</td>
+									
+									<td>4/4</td>
+									<td>
+										<input type="number" class="form-control" name="no4-4-attribPoint">
+									</td>
+									
+									<td>4/5</td>
+									<td>
+										<input type="number" class="form-control" name="no4-5-attribPoint">
+									</td>
+								</tr>
+								
+								<!-- 第五阶 -->
+								<tr>
+									<td>5/1</td>
+									<td>
+										<input type="number" class="form-control" name="no5-1-attribPoint">
+									</td>
+									
+									<td>5/2</td>
+									<td>
+										<input type="number" class="form-control" name="no5-2-attribPoint">
+									</td>
+									
+									<td>5/3</td>
+									<td>
+										<input type="number" class="form-control" name="no5-3-attribPoint">
+									</td>
+									
+									<td>5/4</td>
+									<td>
+										<input type="number" class="form-control" name="no5-4-attribPoint">
+									</td>
+									
+									<td>5/5</td>
+									<td>
+										<input type="number" class="form-control" name="no5-5-attribPoint">
+									</td>
+								</tr>
+								
+								<!-- 每阶段可分配相性点 -->
+								<tr style="background-color: #0e9aef;color:white">
+									<td colspan="10" align="center">每阶段可分配相性点</td>
+								</tr>
+								<tr>
+									<td>1/1</td>
+									<td>
+										<input type="number" class="form-control" name="no1-1-polarPoint">
+									</td>
+									
+									<td>1/2</td>
+									<td>
+										<input type="number" class="form-control" name="no1-2-polarPoint">
+									</td>
+									
+									<td>1/3</td>
+									<td>
+										<input type="number" class="form-control" name="no1-3-polarPoint">
+									</td>
+									
+									<td>1/4</td>
+									<td>
+										<input type="number" class="form-control" name="no1-4-polarPoint">
+									</td>
+									
+									<td>1/5</td>
+									<td>
+										<input type="number" class="form-control" name="no1-5-polarPoint">
+									</td>
+									
+								</tr>
+								<!-- 第二阶 -->
+								<tr>
+									<td>2/1</td>
+									<td>
+										<input type="number" class="form-control" name="no2-1-polarPoint">
+									</td>
+									
+									<td>2/2</td>
+									<td>
+										<input type="number" class="form-control" name="no2-2-polarPoint">
+									</td>
+									
+									<td>2/3</td>
+									<td>
+										<input type="number" class="form-control" name="no2-3-polarPoint">
+									</td>
+									
+									<td>2/4</td>
+									<td>
+										<input type="number" class="form-control" name="no2-4-polarPoint">
+									</td>
+									
+									<td>2/5</td>
+									<td>
+										<input type="number" class="form-control" name="no2-5-polarPoint">
+									</td>
+								</tr>
+								
+								<!-- 第三阶 -->
+								<tr>
+									<td>3/1</td>
+									<td>
+										<input type="number" class="form-control" name="no3-1-polarPoint">
+									</td>
+									
+									<td>3/2</td>
+									<td>
+										<input type="number" class="form-control" name="no3-2-polarPoint">
+									</td>
+									
+									<td>3/3</td>
+									<td>
+										<input type="number" class="form-control" name="no3-3-polarPoint">
+									</td>
+									
+									<td>3/4</td>
+									<td>
+										<input type="number" class="form-control" name="no3-4-polarPoint">
+									</td>
+									
+									<td>3/5</td>
+									<td>
+										<input type="number" class="form-control" name="no3-5-polarPoint">
+									</td>
+									
+								</tr>
+								
+								<!-- 第四阶 -->
+								<tr>
+									<td>4/1</td>
+									<td>
+										<input type="number" class="form-control" name="no4-1-polarPoint">
+									</td>
+									
+									<td>4/2</td>
+									<td>
+										<input type="number" class="form-control" name="no4-2-polarPoint">
+									</td>
+									
+									<td>4/3</td>
+									<td>
+										<input type="number" class="form-control" name="no4-3-polarPoint">
+									</td>
+									
+									<td>4/4</td>
+									<td>
+										<input type="number" class="form-control" name="no4-4-polarPoint">
+									</td>
+									
+									<td>4/5</td>
+									<td>
+										<input type="number" class="form-control" name="no4-5-polarPoint">
+									</td>
+								</tr>
+								
+								<!-- 第五阶 -->
+								<tr>
+									<td>5/1</td>
+									<td>
+										<input type="number" class="form-control" name="no5-1-polarPoint">
+									</td>
+									
+									<td>5/2</td>
+									<td>
+										<input type="number" class="form-control" name="no5-2-polarPoint">
+									</td>
+									
+									<td>5/3</td>
+									<td>
+										<input type="number" class="form-control" name="no5-3-polarPoint">
+									</td>
+									
+									<td>5/4</td>
+									<td>
+										<input type="number" class="form-control" name="no5-4-polarPoint">
+									</td>
+									
+									<td>5/5</td>
+									<td>
+										<input type="number" class="form-control" name="no5-5-polarPoint">
+									</td>
+								</tr>
+								
+								<tr>
+									<td colspan="10">
+										<a class="layui-btn layui-btn-danger layui-btn" id="save">保存</a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End Panel Other -->
+	</div>
+
+	<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/js/bootstrap.min.js?v=3.3.5}"></script>
+	<script th:src="@{/static/sys/js/content.min.js}"></script>
+	<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/plugins/sweetalert/sweetalert.min.js}"></script>
+	<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+	<script th:src="@{/static/sys/js/public.js}"></script>
+	<script th:line="javascript">
+	
+	var path = '[[${session.path}]]';
+	layui.use(["form", "layer"], function() {
+		var layer = layui.layer;
+		var form = layui.form;
+		var config;
+		loadConfig();
+		function loadConfig() {
+			//加载配置操作信息
+			$.post(path+"/ws/configInfo/getNeiDanConfig",function(data){
+				config = data.data.info;
+				var n1 = config.no1;				
+				var n2 = config.no2;				
+				var n3 = config.no3;				
+				var n4 = config.no4;				
+				var n5 = config.no5;
+				form.val("baseForm",{
+					"no1-1-nextExp":n1[0].nextExp,
+					"no1-2-nextExp":n1[1].nextExp,
+					"no1-3-nextExp":n1[2].nextExp,
+					"no1-4-nextExp":n1[3].nextExp,
+					"no1-5-nextExp":n1[4].nextExp,
+					"no2-1-nextExp":n2[0].nextExp,
+					"no2-2-nextExp":n2[1].nextExp,
+					"no2-3-nextExp":n2[2].nextExp,
+					"no2-4-nextExp":n2[3].nextExp,
+					"no2-5-nextExp":n2[4].nextExp,
+					"no3-1-nextExp":n3[0].nextExp,
+					"no3-2-nextExp":n3[1].nextExp,
+					"no3-3-nextExp":n3[2].nextExp,
+					"no3-4-nextExp":n3[3].nextExp,
+					"no3-5-nextExp":n3[4].nextExp,
+					"no4-1-nextExp":n4[0].nextExp,
+					"no4-2-nextExp":n4[1].nextExp,
+					"no4-3-nextExp":n4[2].nextExp,
+					"no4-4-nextExp":n4[3].nextExp,
+					"no4-5-nextExp":n4[4].nextExp,
+					"no5-1-nextExp":n5[0].nextExp,
+					"no5-2-nextExp":n5[1].nextExp,
+					"no5-3-nextExp":n5[2].nextExp,
+					"no5-4-nextExp":n5[3].nextExp,
+					"no5-5-nextExp":n5[4].nextExp,
+					
+					"no1-1-polarPoint":n1[0].polarPoint,
+					"no1-2-polarPoint":n1[1].polarPoint,
+					"no1-3-polarPoint":n1[2].polarPoint,
+					"no1-4-polarPoint":n1[3].polarPoint,
+					"no1-5-polarPoint":n1[4].polarPoint,
+					"no2-1-polarPoint":n2[0].polarPoint,
+					"no2-2-polarPoint":n2[1].polarPoint,
+					"no2-3-polarPoint":n2[2].polarPoint,
+					"no2-4-polarPoint":n2[3].polarPoint,
+					"no2-5-polarPoint":n2[4].polarPoint,
+					"no3-1-polarPoint":n3[0].polarPoint,
+					"no3-2-polarPoint":n3[1].polarPoint,
+					"no3-3-polarPoint":n3[2].polarPoint,
+					"no3-4-polarPoint":n3[3].polarPoint,
+					"no3-5-polarPoint":n3[4].polarPoint,
+					"no4-1-polarPoint":n4[0].polarPoint,
+					"no4-2-polarPoint":n4[1].polarPoint,
+					"no4-3-polarPoint":n4[2].polarPoint,
+					"no4-4-polarPoint":n4[3].polarPoint,
+					"no4-5-polarPoint":n4[4].polarPoint,
+					"no5-1-polarPoint":n5[0].polarPoint,
+					"no5-2-polarPoint":n5[1].polarPoint,
+					"no5-3-polarPoint":n5[2].polarPoint,
+					"no5-4-polarPoint":n5[3].polarPoint,
+					"no5-5-polarPoint":n5[4].polarPoint,
+					
+					
+					"no1-1-attribPoint":n1[0].attribPoint,
+					"no1-2-attribPoint":n1[1].attribPoint,
+					"no1-3-attribPoint":n1[2].attribPoint,
+					"no1-4-attribPoint":n1[3].attribPoint,
+					"no1-5-attribPoint":n1[4].attribPoint,
+					"no2-1-attribPoint":n2[0].attribPoint,
+					"no2-2-attribPoint":n2[1].attribPoint,
+					"no2-3-attribPoint":n2[2].attribPoint,
+					"no2-4-attribPoint":n2[3].attribPoint,
+					"no2-5-attribPoint":n2[4].attribPoint,
+					"no3-1-attribPoint":n3[0].attribPoint,
+					"no3-2-attribPoint":n3[1].attribPoint,
+					"no3-3-attribPoint":n3[2].attribPoint,
+					"no3-4-attribPoint":n3[3].attribPoint,
+					"no3-5-attribPoint":n3[4].attribPoint,
+					"no4-1-attribPoint":n4[0].attribPoint,
+					"no4-2-attribPoint":n4[1].attribPoint,
+					"no4-3-attribPoint":n4[2].attribPoint,
+					"no4-4-attribPoint":n4[3].attribPoint,
+					"no4-5-attribPoint":n4[4].attribPoint,
+					"no5-1-attribPoint":n5[0].attribPoint,
+					"no5-2-attribPoint":n5[1].attribPoint,
+					"no5-3-attribPoint":n5[2].attribPoint,
+					"no5-4-attribPoint":n5[3].attribPoint,
+					"no5-5-attribPoint":n5[4].attribPoint,
+				})
+			})
+		}
+		$("#save").click(function(){
+			//请求后端修改
+			var val = form.val("baseForm");
+			var template = {"no1":[{"nextExp":100,"polarPoint":1,"attribPoint":1},{"nextExp":200,"polarPoint":1,"attribPoint":1},{"nextExp":300,"polarPoint":1,"attribPoint":1},{"nextExp":400,"polarPoint":1,"attribPoint":1},{"nextExp":500,"polarPoint":1,"attribPoint":1}],"no2":[{"nextExp":600,"polarPoint":2,"attribPoint":3},{"nextExp":700,"polarPoint":2,"attribPoint":3},{"nextExp":800,"polarPoint":2,"attribPoint":3},{"nextExp":900,"polarPoint":2,"attribPoint":3},{"nextExp":1000,"polarPoint":2,"attribPoint":3}],"no3":[{"nextExp":2000,"polarPoint":3,"attribPoint":5},{"nextExp":3000,"polarPoint":3,"attribPoint":5},{"nextExp":4000,"polarPoint":3,"attribPoint":5},{"nextExp":5000,"polarPoint":3,"attribPoint":5},{"nextExp":6000,"polarPoint":3,"attribPoint":5}],"no4":[{"nextExp":7000,"polarPoint":4,"attribPoint":7},{"nextExp":8000,"polarPoint":4,"attribPoint":7},{"nextExp":9000,"polarPoint":4,"attribPoint":7},{"nextExp":10000,"polarPoint":4,"attribPoint":7},{"nextExp":11000,"polarPoint":4,"attribPoint":7}],"no5":[{"nextExp":12000,"polarPoint":5,"attribPoint":10},{"nextExp":13000,"polarPoint":5,"attribPoint":10},{"nextExp":14000,"polarPoint":5,"attribPoint":10},{"nextExp":15000,"polarPoint":5,"attribPoint":10},{"nextExp":16000,"polarPoint":5,"attribPoint":10}]};
+			var n1 = template.no1;				
+			var n2 = template.no2;				
+			var n3 = template.no3;				
+			var n4 = template.no4;				
+			var n5 = template.no5;
+			
+			//exp
+			n1[0].nextExp = val["no1-1-nextExp"];
+			n1[1].nextExp = val["no1-2-nextExp"];
+			n1[2].nextExp = val["no1-3-nextExp"];
+			n1[3].nextExp = val["no1-4-nextExp"];
+			n1[4].nextExp = val["no1-5-nextExp"];
+			
+			n2[0].nextExp = val["no2-1-nextExp"];
+			n2[1].nextExp = val["no2-2-nextExp"];
+			n2[2].nextExp = val["no2-3-nextExp"];
+			n2[3].nextExp = val["no2-4-nextExp"];
+			n2[4].nextExp = val["no2-5-nextExp"];
+			
+			n3[0].nextExp = val["no3-1-nextExp"];
+			n3[1].nextExp = val["no3-2-nextExp"];
+			n3[2].nextExp = val["no3-3-nextExp"];
+			n3[3].nextExp = val["no3-4-nextExp"];
+			n3[4].nextExp = val["no3-5-nextExp"];
+			
+			n4[0].nextExp = val["no4-1-nextExp"];
+			n4[1].nextExp = val["no4-2-nextExp"];
+			n4[2].nextExp = val["no4-3-nextExp"];
+			n4[3].nextExp = val["no4-4-nextExp"];
+			n4[4].nextExp = val["no4-5-nextExp"];
+			
+			n5[0].nextExp = val["no5-1-nextExp"];
+			n5[1].nextExp = val["no5-2-nextExp"];
+			n5[2].nextExp = val["no5-3-nextExp"];
+			n5[3].nextExp = val["no5-4-nextExp"];
+			n5[4].nextExp = val["no5-5-nextExp"];
+			//exp
+			
+			//attribPoint
+			n1[0].attribPoint = val["no1-1-attribPoint"];
+			n1[1].attribPoint = val["no1-2-attribPoint"];
+			n1[2].attribPoint = val["no1-3-attribPoint"];
+			n1[3].attribPoint = val["no1-4-attribPoint"];
+			n1[4].attribPoint = val["no1-5-attribPoint"];
+			
+			n2[0].attribPoint = val["no2-1-attribPoint"];
+			n2[1].attribPoint = val["no2-2-attribPoint"];
+			n2[2].attribPoint = val["no2-3-attribPoint"];
+			n2[3].attribPoint = val["no2-4-attribPoint"];
+			n2[4].attribPoint = val["no2-5-attribPoint"];
+			
+			n3[0].attribPoint = val["no3-1-attribPoint"];
+			n3[1].attribPoint = val["no3-2-attribPoint"];
+			n3[2].attribPoint = val["no3-3-attribPoint"];
+			n3[3].attribPoint = val["no3-4-attribPoint"];
+			n3[4].attribPoint = val["no3-5-attribPoint"];
+			
+			n4[0].attribPoint = val["no4-1-attribPoint"];
+			n4[1].attribPoint = val["no4-2-attribPoint"];
+			n4[2].attribPoint = val["no4-3-attribPoint"];
+			n4[3].attribPoint = val["no4-4-attribPoint"];
+			n4[4].attribPoint = val["no4-5-attribPoint"];
+			
+			n5[0].attribPoint = val["no5-1-attribPoint"];
+			n5[1].attribPoint = val["no5-2-attribPoint"];
+			n5[2].attribPoint = val["no5-3-attribPoint"];
+			n5[3].attribPoint = val["no5-4-attribPoint"];
+			n5[4].attribPoint = val["no5-5-attribPoint"];
+			//attribPoint
+			
+			//polarPoint
+			n1[0].polarPoint = val["no1-1-polarPoint"];
+			n1[1].polarPoint = val["no1-2-polarPoint"];
+			n1[2].polarPoint = val["no1-3-polarPoint"];
+			n1[3].polarPoint = val["no1-4-polarPoint"];
+			n1[4].polarPoint = val["no1-5-polarPoint"];
+			
+			n2[0].polarPoint = val["no2-1-polarPoint"];
+			n2[1].polarPoint = val["no2-2-polarPoint"];
+			n2[2].polarPoint = val["no2-3-polarPoint"];
+			n2[3].polarPoint = val["no2-4-polarPoint"];
+			n2[4].polarPoint = val["no2-5-polarPoint"];
+			
+			n3[0].polarPoint = val["no3-1-polarPoint"];
+			n3[1].polarPoint = val["no3-2-polarPoint"];
+			n3[2].polarPoint = val["no3-3-polarPoint"];
+			n3[3].polarPoint = val["no3-4-polarPoint"];
+			n3[4].polarPoint = val["no3-5-polarPoint"];
+			
+			n4[0].polarPoint = val["no4-1-polarPoint"];
+			n4[1].polarPoint = val["no4-2-polarPoint"];
+			n4[2].polarPoint = val["no4-3-polarPoint"];
+			n4[3].polarPoint = val["no4-4-polarPoint"];
+			n4[4].polarPoint = val["no4-5-polarPoint"];
+			
+			n5[0].polarPoint = val["no5-1-polarPoint"];
+			n5[1].polarPoint = val["no5-2-polarPoint"];
+			n5[2].polarPoint = val["no5-3-polarPoint"];
+			n5[3].polarPoint = val["no5-4-polarPoint"];
+			n5[4].polarPoint = val["no5-5-polarPoint"];
+			//polarPoint
+			var obj = {info:template}
+			var str = JSON.stringify(obj);
+			$.post(path+"/ws/configInfo/updateNeiDanConfig",{"info":str},function(data){
+				layer.msg(data.retmsg);
+			})
+		})
+	})
+	
+	
+		
+	</script>
+</body>
+
+</html>

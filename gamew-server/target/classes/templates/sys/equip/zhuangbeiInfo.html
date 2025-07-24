@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>装备数据</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+
+<link rel="shortcut icon" href="favicon.ico">
+<link th:href="@{/static/sys/css/bootstrap.min.css?v=3.3.5}" rel="stylesheet">
+<link th:href="@{/static/sys/css/plugins/sweetalert/sweetalert.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/font-awesome.min.css?v=4.4.0}" rel="stylesheet">
+<link th:href="@{/static/sys/css/animate.min.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/style.min.css?v=4.0.0}" rel="stylesheet">
+<link th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" rel="stylesheet" />
+<link rel="stylesheet" th:href="@{/static/sys/css/global.css}">
+<style>
+.openMaxImg:hover {
+	box-shadow: 0px 0px 4px 1px #4e4e4e;
+	cursor: pointer;
+}
+
+/* 鼠标指向表格时,奇数行背景颜色 */
+.layui-table tbody tr:hover, .layui-table-hover {
+	background-color: #eeffee;
+}
+/* 表格头部工具栏背景色 */
+.layui-table-tool {
+	background-color: #eeffee;
+}
+
+.news_search {
+	font-size: 14px;
+}
+
+.layui-form-label {
+	padding: 9px 0;
+	left: 18px;
+	color: black;
+	font-size: 15px;
+	top: 1px;
+	width: 70px;
+}
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield;
+}
+</style>
+</head>
+
+<body>
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<!-- Panel Other -->
+		<div class="ibox float-e-margins">
+			<div class="row row-lg">
+				<div class="col-sm-12">
+					<blockquote class="layui-elem-quote news_search">
+						<div class="layui-inline">
+							<div class="layui-input-inline">
+								<input type="text" placeholder="装备名"
+									class="layui-input search_btn" type-close autocomplete="off">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<a class="layui-btn" id="query">查询</a>
+							<a class="layui-btn" id="add">添加</a>
+						</div>
+						<div class="layui-inline">
+							<a class="layui-btn layui-btn-danger" id="refreshCache">刷新缓存</a>
+						</div>
+					</blockquote>
+
+
+					<!-- Example Events -->
+					<div class="example">
+						<table id="table" lay-filter="test">
+
+						</table>
+					</div>
+					<!-- End Example Events -->
+				</div>
+			</div>
+		</div>
+		<!-- End Panel Other -->
+	</div>
+
+	<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/js/bootstrap.min.js?v=3.3.5}"></script>
+	<script th:src="@{/static/sys/js/content.min.js}"></script>
+	<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/plugins/sweetalert/sweetalert.min.js}"></script>
+	<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+	<script th:src="@{/static/sys/js/public.js}"></script>
+	<script th:line="javascript">
+	var path = '[[${session.path}]]';
+		var layer;
+		var table;
+		var params;
+		var util;
+		layui.use([ 'layer', 'table', 'form', 'laydate', 'util' ], function() {
+			util = layui.util;
+			layer = layui.layer;
+			table = layui.table;
+			var date = layui.laydate;
+			form = layui.form;
+			var cols = [ {
+				title : 'id',
+				field : 'id',
+			}, {
+				title : '名字',
+				field : 'str',
+			}, {
+				title : '等级',
+				field : 'attrib',
+			},
+			{
+				title : '类型',
+				field : 'type',
+				templet:function(value){
+					var html = "武器";
+					if(value.amount == 2) {
+						html = "头盔"
+					}else if(value.amount ==3) {
+						html = "衣服"
+					}else if(value.amount ==4) {
+						html = "项链";
+					}else if(value.amount ==5){
+						html = "玉佩";
+					}else if(value.amount ==6){
+						html = "左手镯";
+					}else if(value.amount ==7){
+						html = "右手镯";
+					}else if(value.amount ==8){
+						html = "魂器";
+					}else if(value.amount ==9){
+						html = "法宝";
+					}else if(value.amount ==10){
+						html = "鞋子";
+					}
+					return html;
+				}
+			}
+			];
+			params = $.myRendar({
+				"table" : table,
+				"elem" : "#table",
+				"url" : path+"/sys/zhuangbeiInfo/getZhuangbeiInfos",
+				"method" : "post",
+				"cols" : cols,
+				toolbar : false,
+				width:"150",
+				success:function(c,curr) {
+					pageNum = curr;
+				}
+			});
+			var pageNum = 1;
+			$("#refreshCache").click(function(){
+				$.post(path+"/sys/zhuangbeiInfo/refreshCache",function(data){
+					layer.msg(data.retmsg);
+				})
+			})
+		});
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+    <title>npc列表2</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="favicon.ico"> 
+	<link th:href="@{/static/sys/css/bootstrap.min.css?v=3.3.5}" rel="stylesheet">
+<link th:href="@{/static/sys/css/plugins/sweetalert/sweetalert.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/font-awesome.min.css?v=4.4.0}" rel="stylesheet">
+<link th:href="@{/static/sys/css/animate.min.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/style.min.css?v=4.0.0}" rel="stylesheet">
+<link th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" rel="stylesheet" />
+<link rel="stylesheet" th:href="@{/static/sys/css/global.css}">
+     <style>
+    	.openMaxImg:hover{
+   		    box-shadow: 0px 0px 4px 1px #4e4e4e;
+   		    cursor: pointer;
+    	}
+		/* 鼠标指向表格时,奇数行背景颜色 */
+		.layui-table tbody tr:hover,.layui-table-hover {
+		    background-color: #eeffee;
+		}
+		/* 表格头部工具栏背景色 */
+		.layui-table-tool {
+		    background-color: #eeffee;
+		}
+		.news_search{
+			font-size:14px;
+		}
+		.layui-form-label{
+			padding: 9px 0;
+		    left: 18px;
+		    color: black;
+		    font-size: 15px;
+		    top: 1px;
+	        width: 35px;
+		}
+		.layui-form-select {
+		    max-width:12.5rem;
+		}
+		input::-webkit-outer-spin-button,
+	    input::-webkit-inner-spin-button {
+	        -webkit-appearance: none;
+	    }
+	    input[type="number"]{
+	        -moz-appearance: textfield;
+	    }
+	    .layui-icon{
+	    	height: 30px;
+	    }
+    </style>
+</head>
+
+<body>
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<!-- Panel Other -->
+		<div class="ibox float-e-margins">
+			<div class="row row-lg">
+				<div class="col-sm-12">
+					<!-- Example Events -->
+					<div class="example">
+						<blockquote class="layui-elem-quote news_search">
+							<div class="layui-inline">
+							<div class="layui-input-inline">
+								<input type="text" placeholder="名字"
+									class="layui-input search_btn" type-close autocomplete="off">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<a class="layui-btn" id="query">查询</a>
+						</div>
+						<div class="layui-inline">
+						    <a class="layui-btn search_btn_cl addNpc">添加</a>
+						</div>
+						<div class="layui-inline">
+							<a class="layui-btn layui-btn-danger" id="refreshCache">刷新缓存</a>
+						</div>
+						</blockquote>
+						<table id="table" lay-filter="test">
+							
+						</table>
+					</div>
+					<!-- End Example Events -->
+				</div>
+			</div>
+		</div>
+		<!-- End Panel Other -->
+	</div>
+
+			<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/js/bootstrap.min.js?v=3.3.5}"></script>
+	<script th:src="@{/static/sys/js/content.min.js}"></script>
+	<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/plugins/sweetalert/sweetalert.min.js}"></script>
+	<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+	<script th:src="@{/static/sys/js/public.js}"></script>
+		<script th:line="javascript">
+		var path = '[[${session.path}]]';
+		var layer;
+		var table;
+		var params;
+		var util;
+		var mapId;
+		
+		layui.use(['layer','table','form','util'], function(){
+		
+			util = layui.util;
+		  	layer = layui.layer;
+		  	table = layui.table;
+		  	form = layui.form;
+		  	var cols =  [
+				{
+					title: 'id',
+					field: 'id'
+				}, 
+				{
+					title: '图标',
+					field: 'icon'
+				},
+				{
+					title: '地图',
+					field: 'mapId',
+					templet:function(value){
+						return mapJson[value.mapId];
+					}
+				},
+				{
+					title: '名字',
+					field: 'name'
+				},
+				{
+					title:"位置",
+					templet:function(value){
+						return "x轴:"+value.x+"&nbsp;y轴:" + value.y
+					}
+				},
+				{
+					title:"朝向",
+					field: 'ext'
+				},
+				{
+					title: '状态',
+					field: 'deleted',
+					templet: function(value) {
+						if(value.deleted){
+							return "已删除";
+						}else {
+							return "正常";
+						}
+					}
+				},
+				
+			];
+		  	var pageNum = 1;
+		  	params = $.myRendar({"table":table,"elem":"#table","url":path+"/sys/wd/npc/getNpcs","method":"post",where:{"name":""},"cols":cols,toolbar:false,
+				templet:function(data){
+					var html = '<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit" data-id="'+data.id+'">修改</a>';
+					if(!data.deleted) {
+						html+='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-id="'+data.id+'">删除</a>';
+					}else {
+						html+='<a class="layui-btn layui-btn-wring layui-btn-xs" lay-event="cancel" data-id="'+data.id+'">恢复</a>';
+					}
+					return html;
+				},success:function(res,curr,count){
+					pageNum = curr;
+			  	}
+		  	});
+
+		  	table.on('tool(test)', function(obj){
+				  var data = obj.data;
+				  var layEvent = obj.event;
+				  var t = $(this);
+				  var obj = {};
+				  for(var p in data){
+					  if(p != "updateTime" && p != "addTime") {
+						  obj[p] = data[p];
+					  }
+					}
+				  if(layEvent == "edit") {
+						var html = '<div class="layui-form" style="width:90%;margin-top:31px;" lay-filter="npcForm">';
+						html += '<div class="layui-form-item"> <label class="layui-form-label">图标</label> <div class="layui-input-block"> <input type="number" name="icon" class="layui-input" value="'+data.icon+'"> </div></div>';
+						html += '<div class="layui-form-item"> <label class="layui-form-label" style="width:52px">地图</label> <div class="layui-input-block">';
+						html += "<select lay-search name='mapId'>";
+						$(Object.keys(mapJson)).each(function(idx,e){
+							if(data.mapId == e) {
+								html+="<option value="+e+" selected='selected'>"+mapJson[e]+"</option>"
+							}else {
+								html+="<option value="+e+">"+mapJson[e]+"</option>"
+							}
+						});
+						html += "</select>";
+						html+='</div></div>';
+						
+						//位置编辑
+						html += '<div class="layui-form-item"> <label class="layui-form-label" style="width:52px">朝向</label> <div class="layui-input-block">';
+						html += "<select name='ext' class='extPosition'>";
+						html += "<option value='左上'>左上</option>";
+						html += "<option value='右上'>右上</option>";
+						html += "<option value='左下'>左下</option>";
+						html += "<option value='右下'>右下</option>";
+						html += "<option value='左偏上下居中'>左偏上下居中</option>";
+						html += "<option value='中间'>中间</option>";
+						html += "<option value='中上' selected='selected'>中上</option>";
+						html += "<option value='中下'>中下</option>";
+						html +="</select>";
+						html+='</div></div>';
+						
+						html += '<div class="layui-form-item"> <label class="layui-form-label">名字</label> <div class="layui-input-block"> <input type="text" name="name" class="layui-input" value="'+data.name+'"> </div></div>';
+						html += '<div class="layui-form-item"> <label class="layui-form-label">x</label> <div class="layui-input-block"> <input type="number" name="x" class="layui-input" value="'+data.x+'"> </div></div>';
+						html += '<div class="layui-form-item"> <label class="layui-form-label">y</label> <div class="layui-input-block"> <input type="number" name="y" class="layui-input" value="'+data.y+'"> </div></div>';
+						html += '<div class="layui-form-item"><a class="layui-btn layui-btn-danger layui-btn" lay-submit style="margin-left: 109px;" id="updateNpcForm" data-id="' + data.id + '" map-id="' + data.mapId + '">保存</a></div>'
+						html += '</div>';
+						layer.open({
+							title: false,
+							area: ["400px"],
+							type: 1,
+							shadeClose:true,
+							content: html,
+							success: function() {
+								if(data.ext == "" || data.ext == undefined) {
+									data.ext = "中上";
+								}
+								$(".extPosition").find("option").each(function(i,o){
+									var op = $(o);
+									if(op.text() == data.ext.trim()) {
+										op.attr("selected","selected")
+									}
+								})
+								form.render('select');
+							}
+						});
+				  }else if(layEvent == "del") {
+					  layer.confirm('是否确定删除',function(){
+						  obj.deleted = true;
+						  u(obj)
+					  })
+				  }else if(layEvent == "cancel") {
+					  obj.deleted = false;
+					  u(obj)
+				  }
+			});
+		  	$(document).on("click","#updateNpcForm",function(){
+		  		var npc = form.val("npcForm");
+		  		npc.id = $(this).attr("data-id");
+		  		u(npc);
+		  	})
+		  	$(".addNpc").click(function(){
+		  		var html = '<div class="layui-form" style="width:90%;margin-top:31px;" lay-filter="addNpcForm">';
+						html += '<div class="layui-form-item"> <label class="layui-form-label">名字</label> <div class="layui-input-block"> <input type="text" name="name" class="layui-input" lay-verify="required"> </div></div>';
+						html += '<div class="layui-form-item"> <label class="layui-form-label" style="width:52px">地图</label> <div class="layui-input-block">';
+						html += "<select lay-search name='mapId'>";
+						$(Object.keys(mapJson)).each(function(idx,e){
+							html+="<option value="+e+">"+mapJson[e]+"</option>"
+						});
+						html += "</select>";
+						html+='</div></div>';		
+						
+						
+						//位置编辑
+						html += '<div class="layui-form-item"> <label class="layui-form-label" style="width:52px">朝向</label> <div class="layui-input-block">';
+						html += "<select name='ext'>";
+						html += "<option value='左上'>左上</option>";
+						html += "<option value='右上'>右上</option>";
+						html += "<option value='左下'>左下</option>";
+						html += "<option value='右下'>右下</option>";
+						html += "<option value='左偏上下居中'>左偏上下居中</option>";
+						html += "<option value='中间'>中间</option>";
+						html += "<option value='中上' selected='selected'>中上</option>";
+						html += "<option value='中下'>中下</option>";
+						html +="</select>";
+						html+='</div></div>';
+						
+						
+						html += '<div class="layui-form-item"> <label class="layui-form-label">图标</label> <div class="layui-input-block"> <input type="number" name="icon" class="layui-input" lay-verify="required"> </div></div>';
+						html += '<div class="layui-form-item"> <label class="layui-form-label">x</label> <div class="layui-input-block"> <input type="number" name="x" class="layui-input" lay-verify="required"> </div></div>';
+						html += '<div class="layui-form-item"> <label class="layui-form-label">y</label> <div class="layui-input-block"> <input type="number" name="y" class="layui-input" lay-verify="required"> </div></div>';
+						html += '<div class="layui-form-item"><a class="layui-btn layui-btn-danger layui-btn" style="margin-left: 109px;" id="addNpcForm" lay-filter="addNpcForm" lay-submit>保存</a></div>'
+						html += '</div>';
+						layer.open({
+							title: false,
+							area: ["400px"],
+							type: 1,
+							shadeClose:true,
+							content: html,
+							success: function() {
+								form.render('select');
+							}
+					});
+		  	})
+		  	
+		  	 form.on('submit(addNpcForm)', function(data){
+			    $.load("正在添加...");
+		  		var npc = form.val("addNpcForm");
+		  		$.post(path+"/sys/wd/npc/addNpc",npc,function(d){
+				  		if(d.status == 200) {
+							layer.msg("添加成功");
+							setTimeout(function(){
+								params.options.page.curr = pageNum
+								table.render(params.options)
+								
+							},500)
+						}else {
+							layer.msg(d.retmsg);
+						}
+				  		layer.closeAll();
+				  });
+			    return false;
+			  });
+		  	function u(obj) {
+		  		 $.post(path+"/sys/wd/npc/updateNpc",obj,function(d){
+				  		if(d.status == 200) {
+							layer.msg("操作成功");
+							setTimeout(function(){
+								params.options.page.curr = pageNum
+								table.render(params.options)
+							},500)
+						}else {
+							layer.msg(d.retmsg);
+						}
+				  });
+		  	}
+		  	//查询
+		  	$("#query").click(function(data){
+				var name = $(".search_btn").val();
+				if(name.trim() != "" && name.length > 0) {
+					params.options.where = {"name":name};
+				}else {
+					params.options.where = {"name":""};
+				}
+				table.render(params.options);
+			})
+			$("#refreshCache").click(function(){
+				$.post(path+"/sys/wd/npc/refreshCache",function(data){
+					layer.msg(data.retmsg);
+				})
+			})
+		});
+	</script>
+</body>
+</html>

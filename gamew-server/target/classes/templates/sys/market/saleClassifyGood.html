@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>货物分类</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+
+<link rel="shortcut icon" href="favicon.ico">
+<link th:href="@{/static/sys/css/bootstrap.min.css?v=3.3.5}" rel="stylesheet">
+<link th:href="@{/static/sys/css/plugins/sweetalert/sweetalert.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/font-awesome.min.css?v=4.4.0}" rel="stylesheet">
+<link th:href="@{/static/sys/css/animate.min.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/style.min.css?v=4.0.0}" rel="stylesheet">
+<link th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" rel="stylesheet" />
+<link rel="stylesheet" th:href="@{/static/sys/css/global.css}">
+<style>
+.openMaxImg:hover {
+	box-shadow: 0px 0px 4px 1px #4e4e4e;
+	cursor: pointer;
+}
+
+
+/* 鼠标指向表格时,奇数行背景颜色 */
+.layui-table tbody tr:hover, .layui-table-hover {
+	background-color: #eeffee;
+}
+/* 表格头部工具栏背景色 */
+.layui-table-tool {
+	background-color: #eeffee;
+}
+
+.news_search {
+	font-size: 14px;
+}
+
+.layui-form-label {
+	padding: 9px 0;
+	left: 18px;
+	color: black;
+	font-size: 15px;
+	top: 1px;
+	width: 35px;
+}
+
+.layui-form-select {
+	max-width: 12.5rem;
+}
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield;
+}
+
+.layui-icon {
+	height: 30px;
+}
+</style>
+</head>
+
+<body>
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<!-- Panel Other -->
+		<div class="ibox float-e-margins">
+			<div class="row row-lg">
+				<div class="col-sm-12">
+					<!-- Example Events -->
+					<div class="example">
+						<blockquote class="layui-elem-quote news_search">
+							<div class="layui-inline">
+								<div class="layui-input-inline">
+									<input type="text" placeholder="名字"
+										class="layui-input search_btn" type-close autocomplete="off">
+								</div>
+							</div>
+							<div class="layui-inline">
+								<a class="layui-btn" id="query">查询</a>
+							</div>
+							<div class="layui-inline">
+								<a class="layui-btn addGood">添加</a>
+							</div>
+							<div class="layui-inline">
+								<a class="layui-btn marktBtnStatus hide">关闭集市</a>
+							</div>
+						</blockquote>
+						<table id="table" lay-filter="test">
+
+						</table>
+					</div>
+					<!-- End Example Events -->
+				</div>
+			</div>
+		</div>
+		<!-- End Panel Other -->
+	</div>
+
+		<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/js/bootstrap.min.js?v=3.3.5}"></script>
+	<script th:src="@{/static/sys/js/content.min.js}"></script>
+	<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/plugins/sweetalert/sweetalert.min.js}"></script>
+	<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+	<script th:src="@{/static/sys/js/public.js}"></script>
+	<script th:line="javascript">
+		var layer;
+		var table;
+		var params;
+		var util;
+		var mapId;
+		var path = '[[${session.path}]]';
+		layui.use(['layer','table','form','util'], function(){
+			
+			util = layui.util;
+		  	layer = layui.layer;
+		  	table = layui.table;
+		  	form = layui.form;
+		  	var cols =  [
+				{
+					title: 'id',
+					field: 'id'
+				}, 
+				{
+					title: '名字',
+					field: 'name',
+					edit:"text"
+				},
+				{
+					title: '图标',
+					field: 'icon',
+					edit:"text"
+				},
+				{
+					title: '基础价格',
+					field: 'price',
+					edit:"text"
+				},
+				{
+					title:"格式",
+					field: 'compose',
+					edit:"text"
+				},
+				{
+					title:"公示时间(分)",
+					field: 'publicityTime',
+					edit:"text"
+				},
+				{
+					title: '状态',
+					field: 'deleted',
+					templet: function(value) {
+						if(value.deleted){
+							return "已删除";
+						}else {
+							return "正常";
+						}
+					}
+				},
+			];
+		  	var pageNum = 1;
+		  	params = $.myRendar({"table":table,"elem":"#table","url":path+"/sys/wd/saleGood/getSaleClassifyGoods","method":"post","cols":cols,toolbar:false,
+				templet:function(data){
+					var html = '';
+					if(!data.deleted) {
+						html+='<a class="layui-btn layui-btn-danger layui-btn-xs my_del" lay-event="del" data-id="'+data.id+'" data-status="'+true+'">删除</a>';
+					}else {
+						html+='<a class="layui-btn layui-btn-wring layui-btn-xs my_del" lay-event="cancel" data-id="'+data.id+'" data-status="'+false+'">恢复</a>';
+					}
+					
+					return html;
+				},success:function(res,curr,count){
+					pageNum = curr;
+			  	}
+		  	});
+		  	
+		  	table.on('edit(test)', function(obj){
+				  var data = {"id":obj.data.id};
+				  data[obj.field] = obj.value;
+				  if(obj.field == "publicityTime" || obj.field == "price" || obj.field == "icon"){
+					  if(!isNum(obj.value)) {
+						  layer.msg("请输入数字.");
+						  return false;
+					  }
+			 	  }
+				 var index = $.load();
+				 $.post(path+"/sys/wd/saleGood/updateSaleClassifyGood",data,function(d){
+					  if(d.status == 200) {
+						  layer.msg("修改成功");
+					  }else {
+						  layer.msg(d.retmsg);
+					  }
+					  layer.close(index);
+				  })
+			});
+		  	$(document).on("click",".my_del",function(){
+		  		var index = $.load();
+		  		var id = $(this).attr("data-id");
+		  		var deleted = $(this).attr("data-status");
+		  		var obj = {"id":id,"deleted":deleted};
+				$.post(path+"/sys/wd/saleGood/updateSaleClassifyGood",obj,function(d){
+					if(d.status == 200) {
+						layer.msg("操作成功");
+						setTimeout(function(){
+							params.options.page.curr = pageNum
+							table.render(params.options)
+						},500)
+					}else {
+						layer.msg(d.retmsg);
+					}
+					layer.close(index);
+				 })
+		  	})
+		  	
+		  	//查询
+		  	$("#query").click(function(data){
+				var name = $(".search_btn").val();
+				if(name.trim() != "" && name.length > 0) {
+					params.options.where = {"name":name};
+				}else {
+					params.options.where = {};
+				}
+				table.render(params.options);
+			})
+		  	$(".addGood").click(function(data){
+		  		var html = '<div class="layui-form" style="width:90%;margin-top:31px;" lay-filter="addForm">';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">名字</label> <div class="layui-input-block"> <input type="text" name="name" class="layui-input" lay-verify="required"> </div></div>';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">图标</label> <div class="layui-input-block"> <input type="number" name="icon" class="layui-input" lay-verify="required"> </div></div>';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">价格</label> <div class="layui-input-block"> <input type="number" name="price" class="layui-input" lay-verify="required"> </div></div>';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">格式</label> <div class="layui-input-block"> <input type="text" name="compose" class="layui-input" lay-verify="required"> </div></div>';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">公示时间</label> <div class="layui-input-block"> <input type="number" name="compose" class="layui-input" lay-verify="required"> </div></div>';
+				html += '<div class="layui-form-item"><a class="layui-btn layui-btn-danger layui-btn" style="margin-left: 109px;" id="addForm" lay-filter="addForm" lay-submit>保存</a></div>'
+				html += '</div>';
+				layer.open({
+					title: false,
+					area: ["400px"],
+					type: 1,
+					shadeClose:true,
+					content: html,
+					success: function() {
+					}
+				});
+			})
+			
+			form.on('submit(addForm)', function(data){
+			    $.load("正在添加...");
+		  		var data = form.val("addForm");
+		  		$.post(path+"/sys/wd/saleGood/addSaleClassifyGood",data,function(d){
+				  		if(d.status == 200) {
+							layer.msg("添加成功");
+							setTimeout(function(){
+								params.options.page.curr = pageNum
+								table.render(params.options)
+							},500)
+						}else {
+							layer.msg(d.retmsg);
+						}
+				  		layer.closeAll();
+				  });
+			    return false;
+			  });
+		  	
+		  	$.post(path+"/sys/wd/getConfig",function(data){
+		  		var status = data.data.marketConfig.status;
+		  		if(status == 1) {
+		  			$(".marktBtnStatus").html("开启集市");
+		  			$(".marktBtnStatus").attr("data-status","0")
+		  			$(".marktBtnStatus").addClass("layui-btn-danger");
+		  		}else {
+		  			$(".marktBtnStatus").html("关闭集市");
+		  			$(".marktBtnStatus").attr("data-status","1")
+		  			$(".marktBtnStatus").removeClass("layui-btn-danger");
+		  		}
+		  		$(".marktBtnStatus").removeClass("hide");
+		  	})
+		  	
+		  	$(".marktBtnStatus").click(function(data){
+		  		var status = $(this).attr("data-status");
+		  		$.post(path+"/sys/wd/saleGood/setMarketConfig",{"status":status},function(data){
+		  			if(data.status == 200) {
+						layer.msg("修改成功");		  				
+		  			}else {
+		  				layer.msg(data.retmsg);
+		  			}
+		  		})
+		  		if(status == 1) {
+		  			$(".marktBtnStatus").html("开启集市");
+		  			$(".marktBtnStatus").attr("data-status","0")
+		  			$(".marktBtnStatus").addClass("layui-btn-danger");
+		  		}else {
+		  			$(".marktBtnStatus").html("关闭集市");
+		  			$(".marktBtnStatus").attr("data-status","1")
+		  			$(".marktBtnStatus").removeClass("layui-btn-danger");
+		  		}
+		  	})
+		});
+	</script>
+</body>
+
+</html>

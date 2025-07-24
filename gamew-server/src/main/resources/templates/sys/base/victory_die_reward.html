@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>奖励惩罚</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+
+<link rel="shortcut icon" href="favicon.ico">
+<link th:href="@{/static/sys/css/bootstrap.min.css?v=3.3.5}" rel="stylesheet">
+<link th:href="@{/static/sys/css/plugins/sweetalert/sweetalert.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/font-awesome.min.css?v=4.4.0}" rel="stylesheet">
+<link th:href="@{/static/sys/css/animate.min.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/style.min.css?v=4.0.0}" rel="stylesheet">
+<link th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" rel="stylesheet" />
+<link rel="stylesheet" th:href="@{/static/sys/css/global.css}">
+<style>
+.openMaxImg:hover {
+	box-shadow: 0px 0px 4px 1px #4e4e4e;
+	cursor: pointer;
+}
+
+/* 鼠标指向表格时,奇数行背景颜色 */
+.layui-table tbody tr:hover, .layui-table-hover {
+	background-color: #eeffee;
+}
+/* 表格头部工具栏背景色 */
+.layui-table-tool {
+	background-color: #eeffee;
+}
+
+.news_search {
+	font-size: 14px;
+}
+
+.layui-form-label {
+	padding: 9px 0;
+	left: 18px;
+	color: black;
+	font-size: 15px;
+	top: 1px;
+	width: 70px;
+}
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield;
+}
+</style>
+</head>
+
+<body>
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<!-- Panel Other -->
+		<div class="ibox float-e-margins">
+			<div class="row row-lg">
+				<div class="col-sm-12">
+					<blockquote class="layui-elem-quote news_search">
+						<div class="layui-inline">
+							<div class="layui-input-inline">
+								<input type="text" placeholder="名称"
+									class="layui-input search_btn" type-close autocomplete="off">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<a class="layui-btn" id="query">查询</a>
+						</div>
+						<div class="layui-inline">
+							<a class="layui-btn layui-btn-danger" id="refreshCache">刷新缓存</a>
+						</div>
+						<span>同一个名字不允许出现两次一样的类型</span>
+					</blockquote>
+
+
+					<!-- Example Events -->
+					<div class="example">
+						<table id="table" lay-filter="test">
+
+						</table>
+					</div>
+					<!-- End Example Events -->
+				</div>
+			</div>
+		</div>
+		<!-- End Panel Other -->
+	</div>
+
+	<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/js/bootstrap.min.js?v=3.3.5}"></script>
+	<script th:src="@{/static/sys/js/content.min.js}"></script>
+	<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/plugins/sweetalert/sweetalert.min.js}"></script>
+	<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+	<script th:src="@{/static/sys/js/public.js}"></script>
+	<script th:line="javascript">
+	var path = '[[${session.path}]]';
+		var layer;
+		var table;
+		var params;
+		var util;
+		layui.use([ 'layer', 'table', 'form', 'laydate', 'util' ], function() {
+			util = layui.util;
+			layer = layui.layer;
+			table = layui.table;
+			var date = layui.laydate;
+			form = layui.form;
+			var cols = [ {
+				title : 'id',
+				field : 'id',
+			}, {
+				title : '名字',
+				field : 'name',
+			}, {
+				title : '积分',
+				field : 'score',
+			}, {
+				title : '经验',
+				field : 'exp',
+			}, {
+				title : '道行',
+				field : 'tao',
+			}, 
+			 {
+				title : '武学',
+				field : 'wuxue',
+			}, 
+			 {
+				title : '金元宝',
+				field : 'goldCoin',
+			},
+			 {
+				title : '银元宝',
+				field : 'silverCoin',
+			}, 
+			 {
+				title : '物品',
+				field : 'daoju'
+			}, 
+			{	
+				title: '类型',
+				field: 'type',
+				templet: function(value) {
+					if(value.type == 1){
+						return "<font color='red'>死亡</font>";
+					}
+					return "<font color='green'>胜利</font>";
+				}
+			}
+			];
+			params = $.myRendar({
+				"table" : table,
+				"elem" : "#table",
+				"url" : path+"/victoryDieReward/getVictoryDieReward",
+				"method" : "post",
+				"cols" : cols,
+				toolbar : false,
+				width:"150",
+				templet:function(data){
+					var html = "";
+					html+='<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit" data-id="'+data.id+'">修改</a>'
+					if(!data.deleted) {
+						html+='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-id="'+data.id+'" >删除</a>';
+					}else {
+						html+='<a class="layui-btn layui-btn-wring layui-btn-xs" lay-event="cancel" data-id="'+data.id+'">恢复</a>';
+					}
+					return html;
+				},
+				success:function(c,curr) {
+					pageNum = curr;
+				}
+			});
+			
+			
+			$("#query").click(function(data){
+				var name = $(".search_btn").val();
+				if(name.trim() != "" && name.length > 0) {
+					params.options.where = {"name":name};
+				}else {
+					params.options.where = {};
+				}
+				table.render(params.options);
+			})
+			table.on('tool(test)', function(obj){
+				  var data = obj.data;
+				  var layEvent = obj.event;
+				  var t = $(this);
+				  var obj = {};
+				  if(layEvent == "del") {
+					  layer.confirm("确定删除?",function(){
+						  obj.id = data.id;
+						  obj.deleted = 1;
+						  del(obj);
+					  })
+					  
+				  }else if(layEvent == "cancel") {
+					  layer.confirm("确定恢复?",function(){
+						  obj.id = data.id;
+						  obj.deleted = 0;
+						  del(obj);
+					  })
+				  }else if(layEvent == "edit") {
+					  var html = '<div class="layui-form" style="width:90%;margin-top:31px;" lay-filter="editForm">';
+					  html+='<input type="hidden" name="deleted" class="layui-input" value="'+data.deleted+'" lay-verify="required">';
+						html += '<div class="layui-form-item"> <label class="layui-form-label">名字</label> <div class="layui-input-block"> <input type="text" name="name" class="layui-input" value="'+data.name+'" lay-verify="required"> <input type="hidden" value="'+data.id+'" name="id"/></div></div>';
+						html += '<div class="layui-form-item"> <label class="layui-form-label">积分</label> <div class="layui-input-block"> <input type="number" name="score" class="layui-input" value="'+data.score+'" lay-verify="required"> </div></div>';
+						html += '<div class="layui-form-item"> <label class="layui-form-label">经验</label> <div class="layui-input-block"> <input type="number" name="exp" class="layui-input" value="'+data.exp+'" lay-verify="required"> </div></div>';
+						html += '<div class="layui-form-item"> <label class="layui-form-label">道行</label> <div class="layui-input-block"> <input type="number" name="tao" class="layui-input" value="'+data.tao+'" lay-verify="required"><div class="layui-form-mid layui-word-aux">单位:天,360=一年</div></div></div>';
+						html += '<div class="layui-form-item"> <label class="layui-form-label">武学</label> <div class="layui-input-block"> <input type="number" name="wuxue" class="layui-input" value="'+data.wuxue+'" lay-verify="required"> </div></div>';
+						html += '<div class="layui-form-item"> <label class="layui-form-label">金元宝</label> <div class="layui-input-block"> <input type="number" name="goldCoin" class="layui-input" value="'+data.goldCoin+'" lay-verify="required"> </div></div>';
+						html += '<div class="layui-form-item"> <label class="layui-form-label">银元宝</label> <div class="layui-input-block"> <input type="number" name="silverCoin" class="layui-input" value="'+data.silverCoin+'" lay-verify="required"> </div></div>';
+						if(data.daoju == undefined) {
+							data.daoju = "";
+						}
+						if(data.pet == undefined) {
+							data.pet = "";
+						}
+						html += '<div class="layui-form-item"> <label class="layui-form-label">物品</label> <div class="layui-input-block"> <input type="text" name="daoju" class="layui-input" value="'+data.daoju+'" autocomplete="off"><div class="layui-form-mid layui-word-aux">多个物品随机示例:<br/>超级女娲石,超级神兽丹;随机<br/>全部物品示例:<br/>超级女娲石,超级神兽丹;全部</div><input type="hidden" value="'+data.id+'" name="id"/></div></div>';
+						html += '<div class="layui-form-item"> <label class="layui-form-label">宠物</label> <div class="layui-input-block"> <input type="text" name="pet" class="layui-input" value="'+data.pet+'" autocomplete="off"><div class="layui-form-mid layui-word-aux">多个宠物示例:<br/>朱雀(神兽)$满,百年黑熊(宝宝)$满,百年黑熊(宝宝)$空,<br/>坐骑示例:太极熊(坐骑)$8;随机<br/><font color="red">空表示属性随机,只对宝宝有用。神兽变异默认满属性</font></div><input type="hidden" value="'+data.id+'" name="id"/></div></div>';
+						html += '<div class="layui-form-item"> <label class="layui-form-label">类型</label> <div class="layui-input-block">';
+						html += "<select name='type' lay-verify='required'>";
+						if(data.type ==0) {
+							html +="<option value='0' selected>胜利</option>"
+							html +="<option value='1'>死亡</option>"
+						}else {
+							html +="<option value='0'>胜利</option>"
+								html +="<option value='1' selected>死亡</option>"
+						}
+						html+="</select>";
+						html+='</div></div>';
+						
+						
+						html += '<div class="layui-form-item"><a class="layui-btn layui-btn-danger layui-btn" lay-submit style="margin-left: 109px;" id="saveFormBtn" data-id="' + data.id + '" lay-filter="editForm">保存</a></div>'
+						html += '</div>';
+						layer.open({
+							title: false,
+							area: ["500px","98%"],
+							type: 1,
+							shadeClose:true,
+							content: html,
+							success: function() {
+								$("#type option[value='"+data.type+"']").attr("selected", true);								
+								form.render('select');
+							}
+						});
+				  }
+			});
+			form.on('submit(editForm)', function(data){
+				u(data.field);
+				return false;
+			});
+			var pageNum = 1;
+			function del(obj) {
+				var load = $.load("删除中...");
+				$.post(path+"/victoryDieReward/deleteVictoryDieReward",obj,function(d){
+				  if(d.status == 200) {
+					  layer.msg("删除成功");
+					  params.options.page.curr = pageNum
+					  table.render(params.options);
+				  }else {
+					  layer.msg(d.retmsg);
+				  }
+				  layer.close(load);
+		  		})
+			}
+			function u(obj) {
+				var load = $.load("修改中...");
+				$.post(path+"/victoryDieReward/updateVictoryDieReward",obj,function(d){
+				  if(d.status == 200) {
+					  layer.msg("修改成功");
+					  params.options.page.curr = pageNum
+					  table.render(params.options);
+				  }else {
+					  layer.msg(d.retmsg);
+				  }
+				  layer.close(load);
+				})
+			}
+			$("#refreshCache").click(function(){
+				$.post(path+"/sys/zhuangbeiInfo/refreshCache",function(data){
+					layer.msg(data.retmsg);
+				})
+			})
+		});
+	</script>
+</body>
+
+</html>

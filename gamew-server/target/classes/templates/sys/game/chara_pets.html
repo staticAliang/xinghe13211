@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+    <title>角色宠物管理</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="favicon.ico"> 
+	<link th:href="@{/static/sys/css/bootstrap.min.css?v=3.3.5}" rel="stylesheet">
+<link th:href="@{/static/sys/css/plugins/sweetalert/sweetalert.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/font-awesome.min.css?v=4.4.0}" rel="stylesheet">
+<link th:href="@{/static/sys/css/animate.min.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/style.min.css?v=4.0.0}" rel="stylesheet">
+<link th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" rel="stylesheet" />
+<link rel="stylesheet" th:href="@{/static/sys/css/global.css}">
+
+     <style>
+    	.openMaxImg:hover{
+   		    box-shadow: 0px 0px 4px 1px #4e4e4e;
+   		    cursor: pointer;
+    	}
+		
+		/* 鼠标指向表格时,奇数行背景颜色 */
+		.layui-table tbody tr:hover,.layui-table-hover {
+		    background-color: #eeffee;
+		}
+		/* 表格头部工具栏背景色 */
+		.layui-table-tool {
+		    background-color: #eeffee;
+		}
+		.news_search{
+			font-size:14px;
+		}
+		.layui-form-label{
+			padding: 9px 0;
+		    left: 18px;
+		    color: black;
+		    font-size: 15px;
+		    top: 1px;
+	        width: 35px;
+		}
+		.layui-form-select {
+		    max-width:12.5rem;
+		}
+		input::-webkit-outer-spin-button,
+	    input::-webkit-inner-spin-button {
+	        -webkit-appearance: none;
+	    }
+	    input[type="number"]{
+	        -moz-appearance: textfield;
+	    }
+    </style>
+</head>
+
+<body>
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<!-- Panel Other -->
+		<div class="ibox float-e-margins">
+			<div class="row row-lg">
+				<div class="col-sm-12">
+					<!-- Example Events -->
+					<div class="example">
+						<table class="layui-table" lay-filter="test">
+						  <colgroup>
+						    <col width="150">
+						    <col width="200">
+						    <col>
+						  </colgroup>
+						  <thead>
+						    <tr>
+						      <th lay-data="{field:'id'}">id</th>
+						      <th lay-data="{field:'str'}">名称</th>
+						      <th lay-data="{field:'skill'}">等级</th>
+						      <th lay-data="{field:'type1'}">外观</th>
+						      <th lay-data="{field:'penetrate'}">类型</th>
+						      <th lay-data="{field:'shape'}">亲密</th>
+						      <th lay-data="{field:'def'}">气血</th>
+						      <th lay-data="{field:'mana',edit:'text'}">法伤</th>
+						      <th lay-data="{field:'parry'}">速度</th>
+						      <th lay-data="{field:'wiz'}">防御</th>
+						      <th lay-data="{field:'accurate'}">物伤</th>
+						      <th lay-data="{field:'suit_light_effect'}">阶数</th>
+						      <th lay-data="{field:'intimacy'}">武学</th>
+						      <th lay-data="{field:'fasion_id'}">时装</th>
+						      <th>操作</th>
+						    </tr> 
+						  </thead>
+						  <tbody id="tbody">
+						  </tbody>
+						</table>
+					</div>
+					<!-- End Example Events -->
+				</div>
+			</div>
+		</div>
+		<!-- End Panel Other -->
+	</div>
+
+		<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/js/bootstrap.min.js?v=3.3.5}"></script>
+	<script th:src="@{/static/sys/js/content.min.js}"></script>
+	<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/plugins/sweetalert/sweetalert.min.js}"></script>
+	<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+	<script th:src="@{/static/sys/js/public.js}"></script>
+		<script th:line="javascript">
+		var layer;
+		var table;
+		var params;
+		var util;
+		var mapId;
+		var ps = $.getQueryString("ps");
+		var path = '[[${session.path}]]';
+		layui.use(['layer','table','form','util'], function(){
+			util = layui.util;
+		  	layer = layui.layer;
+		  	table = layui.table;
+		  	var form = layui.form;
+		  	var datas = new Array();
+		  	$.load("加载中");
+		  	$.post(path+"/wd/chara/getCharaValue",{"gid":ps,"type":"pets"},function(data){
+		  		if(data.status == 200) {
+		  			var html = "";
+		  			$(data.data).each(function(i,o){
+		  				var pet = JSON.parse(o.pet);
+		  				datas.push(pet);
+		  				html+="<tr>";
+		  				html+="<td>"+pet.id+"</td>";
+		  				html+="<td>"+pet.petShuXing[0].str+"</td>";
+		  				html+="<td>"+pet.petShuXing[0].skill+"</td>";
+		  				var type = "野生";
+		  				if(pet.petShuXing[0].hide_mount > 0) {
+		  					type = "<font color='#FF5722'>坐骑</font>";
+		  				}else if(pet.petShuXing[0].penetrate == 2) {
+		  					type = "宝宝";  					
+		  				}else if(pet.petShuXing[0].penetrate == 3) {
+		  					type = "变异";
+		  				}else if(pet.petShuXing[0].penetrate == 4) {
+		  					type = "<font color='#009688'>神兽</font>";
+		  				}else if(pet.petShuXing[0].penetrate == 5) {
+		  					type = "守护";
+		  				}else if(pet.petShuXing[0].penetrate == 6) {
+		  					type = "鬼卒";
+		  				}else if(pet.petShuXing[0].penetrate == 7) {
+		  					type = "鬼将";
+		  				}else if(pet.petShuXing[0].penetrate == 8) {
+		  					type = "鬼仙";
+		  				}
+		  				html+="<td>"+pet.petShuXing[0].type+"</td>";
+		  				html+="<td>"+type+"</td>";
+		  				html+="<td>"+pet.petShuXing[0].shape+"</td>";
+		  				html+="<td>"+pet.petShuXing[0].def+"</td>";
+		  				html+="<td>"+pet.petShuXing[0].mana+"</td>";
+		  				html+="<td>"+pet.petShuXing[0].parry+"</td>";
+		  				html+="<td>"+pet.petShuXing[0].wiz+"</td>";
+		  				html+="<td>"+pet.petShuXing[0].accurate+"</td>";
+		  				html+="<td>"+pet.petShuXing[0].hide_mount+"</td>";
+		  				html+="<td>"+pet.petShuXing[0].intimacy+"</td>";
+		  				html+="<td>"+pet.petShuXing[0].fasion_id+"</td>";
+		  				html+='<td><a class="layui-btn layui-btn-wring layui-btn-xs update" data-id="'+pet.id+'">修改</a><a class="layui-btn layui-btn-wring layui-btn-xs del" data-id="'+pet.id+'" lay-event="del">删除</a></td>';
+		  				html+="</tr>";
+		  			})
+		  			$("#tbody").html(html);
+		  		}
+		  		layer.closeAll();
+		  	})
+		  	
+		  	$(document).on("click",".update",function(){
+		  		var value = $(this).attr("data-id");
+				var data;
+				var id;
+		  		$(datas).each(function(i,o){
+					if(o.id == value) {
+						data = o;
+						id = o.id;
+						return false;
+					}
+				})
+				data = data.petShuXing[0];
+				var html = '<div class="layui-form" style="width:90%;margin-top:31px;" lay-filter="petForm">';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">名字</label> <div class="layui-input-block"> <input type="text" name="str" class="layui-input" value="'+data.str+'"> </div></div>';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">等级</label> <div class="layui-input-block"> <input type="number" name="skill" class="layui-input" value="'+data.skill+'"> </div></div>';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">外观</label> <div class="layui-input-block"> <input type="number" name="type" class="layui-input" value="'+data.type+'"> </div></div>';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">气血</label> <div class="layui-input-block"> <input type="number" name="def" class="layui-input" value="'+data.def+'"> </div></div>';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">物伤</label> <div class="layui-input-block"> <input type="number" name="accurate" class="layui-input" value="'+data.accurate+'"> </div></div>';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">法伤</label> <div class="layui-input-block"> <input type="number" name="mana" class="layui-input" value="'+data.mana+'"> </div></div>';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">防御</label> <div class="layui-input-block"> <input type="number" name="wiz" class="layui-input" value="'+data.wiz+'"> </div></div>';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">亲密</label> <div class="layui-input-block"> <input type="number" name="shape" class="layui-input" value="'+data.shape+'"> </div></div>';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">速度</label> <div class="layui-input-block"> <input type="number" name="parry" class="layui-input" value="'+data.parry+'"> </div></div>';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">武学</label> <div class="layui-input-block"> <input type="number" name="intimacy" class="layui-input" value="'+data.intimacy+'"> </div></div>';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">技能数</label> <div class="layui-input-block"> <input type="number" name="skillRange" class="layui-input" value="'+data.skillRange+'"> </div></div>';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">时装</label> <div class="layui-input-block"> <input type="number" name="fasion_id" class="layui-input" value="'+data.fasion_id+'"> </div></div>';
+				html += '<div class="layui-form-item"><a class="layui-btn layui-btn-danger layui-btn" lay-submit style="margin-left: 109px;" id="petForm" data-id="' + id + '">保存</a></div>'
+				html += '</div>';
+				layer.open({
+					title: false,
+					area: ["50%","85%"],
+					type: 1,
+					shadeClose:true,
+					content: html,
+					success: function() {
+					}
+				});
+		  	})
+		  	$(document).on("click",".del",function(){
+		  		var formData = form.val("petForm");
+		  		formData.gid = ps;
+		  		formData.id = $(this).attr("data-id");
+		  		$.post(path+"/wd/chara/delPet",formData,function(d){
+			  		if(d.status == 200) {
+						layer.msg("删除成功");
+						setTimeout(function(){
+							table.render(params.options);
+						},500)
+					}else {
+						layer.msg(d.retmsg);
+					}
+				});
+		  	})
+		  	$(document).on("click","#petForm",function(){
+		  		var formData = form.val("petForm");
+		  		formData.gid = ps;
+		  		formData.id = $(this).attr("data-id");
+		  		$.post(path+"/wd/chara/updatePet",formData,function(d){
+			  		if(d.status == 200) {
+						layer.msg("修改成功");
+					}else {
+						layer.msg(d.retmsg);
+					}
+				});
+		  	})
+		});
+	</script>
+</body>
+
+</html>
