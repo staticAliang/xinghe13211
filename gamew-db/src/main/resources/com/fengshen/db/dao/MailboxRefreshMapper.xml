@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fengshen.db.dao.MailboxRefreshMapper">
+  <resultMap id="BaseResultMap" type="com.fengshen.db.domain.MailboxRefresh">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="count" jdbcType="INTEGER" property="count" />
+    <result column="gid" jdbcType="VARCHAR" property="gid" />
+    <result column="to_gid" jdbcType="VARCHAR" property="toGid" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="sender" jdbcType="VARCHAR" property="sender" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="msg" jdbcType="VARCHAR" property="msg" />
+    <result column="attachment" jdbcType="VARCHAR" property="attachment" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="create_time" jdbcType="INTEGER" property="createTime" />
+    <result column="expired_time" jdbcType="INTEGER" property="expiredTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, count, gid, to_gid, type, sender, title, msg, attachment, status, create_time, expired_time
+  </sql>
+</mapper>

@@ -1,0 +1,208 @@
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.gamew</groupId>
+	<artifactId>wgames-59</artifactId>
+	<version>4.0.0</version>
+	<packaging>pom</packaging>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.0.4.RELEASE</version>
+		<relativePath />
+	</parent>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
+		<maven.test.skip>true</maven.test.skip>
+		<game.version>4.0.0</game.version>
+	</properties>
+
+	<modules>
+		<module>gamew-db</module>
+		<module>gamew-utils</module>
+		<module>gamew-server</module>
+		<module>gamew-generator</module>
+	</modules>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.gamew</groupId>
+				<artifactId>gamew-db</artifactId>
+				<version>4.0.0</version>
+			</dependency>
+			<dependency>
+				<groupId>org.gamew</groupId>
+				<artifactId>gamew-utils</artifactId>
+				<version>4.0.0</version>
+			</dependency>
+			<dependency>
+				<groupId>org.gamew</groupId>
+				<artifactId>gamew-server</artifactId>
+				<version>4.0.0</version>
+			</dependency>
+			<!-- Spring Boot Mybatis 依赖 -->
+			<dependency>
+				<groupId>org.mybatis.spring.boot</groupId>
+				<artifactId>mybatis-spring-boot-starter</artifactId>
+				<version>1.3.2</version>
+			</dependency>
+
+			<!-- MySQL 连接驱动依赖 -->
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>5.1.46</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>druid-spring-boot-starter</artifactId>
+				<version>1.1.10</version>
+			</dependency>
+			<dependency>
+				<groupId>com.github.pagehelper</groupId>
+				<artifactId>pagehelper-spring-boot-starter</artifactId>
+				<version>1.2.10</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.github.binarywang</groupId>
+				<artifactId>weixin-java-pay</artifactId>
+				<version>3.3.0</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.github.binarywang</groupId>
+				<artifactId>weixin-java-miniapp</artifactId>
+				<version>3.3.0</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.github.qcloudsms</groupId>
+				<artifactId>qcloudsms</artifactId>
+				<version>1.0.5</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.qcloud</groupId>
+				<artifactId>cos_api</artifactId>
+				<version>5.4.4</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.aliyun.oss</groupId>
+				<artifactId>aliyun-sdk-oss</artifactId>
+				<version>2.5.0</version>
+			</dependency>
+			<dependency>
+				<groupId>com.qiniu</groupId>
+				<artifactId>qiniu-java-sdk</artifactId>
+				<version>[7.2.0, 7.2.99]</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-json</artifactId>
+				<version>2.0.4.RELEASE</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-mail</artifactId>
+				<version>2.0.4.RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>com.lmax</groupId>
+				<artifactId>disruptor</artifactId>
+				<version>3.4.2</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+
+		<!-- 热部署模块 -->
+		<!-- <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-devtools</artifactId> 
+			<optional>true</optional> </dependency> -->
+
+		<!-- 阿里巴巴解析Json数据 -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.1.35</version>
+		</dependency>
+		<!-- 通用mapper -->
+		<dependency>
+			<groupId>tk.mybatis</groupId>
+			<artifactId>mapper-spring-boot-starter</artifactId>
+			<version>2.1.5</version>
+		</dependency>
+		<!-- 添加mybatis 依赖 -->
+		<dependency>
+			<groupId>tk.mybatis</groupId>
+			<artifactId>mapper</artifactId>
+			<version>4.1.5</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.pagehelper</groupId>
+			<artifactId>pagehelper-spring-boot-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.mybatis.spring.boot</groupId>
+			<artifactId>mybatis-spring-boot-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+		<!-- <dependency> <groupId>com.alibaba</groupId> <artifactId>druid-spring-boot-starter</artifactId> 
+			</dependency> -->
+		<!-- 自动生成注解插件 -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.lmax</groupId>
+			<artifactId>disruptor</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>uk.com.robust-it</groupId>
+			<artifactId>cloning</artifactId>
+			<version>1.9.12</version>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+			<version>1.2.1</version>
+		</dependency>
+		<!-- <dependency> <groupId>log4j</groupId> <artifactId>log4j</artifactId> 
+			<version>1.2.17</version> </dependency> -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>log4j-over-slf4j</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.vdurmont</groupId>
+			<artifactId>emoji-java</artifactId>
+			<version>5.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-text</artifactId>
+			<version>1.9</version>
+		</dependency>
+	</dependencies>
+
+</project>

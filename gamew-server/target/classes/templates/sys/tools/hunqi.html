@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>魂器发送</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="stylesheet"
+	th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" />
+<style type="text/css">
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield;
+}
+</style>
+</head>
+
+<body>
+	<div style=" width: 665px; margin: 45px auto; ">
+		<div class="layui-form" lay-filter="formData">
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label" style="width: 30px">魂器</label>
+					<div class="layui-input-inline">
+						<select name="name">
+							<option value="">选择魂器</option>
+							<option value="魂器·锋芒">魂器·锋芒</option>
+							<option value="魂器·魂灯">魂器·魂灯</option>
+							<option value="魂器·鬼步">魂器·鬼步</option>
+							<option value="魂器·润泽">魂器·润泽</option>
+							<option value="魂器·薄暮">魂器·薄暮</option>
+							<option value="魂器·轮回">魂器·轮回</option>
+							<option value="魂器·伏虎">魂器·伏虎</option>
+							<option value="魂器·双极">魂器·双极</option>
+							<option value="魂器·灵咒">魂器·灵咒</option>
+						</select>
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label" style="width:90px">等级</label>
+					<div class="layui-input-inline">
+						<input type="number" name="level" class="layui-input"
+							placeholder="最高等级135" value="75">
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label" style="width: 30px">阳</label>
+					<div class="layui-input-inline" style="width: 120px;">
+						<select name="yangKey1" class="yangKey">
+							<option value="">选择属性</option>
+							<option value="phy_power">物伤</option>
+							<option value="mag_power">法伤</option>
+							<option value="speed">速度</option>
+							<option value="str">力量</option>
+							<option value="wiz">灵力</option>
+							<option value="dex">敏捷</option>
+							<option value="penetrate">破防</option>
+							<option value="penetrate_rate">破防率</option>
+							<option value="double_hit">物理连击数</option>
+							<option value="double_hit_rate">物理连击率</option>
+							<option value="ignore_resist_metal">忽视目标抗金</option>
+							<option value="ignore_resist_wood">忽视目标抗木</option>
+							<option value="ignore_resist_water">忽视目标抗水</option>
+							<option value="ignore_resist_fire">忽视目标抗火</option>
+							<option value="ignore_resist_earth">忽视目标抗土</option>
+							<option value="ignore_all_resist_polar">忽视所有抗性</option>
+							<option value="ignore_all_resist_except">忽视所有异常</option>
+							<option value="ignore_resist_forgotten">忽视目标抗遗忘</option>
+							<option value="ignore_resist_poison">忽视目标抗中毒</option>
+							<option value="ignore_resist_frozen">忽视目标抗冰冻</option>
+							<option value="ignore_resist_sleep">忽视目标抗睡眠</option>
+							<option value="ignore_resist_confusion">忽视目标抗混乱</option>
+						</select>
+					</div>
+					<div class="layui-input-inline" style="width: 120px;">
+						<input type="number" name="yangVal1" class="layui-input"
+							placeholder="输入数值">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label" style="width: 30px;color:red">阴</label>
+					<div class="layui-input-inline" style="width: 120px;">
+						<select name="yinKey1" class="yinKey">
+							<option value="">选择属性</option>
+							<option value="def">防御</option>
+							<option value="max_life">最大气血</option>
+							<option value="max_mana">最大法力</option>
+							<option value="con">体质</option>
+							<option value="damage_sel">反震度</option>
+							<option value="damage_sel_rate">反震率</option>
+							<option value="counter_attack">反击次数</option>
+							<option value="counter_attack_rate">反击率</option>
+							<option value="resist_metal">金抗性</option>
+							<option value="resist_wood">木抗性</option>
+							<option value="resist_water">水抗性</option>
+							<option value="resist_fire">火抗性</option>
+							<option value="resist_earth">土抗性</option>
+							<option value="all_resist_polar">所有抗性</option>
+							<option value="all_resist_except">所有抗异常</option>
+							<option value="resist_forgotten">抗遗忘</option>
+							<option value="resist_poison">抗中毒</option>
+							<option value="resist_frozen">抗冰冻</option>
+							<option value="resist_sleep">抗睡眠</option>
+							<option value="resist_confusion">抗混乱</option>
+						</select>
+					</div>
+					<div class="layui-input-inline" style="width: 120px;">
+						<input type="number" name="yinVal1" class="layui-input"
+							placeholder="输入数值">
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label" style="width: 30px">阳</label>
+					<div class="layui-input-inline" style="width: 120px;">
+						<select name="yangKey2" class="yangKey">
+							<option value="">选择属性</option>
+							<option value="phy_power">物伤</option>
+							<option value="mag_power">法伤</option>
+							<option value="speed">速度</option>
+							<option value="str">力量</option>
+							<option value="wiz">灵力</option>
+							<option value="dex">敏捷</option>
+							<option value="penetrate">破防</option>
+							<option value="penetrate_rate">破防率</option>
+							<option value="double_hit">物理连击数</option>
+							<option value="double_hit_rate">物理连击率</option>
+							<option value="ignore_resist_metal">忽视目标抗金</option>
+							<option value="ignore_resist_wood">忽视目标抗木</option>
+							<option value="ignore_resist_water">忽视目标抗水</option>
+							<option value="ignore_resist_fire">忽视目标抗火</option>
+							<option value="ignore_resist_earth">忽视目标抗土</option>
+							<option value="ignore_all_resist_polar">忽视所有抗性</option>
+							<option value="ignore_all_resist_except">忽视所有异常</option>
+							<option value="ignore_resist_forgotten">忽视目标抗遗忘</option>
+							<option value="ignore_resist_poison">忽视目标抗中毒</option>
+							<option value="ignore_resist_frozen">忽视目标抗冰冻</option>
+							<option value="ignore_resist_sleep">忽视目标抗睡眠</option>
+							<option value="ignore_resist_confusion">忽视目标抗混乱</option>
+						</select>
+					</div>
+					<div class="layui-input-inline" style="width: 120px;">
+						<input type="number" name="yangVal2" class="layui-input"
+							placeholder="输入数值">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label" style="width: 30px;color:red">阴</label>
+					<div class="layui-input-inline" style="width: 120px;">
+						<select name="yinKey2" class="yinKey">
+							<option value="">选择属性</option>
+							<option value="def">防御</option>
+							<option value="max_life">最大气血</option>
+							<option value="max_mana">最大法力</option>
+							<option value="con">体质</option>
+							<option value="damage_sel">反震度</option>
+							<option value="damage_sel_rate">反震率</option>
+							<option value="counter_attack">反击次数</option>
+							<option value="counter_attack_rate">反击率</option>
+							<option value="resist_metal">金抗性</option>
+							<option value="resist_wood">木抗性</option>
+							<option value="resist_water">水抗性</option>
+							<option value="resist_fire">火抗性</option>
+							<option value="resist_earth">土抗性</option>
+							<option value="all_resist_polar">所有抗性</option>
+							<option value="all_resist_except">所有抗异常</option>
+							<option value="resist_forgotten">抗遗忘</option>
+							<option value="resist_poison">抗中毒</option>
+							<option value="resist_frozen">抗冰冻</option>
+							<option value="resist_sleep">抗睡眠</option>
+							<option value="resist_confusion">抗混乱</option>
+						</select>
+					</div>
+					<div class="layui-input-inline" style="width: 120px;">
+						<input type="number" name="yinVal2" class="layui-input"
+							placeholder="输入数值">
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label" style="width: 30px">阳</label>
+					<div class="layui-input-inline" style="width: 120px;">
+						<select name="yangKey3" class="yangKey">
+							<option value="">选择属性</option>
+							<option value="phy_power">物伤</option>
+							<option value="mag_power">法伤</option>
+							<option value="speed">速度</option>
+							<option value="str">力量</option>
+							<option value="wiz">灵力</option>
+							<option value="dex">敏捷</option>
+							<option value="penetrate">破防</option>
+							<option value="penetrate_rate">破防率</option>
+							<option value="double_hit">物理连击数</option>
+							<option value="double_hit_rate">物理连击率</option>
+							<option value="ignore_resist_metal">忽视目标抗金</option>
+							<option value="ignore_resist_wood">忽视目标抗木</option>
+							<option value="ignore_resist_water">忽视目标抗水</option>
+							<option value="ignore_resist_fire">忽视目标抗火</option>
+							<option value="ignore_resist_earth">忽视目标抗土</option>
+							<option value="ignore_all_resist_polar">忽视所有抗性</option>
+							<option value="ignore_all_resist_except">忽视所有异常</option>
+							<option value="ignore_resist_forgotten">忽视目标抗遗忘</option>
+							<option value="ignore_resist_poison">忽视目标抗中毒</option>
+							<option value="ignore_resist_frozen">忽视目标抗冰冻</option>
+							<option value="ignore_resist_sleep">忽视目标抗睡眠</option>
+							<option value="ignore_resist_confusion">忽视目标抗混乱</option>
+						</select>
+					</div>
+					<div class="layui-input-inline" style="width: 120px;">
+						<input type="number" name="yangVal3" class="layui-input"
+							placeholder="输入数值">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label" style="width: 30px;color:red">阴</label>
+					<div class="layui-input-inline" style="width: 120px;">
+						<select name="yinKey3" class="yinKey">
+							<option value="">选择属性</option>
+							<option value="def">防御</option>
+							<option value="max_life">最大气血</option>
+							<option value="max_mana">最大法力</option>
+							<option value="con">体质</option>
+							<option value="damage_sel">反震度</option>
+							<option value="damage_sel_rate">反震率</option>
+							<option value="counter_attack">反击次数</option>
+							<option value="counter_attack_rate">反击率</option>
+							<option value="resist_metal">金抗性</option>
+							<option value="resist_wood">木抗性</option>
+							<option value="resist_water">水抗性</option>
+							<option value="resist_fire">火抗性</option>
+							<option value="resist_earth">土抗性</option>
+							<option value="all_resist_polar">所有抗性</option>
+							<option value="all_resist_except">所有抗异常</option>
+							<option value="resist_forgotten">抗遗忘</option>
+							<option value="resist_poison">抗中毒</option>
+							<option value="resist_frozen">抗冰冻</option>
+							<option value="resist_sleep">抗睡眠</option>
+							<option value="resist_confusion">抗混乱</option>
+						</select>
+					</div>
+					<div class="layui-input-inline" style="width: 120px;">
+						<input type="number" name="yinVal3" class="layui-input"
+							placeholder="输入数值">
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label" style="width: 30px">阳</label>
+					<div class="layui-input-inline" style="width: 120px;">
+						<select name="yangKey4" class="yangKey">
+							<option value="">选择属性</option>
+							<option value="phy_power">物伤</option>
+							<option value="mag_power">法伤</option>
+							<option value="speed">速度</option>
+							<option value="str">力量</option>
+							<option value="wiz">灵力</option>
+							<option value="dex">敏捷</option>
+							<option value="penetrate">破防</option>
+							<option value="penetrate_rate">破防率</option>
+							<option value="double_hit">物理连击数</option>
+							<option value="double_hit_rate">物理连击率</option>
+							<option value="ignore_resist_metal">忽视目标抗金</option>
+							<option value="ignore_resist_wood">忽视目标抗木</option>
+							<option value="ignore_resist_water">忽视目标抗水</option>
+							<option value="ignore_resist_fire">忽视目标抗火</option>
+							<option value="ignore_resist_earth">忽视目标抗土</option>
+							<option value="ignore_all_resist_polar">忽视所有抗性</option>
+							<option value="ignore_all_resist_except">忽视所有异常</option>
+							<option value="ignore_resist_forgotten">忽视目标抗遗忘</option>
+							<option value="ignore_resist_poison">忽视目标抗中毒</option>
+							<option value="ignore_resist_frozen">忽视目标抗冰冻</option>
+							<option value="ignore_resist_sleep">忽视目标抗睡眠</option>
+							<option value="ignore_resist_confusion">忽视目标抗混乱</option>
+						</select>
+					</div>
+					<div class="layui-input-inline" style="width: 120px;">
+						<input type="number" name="yangVal4" class="layui-input"
+							placeholder="输入数值">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label" style="width: 30px;color:red">阴</label>
+					<div class="layui-input-inline" style="width: 120px;">
+						<select name="yinKey4" class="yinKey">
+							<option value="">选择属性</option>
+							<option value="def">防御</option>
+							<option value="max_life">最大气血</option>
+							<option value="max_mana">最大法力</option>
+							<option value="con">体质</option>
+							<option value="damage_sel">反震度</option>
+							<option value="damage_sel_rate">反震率</option>
+							<option value="counter_attack">反击次数</option>
+							<option value="counter_attack_rate">反击率</option>
+							<option value="resist_metal">金抗性</option>
+							<option value="resist_wood">木抗性</option>
+							<option value="resist_water">水抗性</option>
+							<option value="resist_fire">火抗性</option>
+							<option value="resist_earth">土抗性</option>
+							<option value="all_resist_polar">所有抗性</option>
+							<option value="all_resist_except">所有抗异常</option>
+							<option value="resist_forgotten">抗遗忘</option>
+							<option value="resist_poison">抗中毒</option>
+							<option value="resist_frozen">抗冰冻</option>
+							<option value="resist_sleep">抗睡眠</option>
+							<option value="resist_confusion">抗混乱</option>
+						</select>
+					</div>
+					<div class="layui-input-inline" style="width: 120px;">
+						<input type="number" name="yinVal4" class="layui-input"
+							placeholder="输入数值">
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label" style="width: 30px">阳</label>
+					<div class="layui-input-inline" style="width: 120px;">
+						<select name="yangKey5" class="yangKey">
+							<option value="">选择属性</option>
+							<option value="phy_power">物伤</option>
+							<option value="mag_power">法伤</option>
+							<option value="speed">速度</option>
+							<option value="str">力量</option>
+							<option value="wiz">灵力</option>
+							<option value="dex">敏捷</option>
+							<option value="penetrate">破防</option>
+							<option value="penetrate_rate">破防率</option>
+							<option value="double_hit">物理连击数</option>
+							<option value="double_hit_rate">物理连击率</option>
+							<option value="ignore_resist_metal">忽视目标抗金</option>
+							<option value="ignore_resist_wood">忽视目标抗木</option>
+							<option value="ignore_resist_water">忽视目标抗水</option>
+							<option value="ignore_resist_fire">忽视目标抗火</option>
+							<option value="ignore_resist_earth">忽视目标抗土</option>
+							<option value="ignore_all_resist_polar">忽视所有抗性</option>
+							<option value="ignore_all_resist_except">忽视所有异常</option>
+							<option value="ignore_resist_forgotten">忽视目标抗遗忘</option>
+							<option value="ignore_resist_poison">忽视目标抗中毒</option>
+							<option value="ignore_resist_frozen">忽视目标抗冰冻</option>
+							<option value="ignore_resist_sleep">忽视目标抗睡眠</option>
+							<option value="ignore_resist_confusion">忽视目标抗混乱</option>
+						</select>
+					</div>
+					<div class="layui-input-inline" style="width: 120px;">
+						<input type="number" name="yangVal5" class="layui-input"
+							placeholder="输入数值">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label" style="width: 30px;color:red">阴</label>
+					<div class="layui-input-inline" style="width: 120px;">
+						<select name="yinKey5" class="yinKey">
+							<option value="">选择属性</option>
+							<option value="def">防御</option>
+							<option value="max_life">最大气血</option>
+							<option value="max_mana">最大法力</option>
+							<option value="con">体质</option>
+							<option value="damage_sel">反震度</option>
+							<option value="damage_sel_rate">反震率</option>
+							<option value="counter_attack">反击次数</option>
+							<option value="counter_attack_rate">反击率</option>
+							<option value="resist_metal">金抗性</option>
+							<option value="resist_wood">木抗性</option>
+							<option value="resist_water">水抗性</option>
+							<option value="resist_fire">火抗性</option>
+							<option value="resist_earth">土抗性</option>
+							<option value="all_resist_polar">所有抗性</option>
+							<option value="all_resist_except">所有抗异常</option>
+							<option value="resist_forgotten">抗遗忘</option>
+							<option value="resist_poison">抗中毒</option>
+							<option value="resist_frozen">抗冰冻</option>
+							<option value="resist_sleep">抗睡眠</option>
+							<option value="resist_confusion">抗混乱</option>
+						</select>
+					</div>
+					<div class="layui-input-inline" style="width: 120px;">
+						<input type="number" name="yinVal5" class="layui-input"
+							placeholder="输入数值">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div style="margin: 0px 13px;">
+			<div class="layui-form-mid layui-word-aux">如果不知道最大值就随便填，系统会自动校正</div>
+			<a class="layui-btn" id="send" style="width: 633px;">发送</a>
+		</div>
+	</div>
+
+
+	<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+	<script th:src="@{/static/sys/js/public.js}"></script>
+	<script th:line="javascript">
+		var path = '[[${session.path}]]';
+		var layer;
+		var table;
+		var params;
+		var util;
+		var mapId;
+		layui.use([ 'layer', 'table', 'form', 'util' ], function() {
+			util = layui.util;
+			layer = layui.layer;
+			table = layui.table;
+			form = layui.form;
+			
+			$("#send").click(function(){
+				var data = form.val("formData");
+				if(data.name == "") {
+					layer.msg("请选择魂器");
+					return;
+				}
+				if(data.level < 75 || data.level>179) {
+					layer.msg("魂器等级最低不能低于75级，最高不能高于179级");
+					return;
+				}
+				var ary = new Array();
+				$(".yangKey").each(function(i,o){
+					var sel = $(o).find("option:selected");
+					if(sel.val() != "") {
+						ary.push(sel.text());
+					}
+				});
+				var yangKeyNum = 0;
+				for(var i = 0; i < ary.length; i++) {
+					if(yangKeyNum>2) {
+						break;
+					}
+					yangKeyNum = 0;
+					for(var j = i; j < ary.length; j++) {
+						if(ary[i] == ary[j]) {
+						  yangKeyNum++;
+					  	}
+					}
+				}
+				if(yangKeyNum>2) {
+					layer.msg("阳属性最多只能2条重复属性");
+					return;
+				}
+				
+				//阴属性统计
+				var ary2 = new Array();
+				$(".yinKey").each(function(i,o){
+					var sel = $(o).find("option:selected");
+					if(sel.val() != "") {
+						ary2.push(sel.text());
+					}
+				});
+				var yinKeyNum = 0;
+				for(var i = 0; i < ary2.length; i++) {
+					if(yinKeyNum>2) {
+						break;
+					}
+					yinKeyNum = 0;
+					for(var j = i; j < ary2.length; j++) {
+						if(ary2[i] == ary2[j]) {
+						  yinKeyNum++;
+					  	}
+					}
+				}
+				if(yinKeyNum>2) {
+					layer.msg("<font color='yellow'>阴</font>属性最多只能2条重复属性");
+					return;
+				}
+				var charaName = window.parent.getCharaName();
+				if(charaName == "") {
+					layer.msg("请输入角色名");
+					return;
+				}
+				data.charaName = charaName;
+				$.post(path+"/wd/chara/sendHunQi",data,function(d){
+					if(d.status == 200) {
+						
+					}
+					layer.msg(d.retmsg);
+				})
+			});
+		});
+	</script>
+</body>
+
+</html>

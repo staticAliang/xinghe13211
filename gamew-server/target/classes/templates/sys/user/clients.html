@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>客户端连接</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+
+<link rel="shortcut icon" href="favicon.ico">
+<link th:href="@{/static/sys/css/bootstrap.min.css?v=3.3.5}" rel="stylesheet">
+<link th:href="@{/static/sys/css/plugins/sweetalert/sweetalert.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/font-awesome.min.css?v=4.4.0}" rel="stylesheet">
+<link th:href="@{/static/sys/css/animate.min.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/style.min.css?v=4.0.0}" rel="stylesheet">
+<link th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" rel="stylesheet" />
+<link rel="stylesheet" th:href="@{/static/sys/css/global.css}">
+<style>
+.openMaxImg:hover {
+	box-shadow: 0px 0px 4px 1px #4e4e4e;
+	cursor: pointer;
+}
+
+
+/* 鼠标指向表格时,奇数行背景颜色 */
+.layui-table tbody tr:hover, .layui-table-hover {
+	background-color: #eeffee;
+}
+/* 表格头部工具栏背景色 */
+.layui-table-tool {
+	background-color: #eeffee;
+}
+
+.news_search {
+	font-size: 14px;
+}
+
+.layui-form-label {
+	padding: 9px 0;
+	left: 18px;
+	color: black;
+	font-size: 15px;
+	top: 1px;
+	width: 70px;
+}
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield;
+}
+</style>
+</head>
+
+<body>
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<!-- Panel Other -->
+		<div class="ibox float-e-margins">
+			<div class="row row-lg layui-form" lay-filter="choujiang">
+				<div class="col-sm-12">
+					<div class="example">
+						<blockquote class="layui-elem-quote news_search layui-form">
+							<div class="layui-inline">
+								<button type="button" class="layui-btn layui-btn-primary flush"><i class="layui-icon layui-icon-refresh"></i></button>
+							</div>
+							<div class="layui-inline">
+								<div style="font-size: 23px; margin-left: 20px;">
+									<span style="color:#359f6a">客户端:</span>
+									<span id="onlineNumber">0</span>
+								</div>
+							</div>
+						</blockquote>
+						<table id="table" lay-filter="test">
+
+						</table>
+					</div>
+					<!-- End Example Events -->
+				</div>
+			</div>
+		</div>
+		<!-- End Panel Other -->
+	</div>
+
+		<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/js/bootstrap.min.js?v=3.3.5}"></script>
+	<script th:src="@{/static/sys/js/content.min.js}"></script>
+	<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/plugins/sweetalert/sweetalert.min.js}"></script>
+	<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+	<script th:src="@{/static/sys/js/public.js}"></script>
+	<script th:line="javascript">
+	var path = '[[${session.path}]]';
+		var layer;
+		var table;
+		var params;
+		var util;
+		layui.use([ 'layer', 'table', 'form', 'laydate', 'util' ], function() {
+			util = layui.util;
+			layer = layui.layer;
+			table = layui.table;
+			var date = layui.laydate;
+			form = layui.form;
+			var cols = [ {
+				title : 'ip',
+				field : 'ip',
+			}, 
+			{
+				title : '角色',
+				field : 'charaName',
+			},
+			{
+				title : 'uuid',
+				field : 'uuid',
+				hide:true
+			},
+			 {
+				title : '状态',
+				field : 'online',
+			}
+			];
+			params = $.myRendar({
+				"table" : table,
+				"elem" : "#table",
+				"url" : path+"/system/getClients",
+				"method" : "post",
+				"cols" : cols,
+				toolbar : false,
+				page:false,
+				success:function(c,curr) {
+					$("#onlineNumber").text(c.data.length);
+				},
+				templet:function(data){
+					var html = "";
+					if(data.charaName == "") {
+						html = '<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">强制下线</a>';
+					}
+					return html;
+				}
+			});
+			table.on('tool(test)', function(obj){
+				  var data = obj.data;
+				  var layEvent = obj.event;
+				  var t = $(this);
+				  if(layEvent == "del") {
+					  layer.confirm('确认强制客户端下线吗？',function(){
+						 $.post(path+"/system/forceShutdownClient",{"uuid":data.uuid});
+						 table.render(params.options);
+						 layer.msg("操作成功！");
+					  })
+				  }
+			});
+			$(".flush").click(function() {
+				table.render(params.options)
+			})
+		});
+	</script>
+</body>
+
+</html>

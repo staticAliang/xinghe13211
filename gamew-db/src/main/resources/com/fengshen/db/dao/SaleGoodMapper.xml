@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fengshen.db.dao.SaleGoodMapper">
+  <resultMap id="BaseResultMap" type="com.fengshen.db.domain.SaleGood">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="goods_id" jdbcType="VARCHAR" property="goodsId" />
+    <result column="sg_id" jdbcType="INTEGER" property="sgId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="alias" jdbcType="VARCHAR" property="alias" />
+    <result column="price" jdbcType="INTEGER" property="price" />
+    <result column="req_level" jdbcType="INTEGER" property="reqLevel" />
+    <result column="gid" jdbcType="VARCHAR" property="gid" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="deleted" jdbcType="BIT" property="deleted" />
+    <result column="level" jdbcType="INTEGER" property="level" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="extra" jdbcType="VARCHAR" property="extra" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="start_time" jdbcType="INTEGER" property="startTime" />
+    <result column="end_time" jdbcType="INTEGER" property="endTime" />
+    <result column="icon" jdbcType="INTEGER" property="icon" />
+    <result column="unidentified" jdbcType="INTEGER" property="unidentified" />
+    <result column="itemPolar" jdbcType="INTEGER" property="item_polar" />
+    <result column="cgPriceCount" jdbcType="INTEGER" property="cg_price_count" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.fengshen.db.domain.SaleGood">
+    <result column="goods" jdbcType="LONGVARCHAR" property="goods" />
+  </resultMap>
+  
+</mapper>

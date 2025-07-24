@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fengshen.db.auth.AccountsMapper">
+  <resultMap id="BaseResultMap" type="com.fengshen.db.domain.Accounts">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="keyword" jdbcType="VARCHAR" property="keyword" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="token" jdbcType="VARCHAR" property="token" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="deleted" jdbcType="BIT" property="deleted" />
+    <result column="register_code" jdbcType="VARCHAR" property="registerCode" />
+    <result column="register_ip" jdbcType="VARCHAR" property="registerIp" />
+    <result column="mac" jdbcType="VARCHAR" property="mac" />
+    <result column="last_login_ip" jdbcType="VARCHAR" property="lastLoginIp" />
+    <result column="privilege" jdbcType="INTEGER" property="privilege" />
+  </resultMap>
+  
+</mapper>

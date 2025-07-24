@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>缓存管理</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+
+<link th:href="@{/static/sys/css/bootstrap.min.css?v=3.3.5}" rel="stylesheet">
+<link th:href="@{/static/sys/css/plugins/sweetalert/sweetalert.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/font-awesome.min.css?v=4.4.0}" rel="stylesheet">
+<link th:href="@{/static/sys/css/animate.min.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/style.min.css?v=4.0.0}" rel="stylesheet">
+<link th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" rel="stylesheet" />
+<link rel="stylesheet" th:href="@{/static/sys/css/global.css}">
+<style>
+.openMaxImg:hover {
+	box-shadow: 0px 0px 4px 1px #4e4e4e;
+	cursor: pointer;
+}
+
+/* 鼠标指向表格时,奇数行背景颜色 */
+.layui-table tbody tr:hover, .layui-table-hover {
+	background-color: #eeffee;
+}
+/* 表格头部工具栏背景色 */
+.layui-table-tool {
+	background-color: #eeffee;
+}
+
+.news_search {
+	font-size: 14px;
+}
+
+.layui-form-label {
+	padding: 9px 0;
+	left: 18px;
+	color: black;
+	font-size: 15px;
+	top: 1px;
+	width: 35px;
+}
+
+.layui-form-select {
+	max-width: 8.5rem;
+}
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield;
+}
+</style>
+</head>
+
+<body>
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<!-- Panel Other -->
+		<div class="ibox float-e-margins">
+			<div class="row row-lg">
+				<div class="col-sm-12">
+				
+					<blockquote class="layui-elem-quote news_search">
+						<div class="layui-inline">
+							<a class="layui-btn layui-btn-danger" id="refreshCacheAll">刷新全部</a>
+						</div>
+					</blockquote>
+					<div class="example layui-form" lay-filter="baseForm">
+						<table class="layui-table" >
+							<tbody>
+								<tr>
+									<th>名称</th>
+									<th>操作</th>
+								</tr>
+								<tr>
+									<td>人物经验(experience)</td>
+									<td>
+										<a class="layui-btn layui-btn-danger layui-btn refreshCache" data-name="charaExpCache">刷新缓存</a>
+									</td>
+								</tr>
+								<tr>
+									<td>道法经验(experience_treasure)</td>
+									<td>
+										<a class="layui-btn layui-btn-danger layui-btn refreshCache" data-name="daofaExpCache">刷新缓存</a>
+									</td>
+								</tr>
+								<tr>
+									<td>地图数据(map)</td>
+									<td>
+										<a class="layui-btn layui-btn-danger layui-btn refreshCache" data-name="mapCache">刷新缓存</a>
+									</td>
+								</tr>
+								<tr>
+									<td>npc列表(npc)</td>
+									<td>
+										<a class="layui-btn layui-btn-danger layui-btn refreshCache" data-name="npc">刷新缓存</a>
+									</td>
+								</tr>
+								<tr>
+									<td>npc对话(npc_dialogue)</td>
+									<td>
+										<a class="layui-btn layui-btn-danger layui-btn refreshCache" data-name="npc_dialogue">刷新缓存</a>
+									</td>
+								</tr>
+								<tr>
+									<td>npc对话框(npc_dialogue_frame)</td>
+									<td>
+										<a class="layui-btn layui-btn-danger layui-btn refreshCache" data-name="npc_dialogue_frame">刷新缓存</a>
+									</td>
+								</tr>
+								<tr>
+									<td>npc入口(npc_point)</td>
+									<td>
+										<a class="layui-btn layui-btn-danger layui-btn refreshCache" data-name="npc_point">刷新缓存</a>
+									</td>
+								</tr>
+								<tr>
+									<td>宠物列表(pet)</td>
+									<td>
+										<a class="layui-btn layui-btn-danger layui-btn refreshCache" data-name="pet">刷新缓存</a>
+									</td>
+								</tr>
+								<tr>
+									<td>战斗怪物(t_fight_object)</td>
+									<td>
+										<a class="layui-btn layui-btn-danger layui-btn refreshCache" data-name="t_fight_object">刷新缓存</a>
+									</td>
+								</tr>
+								<tr>
+									<td>自定义宠物技能(custom_pet_skill)</td>
+									<td>
+										<a class="layui-btn layui-btn-danger layui-btn refreshCache" data-name="custom_pet_skill">刷新缓存</a>
+									</td>
+								</tr>
+								<tr>
+									<td>抽奖(choujiang)</td>
+									<td>
+										<a class="layui-btn layui-btn-danger layui-btn refreshCache" data-name="choujiang">刷新缓存</a>
+									</td>
+								</tr>
+								<tr>
+									<td>抽奖(chengwei)</td>
+									<td>
+										<a class="layui-btn layui-btn-danger layui-btn refreshCache" data-name="chengwei">刷新缓存</a>
+									</td>
+								</tr>
+								<tr>
+									<td>属性对应(shuxingduiying)</td>
+									<td>
+										<a class="layui-btn layui-btn-danger layui-btn refreshCache" data-name="shuxingduiying">刷新缓存</a>
+									</td>
+								</tr>
+								<tr>
+									<td>死亡惩罚(victory_die_reward)</td>
+									<td>
+										<a class="layui-btn layui-btn-danger layui-btn refreshCache" data-name="victory_die_reward">刷新缓存</a>
+									</td>
+								</tr>
+								<tr>
+									<td>装备信息(zhuangbei_info)</td>
+									<td>
+										<a class="layui-btn layui-btn-danger layui-btn refreshCache" data-name="zhuangbei_info">刷新缓存</a>
+									</td>
+								</tr>
+								<tr>
+									<td>商城库存(store_goods)</td>
+									<td>
+										<a class="layui-btn layui-btn-danger layui-btn refreshCache" data-name="store_goods">刷新缓存</a>
+									</td>
+								</tr>
+								<tr>
+									<td>库存信息(store_info)</td>
+									<td>
+										<a class="layui-btn layui-btn-danger layui-btn refreshCache" data-name="store_info">刷新缓存</a>
+									</td>
+								</tr>
+								<tr>
+									<td>定时公告(notice)</td>
+									<td>
+										<a class="layui-btn layui-btn-danger layui-btn refreshCache" data-name="notice">刷新缓存</a>
+									</td>
+								</tr>
+								<tr>
+									<td>任务(renwu)</td>
+									<td>
+										<a class="layui-btn layui-btn-danger layui-btn refreshCache" data-name="renwu">刷新缓存</a>
+									</td>
+								</tr>
+								<tr>
+									<td>任务怪物(renwu_monster)</td>
+									<td>
+										<a class="layui-btn layui-btn-danger layui-btn refreshCache" data-name="renwu_monster">刷新缓存</a>
+									</td>
+								</tr>
+								<tr>
+									<td>配置信息(config_info)</td>
+									<td>
+										<a class="layui-btn layui-btn-danger layui-btn refreshCache" data-name="config_info">刷新缓存</a>
+									</td>
+								</tr>
+								<tr>
+									<td>福袋抽奖(luck_draw_item)</td>
+									<td>
+										<a class="layui-btn layui-btn-danger layui-btn refreshCache" data-name="fudaichoujiang">刷新缓存</a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End Panel Other -->
+	</div>
+
+	<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/js/bootstrap.min.js?v=3.3.5}"></script>
+	<script th:src="@{/static/sys/js/content.min.js}"></script>
+	<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/plugins/sweetalert/sweetalert.min.js}"></script>
+	<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+	<script th:line="javascript">
+	var path = '[[${session.path}]]';
+	layui.use(["form", "layer"], function() {
+		var layer = layui.layer;
+		var form = layui.form;
+		$(".refreshCache").click(function(){
+			//请求后端修改
+			var name = $(this).attr("data-name");
+			$.post(path+"/sys/wd/wdCache/refreshCache",{"name":name},function(data){
+				if(data.status == 200) {
+					layer.msg("刷新成功");
+				}else {
+					layer.msg(data.retmsg);
+				}
+			})
+		})
+		
+		$("#refreshCacheAll").click(function(){
+			//请求后端修改
+			$.post(path+"/sys/wd/wdCache/refreshCacheAll",function(data){
+				if(data.status == 200) {
+					layer.msg("刷新成功");
+				}else {
+					layer.msg(data.retmsg);
+				}
+			})
+		})
+	})
+	
+	
+		
+	</script>
+</body>
+
+</html>

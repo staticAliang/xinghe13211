@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>清理角色</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="stylesheet"
+	th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" />
+<style type="text/css">
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield;
+}
+</style>
+</head>
+
+<body>
+	<div style=" width: 335px; margin: 45px auto; ">
+		<!-- 角色首饰 -->
+		<div class="layui-form" lay-filter="formData">
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label" style="width: 30px">等级</label>
+					<div class="layui-input-inline">
+						<input type="number" name="level" class="layui-input"
+							placeholder="输入等级">
+						<div class="layui-form-mid layui-word-aux">多少级以下</div>
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label" style="width: 30px">天数</label>
+					<div class="layui-input-inline">
+						<input type="number" name="day" class="layui-input"
+							placeholder="输入天数">
+					<div class="layui-form-mid layui-word-aux">超过多少天未登录</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<div style="margin: 0px 13px;">
+			<a class="layui-btn" id="char_zb_ss_info_send" style="width: 238px;">开始清理</a>
+		</div>
+	</div>
+
+
+	<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+	<script th:src="@{/static/sys/js/public.js}"></script>
+	<script th:line="javascript">
+		var path = '[[${session.path}]]';
+		var layer;
+		layui.use([ 'layer', 'form'], function() {
+			layer = layui.layer;
+			form = layui.form;
+			$("#char_zb_ss_info_send").click(function(){
+				var formData = form.val("formData");
+				$.post(path+"/wd/chara/getClearTimeoutCharaCount",formData,function(d){
+					var totla = d.data;
+					if(d.status == 200) {
+						var load = $.load("正在清理，请稍后<span id='curVal'>0</span>/"+totla+"");
+						//开启定时器5秒钟更新一次
+						var timer = setInterval(function(){
+							$.post(path+"/wd/chara/getClearTimeoutCharaCount",formData,function(d){
+								var curVal = 0;
+								if(totla-d.data > 0) {
+									curVal = totla-d.data;
+								}
+								$("#curVal").html(curVal);
+							});
+						},3000);
+						$.post(path+"/wd/chara/clearTimeoutCharas",formData,function(d){
+							if(d.status == 200) {
+								layer.msg("成功清理"+d.data+"个角色");						
+							}else {
+								layer.msg(d.retmsg);
+							}
+							//删除定时器
+							clearInterval(timer);
+							layer.close(load);
+						})
+					}
+				})
+			})
+		});
+	</script>
+</body>
+
+</html>

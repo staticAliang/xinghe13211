@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+    <title>充值奖励配置</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="favicon.ico"> 
+	<link th:href="@{/static/sys/css/bootstrap.min.css?v=3.3.5}" rel="stylesheet">
+    <link th:href="@{/static/sys/css/plugins/sweetalert/sweetalert.css}" rel="stylesheet">
+    <link th:href="@{/static/sys/css/font-awesome.min.css?v=4.4.0}" rel="stylesheet">
+
+    <link th:href="@{/static/sys/css/animate.min.css}" rel="stylesheet">
+    <link th:href="@{/static/sys/css/style.min.css?v=4.0.0}" rel="stylesheet">
+    <link th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/static/sys/css/global.css}">
+     <style>
+    	.openMaxImg:hover{
+   		    box-shadow: 0px 0px 4px 1px #4e4e4e;
+   		    cursor: pointer;
+    	}
+		
+		/* 鼠标指向表格时,奇数行背景颜色 */
+		.layui-table tbody tr:hover,.layui-table-hover {
+		    background-color: #eeffee;
+		}
+		/* 表格头部工具栏背景色 */
+		.layui-table-tool {
+		    background-color: #eeffee;
+		}
+		.news_search{
+			font-size:14px;
+		}
+		.layui-form-label{
+			padding: 9px 0;
+		    left: 18px;
+		    color: black;
+		    font-size: 15px;
+		    top: 1px;
+	        width: 35px;
+		}
+		.layui-form-select {
+		    max-width:12.5rem;
+		}
+		input::-webkit-outer-spin-button,
+	    input::-webkit-inner-spin-button {
+	        -webkit-appearance: none;
+	    }
+	    input[type="number"]{
+	        -moz-appearance: textfield;
+	    }
+	    .layui-icon{
+	    	height: 30px;
+	    }
+    </style>
+</head>
+
+<body>
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<!-- Panel Other -->
+		<div class="ibox float-e-margins">
+			<div class="row row-lg">
+				<div class="col-sm-12">
+					<!-- Example Events -->
+					<div class="example">
+						<blockquote class="layui-elem-quote news_search layui-form">
+							<div class="layui-inline">
+							    <a class="layui-btn add">添加</a>
+							</div>
+							<div class="layui-inline">
+								<a class="layui-btn chargeSpeakStatus">开启</a>
+							</div>
+						</blockquote>
+						<table id="table" lay-filter="test">
+							
+						</table>
+					</div>
+					<!-- End Example Events -->
+				</div>
+			</div>
+		</div>
+		<!-- End Panel Other -->
+	</div>
+
+		<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+		<script th:src="@{/static/sys/js/bootstrap.min.js?v=3.3.5}"></script>
+		<script th:src="@{/static/sys/js/content.min.js}"></script>
+		<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+		<script th:src="@{/static/sys/js/plugins/sweetalert/sweetalert.min.js}"></script>
+		<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+		<script th:src="@{/static/sys/js/public.js}"></script>
+		<script th:line="javascript">
+		var path = '[[${session.path}]]';
+		var layer;
+		var table;
+		var params;
+		var util;
+		var mapId;
+		layui.use(['layer','table','form','util'], function(){
+		
+			util = layui.util;
+		  	layer = layui.layer;
+		  	table = layui.table;
+		  	form = layui.form;
+		  	var cols =  [
+				{
+					title: 'id',
+					field: 'id'
+				}, 
+				{
+					title: '金额',
+					field: 'money'
+				},
+				{
+					title: '配置',
+					field: 'config'
+				},
+				{
+					title: '创建时间',
+					field: 'createTime',
+					templet: function(value) {
+						if(value.createTime != undefined){
+							return util.timeAgo(value.createTime);
+						}else {
+							return "";
+						}
+					}
+				}
+			];
+		  	var pageNum = 1;
+		  	params = $.myRendar({"table":table,"elem":"#table","url":path+"/wd/charge/getChargeConfigs","method":"post","cols":cols,toolbar:false,page:false,
+				templet:function(data){
+					var html = '<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit" data-id="'+data.id+'">修改</a>';
+					html+='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-id="'+data.id+'">删除</a>';
+					return html;
+				},success:function(res,curr,count){
+					pageNum = curr;
+			  	}
+		  	});
+		  	
+		  	
+		  	$.post(path+"/sys/wd/getConfig",function(data){
+				config = data.data;
+				if(config.baseConfig.isChargeSpeak == 1) {
+					$(".chargeSpeakStatus").html("关闭");
+					$(".chargeSpeakStatus").removeClass("layui-btn-danger");
+					$(".chargeSpeakStatus").attr("data","0");
+				}else {
+					$(".chargeSpeakStatus").html("开启");
+					$(".chargeSpeakStatus").addClass("layui-btn-danger");
+					$(".chargeSpeakStatus").attr("data","1");
+				}
+			})
+		  	$(".chargeSpeakStatus").click(function(){
+				var t = $(this);
+				$.load("正在请求,请稍后。");
+				if(t.attr("data") == 1){
+					layer.confirm('确定开启开口费吗?', function(index){
+						weihu(t);
+					}); 
+				}else {
+					weihu(t);
+				}
+			});
+		  	
+		  	function weihu(t) {
+				$.post(path+"/wd/charge/setChargeStatus",{"status":t.attr("data")},function(data){
+					if(data.status == 200) {
+						layer.msg("操作成功.");
+						if(t.attr("data") == 1) {
+							$(".chargeSpeakStatus").html("关闭");
+							$(".chargeSpeakStatus").removeClass("layui-btn-danger");
+							$(".chargeSpeakStatus").attr("data","0");
+						}else {
+							$(".chargeSpeakStatus").html("开启");
+							$(".chargeSpeakStatus").addClass("layui-btn-danger");
+							$(".chargeSpeakStatus").attr("data","1");
+						}
+						setTimeout(function(){
+							layer.closeAll();
+						},500)
+					}
+				})
+			}
+		  	table.on('tool(test)', function(obj){
+				  var data = obj.data;
+				  var layEvent = obj.event;
+				  var t = $(this);
+				  var obj = {};
+				  if(layEvent == "edit") {
+						var html = '<div class="layui-form" style="width:90%;margin-top:31px;" lay-filter="updateForm">';
+						html += '<div class="layui-form-item"> <label class="layui-form-label">金额</label> <div class="layui-input-block"> <input type="number" name="money" class="layui-input" value="'+data.money+'" autocomplete="off"> <input type="hidden" name="id" class="layui-input" value="'+data.id+'"></div></div>';
+						html += '<div class="layui-form-item"> <label class="layui-form-label">配置</label> <div class="layui-input-block"> <input type="text" name="config" class="layui-input" value="'+data.config+'"> </div></div>';
+						html += '<div class="layui-form-item"><a class="layui-btn layui-btn-danger layui-btn" lay-submit style="margin-left: 109px;">保存</a></div>'
+						html += '</div>';
+						layer.open({
+							title: false,
+							area: ["400px"],
+							type: 1,
+							shadeClose:true,
+							content: html,
+						});
+				  }else if(layEvent == "del") {
+					  layer.confirm('是否确定删除',function(){
+						  obj.id = data.id;
+						  $.post(path+"/wd/charge/delChargeConfig",{"id":data.id},function(d){
+						  		if(d.status == 200) {
+									layer.msg("删除成功");
+									table.render(params.options)
+								}else {
+									layer.msg(d.retmsg);
+								}
+			  				});
+					  })
+				  }
+				 
+			});
+		  	$(document).on("click","#updateBtn",function(){
+		  		var npc = form.val("updateForm");
+		  		npc.id = $(this).attr("data-id");
+		  		$.post(path+"/wd/charge/updateChargeConfig",obj,function(d){
+				  		if(d.status == 200) {
+							layer.msg("修改成功");
+							table.render(params.options)
+						}else {
+							layer.msg(d.retmsg);
+						}
+		  		});
+		  	})
+		  	$(".add").click(function(){
+		  		var html = '<div class="layui-form" style="width:90%;margin-top:31px;" lay-filter="addForm">';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">金额</label> <div class="layui-input-block"> <input type="number" name="money" class="layui-input" autocomplete="off"> </div></div>';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">奖励</label> <div class="layui-input-block"> <textarea type="text" name="config" placeholder="请严格按照示例" style="resize:none;height:100px;width:100%"></textarea> <span>法宝示例:  $法宝$翻天印$24<br/>首饰示例:  $首饰$全套$130<br/>宠物示例:  $变异$溜溜马<br/>(<font color="red">用$符号隔开</font>)</span></div></div>';
+				html += '<div class="layui-form-item"><a class="layui-btn layui-btn-danger layui-btn" lay-submit style="margin-left: 109px;" id="addBtn">保存</a></div>'
+				html += '</div>';
+				layer.open({
+					title: false,
+					area: ["400px"],
+					type: 1,
+					shadeClose:true,
+					content: html,
+				});
+		  	})
+		  	$(document).on("click","#addBtn",function(){
+		  	  	$.load("正在添加...");
+		  		var addForm = form.val("addForm");
+		  		$.post(path+"/wd/charge/addChargeConfig", addForm, function(d){
+			  		if(d.status == 200) {
+						layer.msg("添加成功");
+							table.render(params.options)
+					}else {
+						layer.msg(d.retmsg);
+					}
+			  	});
+		  	})
+		});
+	</script>
+</body>
+
+</html>

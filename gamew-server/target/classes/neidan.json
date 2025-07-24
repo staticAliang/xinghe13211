@@ -1,0 +1,42 @@
+{
+	"data":{
+		"1":{
+			"jifen":111
+		},
+		"2":{
+			"jifen":111
+		},
+		"3":{
+			"jifen":111
+		},
+		"4":{
+			"jifen":111
+		},
+		"5":{
+			"jifen":111
+		},
+	},	
+	"attri":{
+		"1":{
+			"polarPoint":1,
+			"attributePoint":1
+		},
+		"2":{
+			"polarPoint":1,
+			"attributePoint":1
+		},
+		"3":{
+			"polarPoint":1,
+			"attributePoint":1
+		},
+		"4":{
+			"polarPoint":1,
+			"attributePoint":1
+		},
+		"5":{
+			"polarPoint":1,
+			"attributePoint":1
+		}
+	}
+	
+}

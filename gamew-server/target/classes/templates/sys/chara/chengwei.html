@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+    <title>变身卡</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="favicon.ico"> 
+	<link th:href="@{/static/sys/css/bootstrap.min.css?v=3.3.5}" rel="stylesheet">
+	<link th:href="@{/static/sys/css/plugins/sweetalert/sweetalert.css}" rel="stylesheet">
+	<link th:href="@{/static/sys/css/font-awesome.min.css?v=4.4.0}" rel="stylesheet">
+	<link th:href="@{/static/sys/css/animate.min.css}" rel="stylesheet">
+	<link th:href="@{/static/sys/css/style.min.css?v=4.0.0}" rel="stylesheet">
+	<link th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" rel="stylesheet" />
+	<link rel="stylesheet" th:href="@{/static/sys/css/global.css}">
+
+     <style>
+    	.openMaxImg:hover{
+   		    box-shadow: 0px 0px 4px 1px #4e4e4e;
+   		    cursor: pointer;
+    	}
+		
+		/* 鼠标指向表格时,奇数行背景颜色 */
+		.layui-table tbody tr:hover,.layui-table-hover {
+		    background-color: #eeffee;
+		}
+		/* 表格头部工具栏背景色 */
+		.layui-table-tool {
+		    background-color: #eeffee;
+		}
+		.news_search{
+			font-size:14px;
+		}
+		.layui-form-label{
+			padding: 9px 0;
+		    left: 18px;
+		    color: black;
+		    font-size: 15px;
+		    top: 1px;
+	        width: 35px;
+		}
+		.layui-form-select {
+		    max-width:12.5rem;
+		}
+		input::-webkit-outer-spin-button,
+	    input::-webkit-inner-spin-button {
+	        -webkit-appearance: none;
+	    }
+	    input[type="number"]{
+	        -moz-appearance: textfield;
+	    }
+	    .layui-icon{
+	    	height: 30px;
+	    }
+    </style>
+</head>
+
+<body>
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<!-- Panel Other -->
+		<div class="ibox float-e-margins">
+			<div class="row row-lg">
+				<div class="col-sm-12">
+					<!-- Example Events -->
+					<div class="example">
+						<blockquote class="layui-elem-quote">
+						<div class="layui-inline">
+							<button type="button" class="layui-btn" id="addChangeCard">
+							  <i class="layui-icon">&#xe608;</i> 添加
+							</button>
+						</div>
+						<div class="layui-inline">
+							<a class="layui-btn layui-btn-danger" id="refreshCache">刷新缓存</a>
+						</div>
+						</blockquote>
+						<table id="table" lay-filter="test">
+							
+						</table>
+					</div>
+					<!-- End Example Events -->
+				</div>
+			</div>
+		</div>
+		<!-- End Panel Other -->
+	</div>
+
+		<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/js/bootstrap.min.js?v=3.3.5}"></script>
+	<script th:src="@{/static/sys/js/content.min.js}"></script>
+	<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/plugins/sweetalert/sweetalert.min.js}"></script>
+	<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+	<script th:src="@{/static/sys/js/public.js}"></script>
+	
+		<script th:line="javascript">
+		var path2 = '[[${session.path}]]';
+		var layer;
+		var table;
+		var params;
+		var util;
+		var mapId;
+		var path = path2+"/sys/wd/chengwei"
+		
+		layui.use(['layer','table','form','util'], function(){
+			util = layui.util;
+		  	layer = layui.layer;
+		  	table = layui.table;
+		  	form = layui.form;
+			 var cols =  [
+					{
+						title: '编号',
+						field: 'id'
+					}, 
+					{
+						title: '名称',
+						field: 'name'
+					},
+					{
+						title: '金额',
+						field: 'money'
+					},
+					{
+						title: '颜色',
+						field: 'color'
+					},
+					{
+						title: '时间(时)',
+						field: 'time'
+					},
+					{
+						title: '属性',
+						field: 'attr',
+						templet: function(value) {
+							return '<a class="layui-btn layui-bg-blue layui-btn-xs" lay-event="show" data="'+value.attr+'">查看</a>';
+						}
+					},
+					{
+						title: '创建时间',
+						templet: function(value) {
+							if(value.addTime != undefined){
+								return util.toDateString(value.addTime,"yyyy-MM-dd");
+							}else {
+								return "";
+							}
+						}
+					}
+				];
+			  	var pageNum = 1;
+			  	params = $.myRendar({"table":table,"elem":"#table","url":path+"/getChengweis","method":"post","cols":cols,toolbar:false,width:150,
+					width:200,page:false
+			  		,templet:function(data){
+						var html = '<a class="layui-btn layui-bg-blue layui-btn-xs" lay-event="del" data-id="'+data.id+'" data-attr="'+data.attri+'">删除</a>';
+						html += '<a class="layui-btn layui-btn-warm layui-btn-xs " lay-event="send" data-id="'+data.id+'" data-attr="'+data.attri+'">发送</a>';
+						return html;
+					}
+			  	});
+			  	
+			  	table.on('tool(test)', function(obj){
+				  	var data = obj.data;
+				  	var layEvent = obj.event;
+				  	var t = $(this);
+				  	var obj = {};
+			 		if(layEvent == "del") {
+						  layer.confirm('是否删除?',function(){
+							  obj.id = data.id;
+							  var load = $.load();
+							  $.post(path+"/delChengwei",obj,function(data){
+					  				if(data.status == 200) {
+					  					layer.msg("删除成功");
+					  					table.render(params.options);
+					  				}else {
+					  					layer.msg(data.retmsg);
+					  				}
+									layer.close(load);				
+					  			})
+						  })
+					  }else if(layEvent == "show") {
+						  var html = "<div style='text-align: center; margin-top: 42px;'>";
+						  var json = JSON.parse(data.attr);
+						  $(json).each(function(i,o){
+							html+="<p><span>名称:"+o.field+"</span>&nbsp;&nbsp;&nbsp;&nbsp;"							  
+							html+="<span>值:"+o.value+"</span></p>"							  
+						  })
+						  html+="</div>"
+						  layer.open({
+								title: false,
+								area: ["200px","200px"],
+								type: 1,
+								shadeClose:true,
+								content: html,
+								success:function(){
+									
+								}
+							});
+					  }else if(layEvent == "send") {
+						  var obj = {};
+						  obj.name = data.name;
+						  layer.prompt({title: '请输入角色名', formType: 3}, function(pass, index){
+								var load = $.load("正在发送...");
+								obj.charaName = pass
+								$.post(path+"/sendChengwei",obj,function(data){
+									layer.msg(data.retmsg);
+								  	layer.close(load);
+								  	if(data.status == 200) {
+								  		layer.close(index);
+								  	}
+								})
+						  });
+					  }
+				});
+
+		  	
+			$("#addChangeCard").click(function(data){
+		  		var html = '<div class="layui-form" style="width:90%;margin-top:31px;" lay-filter="addChangeCardForm">';
+				html += '<div class="layui-form-item"> <label class="layui-form-label" style=" width: 70px; ">名称</label> <div class="layui-input-block"> <input type="text" name="name" class="layui-input" autocomplete="off"> </div></div>';
+				html += '<div class="layui-form-item"> <label class="layui-form-label" style=" width: 70px; ">文字颜色</label> <div class="layui-input-block"> <input type="text" name="color" class="layui-input" autocomplete="off"> </div><div class="layui-form-mid layui-word-aux">例如：红色:#R、黄色:#Y等等</div></div>';
+				html += '<div class="layui-form-item"> <label class="layui-form-label" style=" width: 70px; ">累计(元)</label> <div class="layui-input-block"> <input type="number" name="money" class="layui-input" autocomplete="off">  </div></div>';
+				//html += '<div class="layui-form-item"> <label class="layui-form-label" style=" width: 70px; ">时间(分)</label> <div class="layui-input-block"> <input type="number" name="time" class="layui-input" value="0">  </div></div>';
+				//属性
+				html +="<div id='attirbuteHtml'></div>"
+				//属性
+				html += '<div class="layui-form-item"><a class="layui-btn layui-btn-normal" style="margin-left: 109px;" id="addAttr">增加属性</a></div>'
+				html += '<div class="layui-form-item"><a class="layui-btn layui-btn-danger layui-btn" lay-submit style="margin-left: 109px;" id="addChangeCardFormBtn">保存</a></div>'
+				html += '</div>';
+				layer.open({
+					title: false,
+					area: ["60%","95%"],
+					type: 1,
+					shadeClose:true,
+					content: html,
+					success:function(){
+						form.render('select');
+					}
+				});
+			});
+		  	$(document).on("click","#addAttr",function(){
+		  		var html = addAttriHtml();
+		  		$("#attirbuteHtml").append(html);
+		  		form.render('select');
+		  	})
+		  	function addAttriHtml() {
+		  		var id = uuid();
+		  		var html = "";
+		  		html += '<div class="layui-form-item attriDiv" id="attriDivId'+id+'"> <label class="layui-form-label" style="width:52px">属性</label> <div class="layui-input-inline" style=" margin-left: 57px; ">';
+				html += "<select name='attriSelect"+id+"' class='attriS'>";
+				html += "<option value='所有相性'>所有相性</option>";
+				html += "<option value='金相性'>金相性</option>";
+				html += "<option value='木相性'>木相性</option>";
+				html += "<option value='水相性'>水相性</option>";
+				html += "<option value='火相性'>火相性</option>";
+				html += "<option value='土相性'>土相性</option>";
+				html += "<option value='所有属性'>所有属性</option>";
+				html += "<option value='体质'>体质</option>";
+				html += "<option value='灵力'>灵力</option>";
+				html += "<option value='力量'>力量</option>";
+				html += "<option value='敏捷'>敏捷</option>";
+				html +="</select>";
+				html +='</div>';
+				html +='<div class="layui-input-inline" style=" width:100px; ">';
+				html +='<input type="number" class="layui-input attriValue" name="attriNum" style="margin-left: -65px;">';
+				html += '</div>';
+				html +='<div class="layui-input-inline" style="width: 26px;margin-left: -64px;margin-top: 3px;">';
+				html +='<button type="button" class="layui-btn layui-btn-sm layui-btn-primary delAttr" data-id="attriDivId'+id+'"><i class="layui-icon"></i></button>';
+				html += '</div>';
+				return html;
+		  	}
+			$(document).on("click","#addChangeCardFormBtn",function(){
+		  		var da = form.val("addChangeCardForm");
+		  		if(da.name == "" || da.name.length== 0){
+		  			layer.msg("请输入名称");
+		  		}else {
+		  			var flag = false;
+		  			var arr = [];
+		  			$(".attriValue").each(function(i,o){
+		  				if($(o).val() == "" || $(o).val().length==0) {
+		  					flag = true;
+		  				}
+		  			})
+		  			$(".attriS").each(function(i,o){
+		  				var s = $(o);
+		  				var val = $("select[name="+s.attr("name")+"] option:selected").val();
+		  				arr.push(val);
+		  			})
+		  			if(arr.length >1) {
+			  			var isReal = isRepeat(arr);
+			  			if(isReal) {
+			  				layer.msg("属性重复请修改");
+			  				return;
+			  			}
+		  			}
+		  			if(!flag) {
+		  				var attrArr = [];
+		  				//获取所有的值
+		  				$(".attriDiv").each(function(i,o){
+		  					var attrObj = {};
+		  					var ssel = $(o).find("select");
+		  					var option = $("select[name="+ssel.attr("name")+"] option:selected");
+		  					var sfield  = option.val();
+		  					var sval = $(o).find("input[name='attriNum']").val();
+		  					attrObj.field = sfield;
+		  					attrObj.value = sval;
+		  					attrArr.push(attrObj);
+		  				})
+		  				var load= $.load("正在添加...");
+		  				da.attr = JSON.stringify(attrArr);
+			  			$.post(path+"/addChengwei",da,function(data){
+			  				if(data.status == 200) {
+			  					layer.msg("添加成功");
+			  					table.render(params.options);
+			  				}else {
+			  					layer.msg(data.retmsg);
+			  				}
+							layer.close(load);				
+			  			})
+		  			}else {
+		  				layer.msg("请输入数值");
+		  			}
+		  		}
+		  	})
+			$(document).on("click",".delAttr",function(){
+				var t = $(this);
+				$("#"+t.attr("data-id")).remove();
+			})
+			function isRepeat(arr) {
+			  var hash = {};
+			  for(var i in arr) {
+			    if(hash[arr[i]]) {
+			      return true;
+			    }
+			    // 不存在该元素，则赋值为true，可以赋任意值，相应的修改if判断条件即可
+			    hash[arr[i]] = true;
+			  }
+			  return false;
+			}				
+			function uuid() {
+				var s = [];
+				var hexDigits = "0123456789abcdef";
+				for (var i = 0; i < 36; i++) {
+					s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+				}
+				s[14] = "4"; // bits 12-15 of the time_hi_and_version field to 0010
+				s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1); // bits 6-7 of the clock_seq_hi_and_reserved to 01
+				s[8] = s[13] = s[18] = s[23] = "-";
+			
+				var uuid = s.join("");
+				return uuid;
+			}
+			$("#refreshCache").click(function(){
+				$.post(path+"/refreshCache",function(data){
+					layer.msg(data.retmsg);
+				})
+			})
+		});
+	</script>
+</body>
+
+</html>

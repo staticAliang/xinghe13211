@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>幸运大使抽奖配置</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+
+<link rel="shortcut icon" href="favicon.ico">
+<link th:href="@{/static/sys/css/bootstrap.min.css?v=3.3.5}" rel="stylesheet">
+<link th:href="@{/static/sys/css/plugins/sweetalert/sweetalert.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/font-awesome.min.css?v=4.4.0}" rel="stylesheet">
+<link th:href="@{/static/sys/css/animate.min.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/style.min.css?v=4.0.0}" rel="stylesheet">
+<link th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" rel="stylesheet" />
+<link rel="stylesheet" th:href="@{/static/sys/css/global.css}">
+<style>
+.openMaxImg:hover {
+	box-shadow: 0px 0px 4px 1px #4e4e4e;
+	cursor: pointer;
+}
+
+/* 鼠标指向表格时,奇数行背景颜色 */
+.layui-table tbody tr:hover, .layui-table-hover {
+	background-color: #eeffee;
+}
+/* 表格头部工具栏背景色 */
+.layui-table-tool {
+	background-color: #eeffee;
+}
+
+.news_search {
+	font-size: 14px;
+}
+
+.layui-form-label {
+	padding: 9px 0;
+	left: 18px;
+	color: black;
+	font-size: 15px;
+	top: 1px;
+	width: 35px;
+}
+
+.layui-form-select {
+	max-width: 8.5rem;
+}
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield;
+}
+</style>
+</head>
+
+<body>
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<!-- Panel Other -->
+		<div class="ibox float-e-margins">
+			<div class="row row-lg">
+				<div class="col-sm-12">
+					<div class="example layui-form" lay-filter="baseForm">
+						<table class="layui-table" >
+							<tbody>
+								<tr>
+									<td>名称</td>
+									<td>数值</td>
+								</tr>
+								<tr>
+									<td>基数</td>
+									<td>
+										<input type="number" class="form-control set"  name="jilv">
+									</td>
+								</tr>
+								<tr>
+									<td>一等奖几率</td>
+									<td>
+										<input type="text" class="form-control set" name="no1Jilv">
+									</td>
+								</tr>
+								<tr>
+									<td>二等奖几率</td>
+									<td>
+										<input type="text" class="form-control set" name="no2Jilv">
+									</td>
+								</tr>
+								<tr>
+									<td>三等奖几率</td>
+									<td>
+										<input type="text" class="form-control set" name="no3Jilv">
+									</td>
+								</tr>
+								<tr>
+									<td>四等奖几率</td>
+									<td>
+										<input type="text" class="form-control set" name="no4Jilv">
+									</td>
+								</tr>
+								<tr>
+									<td>五等奖几率</td>
+									<td>
+										<input type="text" class="form-control set" name="no5Jilv">
+									</td>
+								</tr>
+								<tr>
+									<td>六等奖几率</td>
+									<td>
+										<input type="text" class="form-control set" name="no6Jilv">
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End Panel Other -->
+	</div>
+
+	<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/js/bootstrap.min.js?v=3.3.5}"></script>
+	<script th:src="@{/static/sys/js/content.min.js}"></script>
+	<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/plugins/sweetalert/sweetalert.min.js}"></script>
+	<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+	<script th:line="javascript">
+	var path = '[[${session.path}]]';
+	layui.use(["form", "layer"], function() {
+		var layer = layui.layer;
+		var form = layui.form;
+		var config;
+		loadConfig();
+		function loadConfig() {
+			//加载配置操作信息
+			$.post(path+"/sys/wd/getConfig",function(data){
+				config = data.data;
+				var base = config.luckDrawNpcConfig;
+				//设置信息
+				form.val("baseForm", {
+					  "jilv": base.jilv,
+					  "no1Jilv": base.no1Jilv,
+					  "no2Jilv":base.no2Jilv,
+					  "no3Jilv":base.no3Jilv,
+					  "no4Jilv":base.no4Jilv,
+					  "no5Jilv":base.no5Jilv,
+					  "no6Jilv":base.no6Jilv
+				});
+			})
+		}
+		//监听设置输入框改变.
+		$(".set").blur(function(){
+			var t = $(this);
+			//请求后端修改
+			var val = form.val("baseForm");
+			$.post(path+"/sys/wd/setLuckNpcConfig",val, function(data){
+				if(data.status == 200) {
+					layer.msg("修改成功");
+				}else {
+					layer.msg(data.retmsg);
+				}
+			})
+		})
+		
+	})
+	
+	
+		
+	</script>
+</body>
+
+</html>

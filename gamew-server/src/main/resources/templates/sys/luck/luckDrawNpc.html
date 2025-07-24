@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>抽奖奖品</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+
+<link rel="shortcut icon" href="favicon.ico">
+<link th:href="@{/static/sys/css/bootstrap.min.css?v=3.3.5}" rel="stylesheet">
+<link th:href="@{/static/sys/css/plugins/sweetalert/sweetalert.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/font-awesome.min.css?v=4.4.0}" rel="stylesheet">
+<link th:href="@{/static/sys/css/animate.min.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/style.min.css?v=4.0.0}" rel="stylesheet">
+<link th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" rel="stylesheet" />
+<link rel="stylesheet" th:href="@{/static/sys/css/global.css}">
+<style>
+.openMaxImg:hover {
+	box-shadow: 0px 0px 4px 1px #4e4e4e;
+	cursor: pointer;
+}
+
+
+/* 鼠标指向表格时,奇数行背景颜色 */
+.layui-table tbody tr:hover, .layui-table-hover {
+	background-color: #eeffee;
+}
+/* 表格头部工具栏背景色 */
+.layui-table-tool {
+	background-color: #eeffee;
+}
+
+.news_search {
+	font-size: 14px;
+}
+
+.layui-form-label {
+	padding: 9px 0;
+	left: 18px;
+	color: black;
+	font-size: 15px;
+	top: 1px;
+	width: 70px;
+}
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield;
+}
+</style>
+</head>
+
+<body>
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<!-- Panel Other -->
+		<div class="ibox float-e-margins">
+			<div class="row row-lg layui-form" lay-filter="choujiang">
+				<div class="col-sm-12">
+					<blockquote class="layui-elem-quote news_search">
+						<div class="layui-inline">
+							<div class="layui-input-inline">
+								<input type="text" placeholder="奖品"
+									class="layui-input search_btn" type-close autocomplete="off">
+							</div>
+						</div>
+						<div class="layui-inline" style="width:100px">
+							<select name='level' lay-filter="level">;
+								<option value='-1' selected="selected">奖品等级</option>
+								<option value='0'>特等奖</option>
+								<option value='1'>一等奖</option>
+								<option value='2'>二等奖</option>
+								<option value='3'>三等奖</option>
+								<option value='4'>四等奖</option>
+							</select>
+						</div>
+						<div class="layui-inline">
+							<a class="layui-btn" id="query">查询</a>
+						</div>
+						<div class="layui-inline">
+							<a class="layui-btn layui-btn-warm" id="config">配置</a>
+						</div>
+						<div class="layui-inline">
+							<a class="layui-btn layui-btn-danger" id="add">添加</a>
+						</div>
+						<div class="layui-inline">
+							<a class="layui-btn" id="refreCache">刷新缓存</a>
+						</div>
+					</blockquote>
+					<!-- Example Events -->
+					<div class="example">
+						<table id="table" lay-filter="test">
+
+						</table>
+					</div>
+					<!-- End Example Events -->
+				</div>
+			</div>
+		</div>
+		<!-- End Panel Other -->
+	</div>
+
+		<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/js/bootstrap.min.js?v=3.3.5}"></script>
+	<script th:src="@{/static/sys/js/content.min.js}"></script>
+	<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/plugins/sweetalert/sweetalert.min.js}"></script>
+	<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+	<script th:src="@{/static/sys/js/public.js}"></script>
+	<script th:line="javascript">
+	var path = '[[${session.path}]]';
+		var layer;
+		var table;
+		var params;
+		var util;
+		layui.use([ 'layer', 'table', 'form', 'laydate', 'util' ], function() {
+			util = layui.util;
+			layer = layui.layer;
+			table = layui.table;
+			var date = layui.laydate;
+			form = layui.form;
+			var cols = [ {
+				title : 'id',
+				field : 'id',
+			}, 
+			{
+				title : '奖品',
+				field : 'item',
+			}
+			,{
+				title : '等级',
+				field : 'level',
+				templet:function(value){
+					var level = "特等"
+					if(value.level == 1) {
+						level = "一等"
+					}else if(value.level== 2) {
+						level = "二等"
+					}else if(value.level == 3) {
+						level = "三等"
+					}else if(value.level == 4) {
+						level = "四等"
+					}
+					return level;
+				}
+			}
+			];
+			params = $.myRendar({
+				"table" : table,
+				"elem" : "#table",
+				"url" : path+"/sys/wd/luckDrawItem/getLuckDrawItems",
+				"method" : "post",
+				"cols" : cols,
+				toolbar : false,
+				where : {"type":"choujiangdashi"},
+				width:"150",
+				success:function(c,curr) {
+					pageNum = curr;
+				},
+				templet:function(data){
+					var html = '<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit" data-id="'+data.id+'">修改</a>';
+					html+='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-id="'+data.id+'">删除</a>';
+					return html;
+				}
+			});
+			
+			$("#query").click(function(data){
+				var name = $(".search_btn").val();
+				var choujiang = form.val("choujiang");
+				var data = {};
+				if(name.trim() != "" && name.length > 0) {
+					data.item = name;
+				}
+				if(choujiang.level != "-1") {
+					data.level = choujiang.level;
+				}
+				data.type="choujiangdashi"
+				params.options.where = data;
+				table.render(params.options);
+			})
+			table.on('tool(test)', function(obj){
+				  var data = obj.data;
+				  var layEvent = obj.event;
+				  var t = $(this);
+				  var obj = {};
+				  if(layEvent == "del") {
+					  layer.confirm("确定删除?",function(){
+						  var load = $.load();
+						  $.post(path+"/sys/wd/luckDrawItem/delLuckDrawItem",{"id":data.id},function(d){
+							  if(d.status == 200) {
+								  layer.msg("删除成功");
+								  params.options.page.curr = pageNum
+								  table.render(params.options);
+							  }else {
+								  layer.msg(d.retmsg);
+							  }
+							  layer.close(load);
+						  })
+						  
+					  })
+				  }else if(layEvent == "edit") {
+					  	var html = '<div class="layui-form" style="width:90%;margin-top:31px;" lay-filter="editForm">';
+						html += '<div class="layui-form-item"> <label class="layui-form-label">奖品</label> <div class="layui-input-block"> <input type="text" name="item" class="layui-input" value="'+data.item+'" lay-verify="required" autocomplete="off"> <input type="hidden" value="'+data.id+'" name="id"/><input type="hidden" value="choujiangdashi" name="type"/> </div></div>';
+						
+						
+						html += '<div class="layui-form-item" style="width:400px"> <label class="layui-form-label">类型</label> <div class="layui-input-block">';
+						html += "<select name='level' id='level'>";
+						html +="<option value='0'>特等奖</option>"
+						html +="<option value='1'>一等奖</option>"
+						html +="<option value='2'>二等奖</option>"
+						html +="<option value='3'>三等奖</option>"
+						html +="<option value='4'>四等奖</option>"
+						html+="</select>";
+						html+='</div></div>';
+						
+						html += '<div class="layui-form-item"><a class="layui-btn layui-btn-danger layui-btn" style="margin-left: 109px;" id="editFormBtn" data-id="' + data.id + '" lay-filter="editForm">保存</a></div>'
+						html += '</div>';
+						layer.open({
+							title: false,
+							area: ["500px","400px"],
+							type: 1,
+							shadeClose:true,
+							content: html,
+							success: function() {
+								$("#level option[value='"+data.level+"']").attr("selected", true);								
+								form.render('select');
+							}
+						});
+				  }
+			});
+			
+			$("#add").click(function(){
+				var html = '<div class="layui-form" style="width:90%;margin-top:31px;" lay-filter="addForm">';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">奖品</label> <div class="layui-input-block"> <input type="text" name="item" class="layui-input" lay-verify="required" autocomplete="off">  <input type="hidden" value="choujiangdashi" name="type"/> </div></div>';
+					
+					
+				html += '<div class="layui-form-item" style="width:400px"> <label class="layui-form-label">类型</label> <div class="layui-input-block">';
+				html += "<select name='level'>";
+				html +="<option value='0'>特等奖</option>"
+				html +="<option value='1'>一等奖</option>"
+				html +="<option value='2'>二等奖</option>"
+				html +="<option value='3'>三等奖</option>"
+				html +="<option value='4'>四等奖</option>"
+				html+="</select>";
+				html+='</div></div>';
+					
+				html += '<div class="layui-form-item"><a class="layui-btn layui-btn-danger layui-btn" style="margin-left: 109px;" id="addFormBtn">保存</a></div>'
+				html += '</div>';
+				layer.open({
+					title: false,
+					area: ["500px","390px"],
+					type: 1,
+					shadeClose:true,
+					content: html,
+					success: function() {
+						form.render('select');
+					}
+				});
+			})
+			
+			$(document).on("click","#addFormBtn",function(){
+				var addForm = form.val("addForm");
+				var load = $.load();
+				$.post(path+"/sys/wd/luckDrawItem/addLuckDrawItem",addForm,function(d){
+					if(d.status == 200) {
+						layer.msg("添加成功");
+						table.render(params.options);
+					 }else {
+						layer.msg(d.retmsg);
+					 }
+					 layer.close(load);
+				 })	
+			})
+			$(document).on("click","#editFormBtn",function(){
+				var editForm = form.val("editForm");
+				var load = $.load();
+				$.post(path+"/sys/wd/luckDrawItem/updateById",editForm,function(d){
+					if(d.status == 200) {
+						layer.msg("修改成功");
+						params.options.page.curr = pageNum
+						table.render(params.options);
+					 }else {
+						layer.msg(d.retmsg);
+					 }
+					 layer.close(load);
+				 })	
+			})
+			
+			form.on('submit(editForm)', function(data){
+				u(data.field);
+				return false;
+			});
+			var pageNum = 1;
+			$("#refreCache").click(function(){
+				$.post(path+"/sys/wd/luckDrawItem/refreshCache",function(data){
+					layer.msg(data.retmsg);
+				})
+			})
+			
+			$("#config").click(function(){
+				$.post(path+"/ws/configInfo/getOneConfigInfoData",{"keyName":"抽奖大使配置信息"},function(data){
+					var info = data.data;
+					var config = JSON.parse(info.data);
+					var html = '<div class="layui-form" style="width:90%;margin-top:31px;" lay-filter="configForm">';
+					html += '<div class="layui-form-item"> <label class="layui-form-label">特等奖</label> <div class="layui-input-block"> <input type="number" name="no0" value="'+config.no0+'" class="layui-input" lay-verify="required"></div></div>';
+					html += '<div class="layui-form-item"> <label class="layui-form-label">一等奖</label> <div class="layui-input-block"> <input type="number" name="no1" value="'+config.no1+'" class="layui-input" lay-verify="required"></div></div>';
+					html += '<div class="layui-form-item"> <label class="layui-form-label">二等奖</label> <div class="layui-input-block"> <input type="number" name="no2" value="'+config.no2+'" class="layui-input" lay-verify="required"></div></div>';
+					html += '<div class="layui-form-item"> <label class="layui-form-label">三等奖</label> <div class="layui-input-block"> <input type="number" name="no3" value="'+config.no3+'" class="layui-input" lay-verify="required"></div></div>';
+					html += '<div class="layui-form-item"> <label class="layui-form-label">四等奖</label> <div class="layui-input-block"> <input type="number" name="no4" value="'+config.no4+'" class="layui-input" lay-verify="required"> <input type="hidden" name="id" value="'+info.id+'" class="layui-input"></div></div>';
+					html += '<div class="layui-form-item"> <label class="layui-form-label">基数</label> <div class="layui-input-block"> <input type="number" name="baseNumber" value="'+config.baseNumber+'" class="layui-input" lay-verify="required"><div class="layui-form-mid layui-word-aux">基数越大几率则越小</div></div></div>';
+						
+					html += '<div class="layui-form-item"><a class="layui-btn layui-btn-danger layui-btn" style="margin-left: 109px;" id="configFormBtn">保存</a></div>'
+					html += '</div>';
+					layer.open({
+						title: false,
+						area: ["500px","500px"],
+						type: 1,
+						shadeClose:true,
+						content: html,
+						success: function() {
+							$("#type option[value='"+data.type+"']").attr("selected", true);								
+							form.render('select');
+						}
+					});		
+				})
+			});
+			$(document).on("click","#configFormBtn",function(){
+				var editForm = form.val("configForm");
+				var load = $.load();
+				var obj = {};
+				obj.id = editForm.id;
+				var jsonData = {"no0":editForm.no0,"no1":editForm.no1,"no2":editForm.no2,"no3":editForm.no3,"no4":editForm.no4,"baseNumber":editForm.baseNumber};
+				obj.data = JSON.stringify(jsonData);
+				$.post(path+"/ws/configInfo/updateConfigInfoById",obj,function(d){
+					if(d.status == 200) {
+						layer.msg("修改成功");
+					 }else {
+						layer.msg(d.retmsg);
+					 }
+					 layer.close(load);
+				 })
+			})
+			form.on('select(level)', function(data){
+				var obj = {};
+				if(data.value != "-1") {
+					obj.level = data.value;
+				}
+				obj.type = "choujiangdashi";
+				params.options.where = obj;
+				table.render(params.options);
+			});
+		});
+	</script>
+</body>
+
+</html>

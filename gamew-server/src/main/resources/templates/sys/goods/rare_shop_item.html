@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>稀有商店</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+
+<link rel="shortcut icon" href="favicon.ico">
+<link th:href="@{/static/sys/css/bootstrap.min.css?v=3.3.5}" rel="stylesheet">
+<link th:href="@{/static/sys/css/plugins/sweetalert/sweetalert.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/font-awesome.min.css?v=4.4.0}" rel="stylesheet">
+<link th:href="@{/static/sys/css/animate.min.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/style.min.css?v=4.0.0}" rel="stylesheet">
+<link th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" rel="stylesheet" />
+<link rel="stylesheet" th:href="@{/static/sys/css/global.css}">
+<style>
+.openMaxImg:hover {
+	box-shadow: 0px 0px 4px 1px #4e4e4e;
+	cursor: pointer;
+}
+
+
+/* 鼠标指向表格时,奇数行背景颜色 */
+.layui-table tbody tr:hover, .layui-table-hover {
+	background-color: #eeffee;
+}
+/* 表格头部工具栏背景色 */
+.layui-table-tool {
+	background-color: #eeffee;
+}
+
+.news_search {
+	font-size: 14px;
+}
+
+.layui-form-label {
+	padding: 9px 0;
+	left: 18px;
+	color: black;
+	font-size: 15px;
+	top: 1px;
+	width: 70px;
+}
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield;
+}
+</style>
+</head>
+
+<body>
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<!-- Panel Other -->
+		<div class="ibox float-e-margins">
+			<div class="row row-lg">
+				<div class="col-sm-12">
+					<blockquote class="layui-elem-quote news_search">
+						<div class="layui-inline">
+							 <a class="layui-btn search_btn_cl add">添加</a>
+						</div>
+					</blockquote>
+
+
+					<!-- Example Events -->
+					<div class="example">
+						<table id="table" lay-filter="test">
+
+						</table>
+					</div>
+					<!-- End Example Events -->
+				</div>
+			</div>
+		</div>
+		<!-- End Panel Other -->
+	</div>
+
+		<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/js/bootstrap.min.js?v=3.3.5}"></script>
+	<script th:src="@{/static/sys/js/content.min.js}"></script>
+	<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/plugins/sweetalert/sweetalert.min.js}"></script>
+	<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+	<script th:src="@{/static/sys/js/public.js}"></script>
+	<script th:line="javascript">
+	var path = '[[${session.path}]]';
+		var layer;
+		var table;
+		var params;
+		var util;
+		layui.use([ 'layer', 'table', 'form', 'laydate', 'util' ], function() {
+			util = layui.util;
+			layer = layui.layer;
+			table = layui.table;
+			var date = layui.laydate;
+			form = layui.form;
+			var cols = [
+				{
+					title : 'id',
+					field : 'id',
+					width:'15%'
+				}, {
+					title : '名字',
+					field : 'name',
+					edit:"text"
+				}, {
+					title : '消耗',
+					field : 'cost',
+					edit:"text"
+				},
+				{
+					title : '剩余数量',
+					field : 'num',
+					edit:"text"
+				}
+			];
+			params = $.myRendar({
+				"table" : table,
+				"elem" : "#table",
+				"url" : path+"/rareShopItem/getRareShopItems",
+				"method" : "post",
+				"cols" : cols,
+				toolbar : false,
+				templet:function(data){
+					var	html='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-id="'+data.id+'" >删除</a>';
+					return html;
+				}
+			});
+			table.on('tool(test)', function(obj){
+				  var data = obj.data;
+				  var layEvent = obj.event;
+				  var t = $(this);
+				  if(layEvent == "del") {
+					  layer.confirm("确定删除吗?删除后无法恢复",function(){
+						  $.load();
+						  $.post(path+"/rareShopItem/delRareShopItem",{"id":data.id},function(d){
+							  if(d.status == 200) {
+								  layer.msg("删除成功");
+								  table.render(params.options);
+							  }else {
+								  layer.msg(d.retmsg);
+							  }
+							  layer.closeAll();
+						  })
+					  })
+				  }
+			});
+			
+			table.on('edit(test)', function(obj){
+				  var data = {"id":obj.data.id};
+				  data[obj.field] = obj.value;
+				  if(obj.field == "cost" || obj.field == "num"){
+					  if(!isNum(obj.value)) {
+						  layer.msg("请输入数字.");
+						  return false;
+					  }
+			 	  }
+				  var load = $.load();
+				  $.post(path+"/rareShopItem/updateRareShopItem",data,function(d){
+					  if(d.status == 200) {
+						  layer.msg("修改成功");
+					  }else {
+						  layer.msg(d.retmsg);
+					  }
+					  layer.close(load);
+				  })
+			});
+			$(".add").click(function(){
+				var html = '<div class="layui-form" style="width:90%;margin-top:31px;" lay-filter="addPonitForm">';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">名字</label> <div class="layui-input-block"> <input type="text" name="name" class="layui-input" lay-verify="required"> </div></div>';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">消耗</label> <div class="layui-input-block"> <input type="number" name="cost" class="layui-input" lay-verify="required"> </div></div>';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">数量</label> <div class="layui-input-block"> <input type="number" name="num" class="layui-input" lay-verify="required"> </div></div>';
+				html += '<div class="layui-form-item"><a class="layui-btn layui-btn-danger layui-btn" style="margin-left: 109px;" id="addPonitForm" lay-submit>保存</a></div>'
+				html += '</div>';
+				layer.open({
+					title: false,
+					area: ["400px"],
+					type: 1,
+					shadeClose:true,
+					content: html,
+					success: function() {
+						form.render('select');
+					}
+				});
+			})
+			
+			$(document).on("click","#addPonitForm",function(){
+				var d = form.val("addPonitForm");
+				$.post(path+"/rareShopItem/addRareShopItem",d,function(d){
+					  if(d.status == 200) {
+						  layer.msg("添加成功");
+						  table.render(params.options);
+					  }else {
+						  layer.msg(d.retmsg);
+					  }
+			  	})
+			})
+		});
+	</script>
+</body>
+
+</html>

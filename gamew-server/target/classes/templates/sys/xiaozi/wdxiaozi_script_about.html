@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>问道小子脚本使用</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="stylesheet" th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" />
+<style type="text/css">
+.layadmin-homepage-pad-ver {
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+
+.layadmin-homepage-pad-img {
+	box-shadow: 0 0 0 4px rgba(0, 0, 0, .1);
+	border-radius: 50%;
+}
+
+.layadmin-homepage-min-font {
+	margin: 5px 0 10px;
+	font-size: .9em;
+	color: #afb9c3;
+}
+
+.layadmin-homepage-font {
+	font-weight: 600;
+	color: rgb(43, 66, 91);
+	font-size: 1.2em;
+}
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield;
+}
+</style>
+</head>
+
+<body>
+	<div style="margin: 0 auto;">
+		<div class="layui-collapse" lay-accordion>
+			<div class="layui-colla-item">
+				<h2 class="layui-colla-title">自动任务脚本</h2>
+				<div class="layui-colla-content layui-show">
+					<p>说明:如果npc是动态生成的请带上坐标,如果有多个目标请用逗号分开。</p>
+					<p>~后面的内容不是必须的,如果数量只有一个则全部采用这个奖励,否则就请对应前面的目标数</p>
+					<p>比如有三个目标#Z#Z,#Z#Z,#Z#Z后面的~就必须要三个</p>
+					<P>更多玩法请期待</P>
+					<br/>
+					示例1:#Z揽仙镇|赵老板#Z,#Z天墉城|董老头#Z~exp=1000000
+					<br/>
+					示例2:#Z揽仙镇|赵老板(11,22)#Z,#Z天墉城|董老头(34,25)#Z~exp=1000000,exp=2000000
+					<p>示例3:#Z揽仙镇|赵老板#Z,#Z揽仙镇|张老板#Z,#Z天墉城|董老头#Z~exp=1000000,exp=2000000,exp=3000000</p>
+				</div>
+			</div>
+			<div class="layui-colla-item">
+				<h2 class="layui-colla-title">测试海盗</h2>
+				<div class="layui-colla-content layui-show">
+					#P测试海盗|东海渔村(63,69)|M=杀我|$0#P
+				</div>
+			</div>
+			<div class="layui-colla-item">
+				<h2 class="layui-colla-title">自动点击NPC菜单</h2>
+				<div class="layui-colla-content layui-show">
+					请前往#P北斗星使|M=【进塔】进入通天塔#P处,进入更高层挑战
+					</br>
+					【进塔】进入通天塔，表示npc的菜单。可以根据实际需求去更改
+					北斗星使=npc的名称
+				</div>
+			</div>
+			<div class="layui-colla-item">
+				<h2 class="layui-colla-title">到达某个地图随机走动</h2>
+				<div class="layui-colla-content layui-show">
+					gm让你去#Z蓬莱岛|$1#Z蓬莱岛游荡去！！！
+					</br>
+					$0:自动对话、$1:随机走动、$2:停下、$3:一些需要对话，但是又不是npc的特殊的，通过回调实现
+				</div>
+			</div>
+			<div class="layui-colla-item">
+				<h2 class="layui-colla-title">飞到指定地图的某个坐标</h2>
+				<div class="layui-colla-content layui-show">
+					前往#Z昆仑云海(10,22)#Z
+				</div>
+			</div>
+			<div class="layui-colla-item">
+				<h2 class="layui-colla-title">如果出现重名npc</h2>
+				<div class="layui-colla-content layui-show">
+					前往#P冰晶龙鳞兽王|昆仑云海(10,22)|M=【飞升】那只有得罪了！|$0#P挑战#Y冰晶龙鳞兽王#n完成飞升第二步
+				</div>
+			</div>
+			<div class="layui-colla-item">
+				<h2 class="layui-colla-title">击杀某个星</h2>
+				<div class="layui-colla-content layui-show">
+					我要去杀了#P天退星|蓬莱岛(57,46)|M=我是来向你挑战的(90级)|$0#P
+				</div>
+			</div>
+			<div class="layui-colla-item">
+				<h2 class="layui-colla-title">伏魔</h2>
+				<div class="layui-colla-content layui-show">
+					#P陆压真人|轩辕庙(62,44)|M=领取任务|$0#P
+				</div>
+			</div>
+		</div>
+	</div>
+	<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+</body>
+
+</html>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fengshen.db.dao.CharactersMapper">
+  <resultMap id="BaseResultMap" type="com.fengshen.db.domain.Characters">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="polar" jdbcType="INTEGER" property="polar" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="account_id" jdbcType="INTEGER" property="accountId" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="deleted" jdbcType="BIT" property="deleted" />
+    <result column="gid" jdbcType="VARCHAR" property="gid" />
+    <result column="online" jdbcType="INTEGER" property="online" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.fengshen.db.domain.Characters">
+    <result column="data" jdbcType="LONGVARCHAR" property="data" />
+    <result column="cangku" jdbcType="LONGVARCHAR" property="cangku" />
+    <result column="texiao" jdbcType="LONGVARCHAR" property="texiao" />
+    <result column="genchong" jdbcType="LONGVARCHAR" property="genchong" />
+    <result column="backpack" jdbcType="LONGVARCHAR" property="backpack" />
+    <result column="pets" jdbcType="LONGVARCHAR" property="pets" />
+    <result column="listshouhu" jdbcType="LONGVARCHAR" property="listshouhu" />
+    <result column="shizhuang" jdbcType="LONGVARCHAR" property="shizhuang" />
+  </resultMap>
+  
+  	<select id="getRankData" resultMap="BaseResultMap">
+		select id from characters
+		where xiaozi = 0 and deleted = 0 and block = 0 and DATE_SUB(CURDATE(),
+		INTERVAL 7 DAY) &lt;= date(FROM_UNIXTIME(last_login_time)) ORDER BY
+		last_login_time DESC LIMIT 0,100;
+	</select>
+	
+	<select id="getLastLoginTimeData" resultMap="BaseResultMap" parameterType="com.fengshen.db.domain.Characters">
+		select id, name, `level`, FROM_UNIXTIME(last_login_time) as time from characters where level &lt;= #{level,jdbcType=INTEGER} and DATE_SUB(CURDATE(), INTERVAL #{online,jdbcType=INTEGER} DAY) >= date(FROM_UNIXTIME(last_login_time));
+	</select>
+  
+</mapper>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+    <title>VIP编辑配置</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="favicon.ico"> 
+    <link rel="stylesheet" th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" />
+    <style type="text/css">
+    	input::-webkit-outer-spin-button,
+	    input::-webkit-inner-spin-button {
+	        -webkit-appearance: none;
+	    }
+	    input[type="number"]{
+	        -moz-appearance: textfield;
+	    }
+    </style>
+</head>
+
+<body>
+	<div class="layui-form" style="width: 90%; margin-top: 31px;"
+		lay-filter="showForm">
+  		<div class="layui-form-item">
+		    <label class="layui-form-label">最小金额</label>
+		    <div class="layui-input-block">
+		    	<input type="number" name="minMoney" class="layui-input">
+		    </div>
+  		</div>
+  		<div class="layui-form-item">
+		    <label class="layui-form-label">最大金额</label>
+		    <div class="layui-input-block">
+		    	<input type="number" name="maxMoney" class="layui-input">
+		    </div>
+  		</div>
+  		<div class="layui-form-item">
+		    <label class="layui-form-label">任务奖励</label>
+		    <div class="layui-input-block">
+    	 		<textarea name="task" placeholder="请输入内容" class="layui-textarea"></textarea>
+    	 		<div class="layui-form-mid layui-word-aux">严格按照示例,否则无效：[{"name":"shanggucishu","num":1},{"name":"tiandixingNum","num":1}]</div>
+		    </div>
+  		</div>
+  		<div class="layui-form-item">
+		    <label class="layui-form-label">数值奖励</label>
+		    <div class="layui-input-block">
+    	 		<textarea name="value" placeholder="请输入内容" class="layui-textarea"></textarea>
+    	 		<div class="layui-form-mid layui-word-aux">严格按照示例,只支持积分：[{"name":"积分","num":5}]</div>
+		    </div>
+  		</div>
+		<div class="layui-form-item">
+			<a class="layui-btn layui-btn-danger layui-btn" style="margin-left: 109px;" id="save">保存</a>
+		</div>
+		</div>
+		<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+		<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+		<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+		<script th:src="@{/static/sys/js/public.js}"></script>
+		<script th:line="javascript">
+		var path = '[[${session.path}]]';
+		var layer;
+		var table;
+		var params;
+		var util;
+		layui.use(['layer','table','form','util', "laydate"], function(){
+			util = layui.util;
+		  	layer = layui.layer;
+		  	table = layui.table;
+		  	form = layui.form;
+		  	var laydate = layui.laydate;
+		  	var uid = getQueryString("uid");
+		  	var rtype = getQueryString("rtype");
+		  	//加载信息
+		  	if(rtype == "edit") {
+		  		$.post(path+"/ws/configInfo/getOneConfigInfoData",{"keyName":"VIP_FULI_CONFIG"},function(data){
+			  		if(data.status == 200) {
+			  			var config = data.data;
+			  			var configJson = JSON.parse(config.data);
+			  			$(configJson).each(function(i,o){
+			  				if(o.uuid == uid) {
+			  					form.val("showForm",{
+					  				"minMoney":o.minMoney,
+					  				"maxMoney":o.maxMoney,
+					  				"task":JSON.stringify(o.reward.task),
+					  				"value":JSON.stringify(o.reward.value)
+					  			})
+			  					return false;
+			  				}
+			  			})
+			  		}
+			  	})
+			}
+		  	$(document).keydown(function(e) {
+			    var key = undefined;
+			    var possible = [ e.key, e.keyIdentifier, e.keyCode, e.which ];
+			    while (key === undefined && possible.length > 0) {
+			        key = possible.pop();
+			    }
+			    if (key && (key == '115' || key == '83' ) && (e.ctrlKey || e.metaKey) && !(e.altKey)){
+			        e.preventDefault();
+			        save();
+			        return false;
+			    }
+			    return true;
+			}); 
+			$(document).on("click","#save",function(){
+				if(rtype == "edit") {
+					save();
+				}else {
+					add();
+				}
+		  	})
+		  	function add(){
+				var da = form.val("showForm");
+				$.post(path+"/ws/configInfo/addVipConfig",da,function(data){
+		  			layer.msg(data.retmsg);
+		  			setTimeout(function(){
+		  				parent.location.reload();
+		  			},500)
+			  	})
+			}
+		  	function save(){
+				var da = form.val("showForm");
+				da.uid = uid;
+				$.post(path+"/ws/configInfo/updateVipConfig",da,function(data){
+		  			layer.msg(data.retmsg);
+		  			setTimeout(function(){
+		  				parent.location.reload();
+		  			},500)
+			  	})
+			}
+		});
+		function sortMoney(a,b){
+		  	return a.minMoney-b.minMoney
+		}
+		
+		function getQueryString(name) {
+		    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+		    var r = window.location.search.substr(1).match(reg);//search,查询？后面的参数，并匹配正则
+		    if(r!=null)return  unescape(r[2]); return null;
+		}
+	</script>
+</body>
+
+</html>

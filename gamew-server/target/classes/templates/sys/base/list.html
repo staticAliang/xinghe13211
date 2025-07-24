@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>基础配置</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+
+<link rel="shortcut icon" href="favicon.ico">
+<link th:href="@{/static/sys/css/bootstrap.min.css?v=3.3.5}" rel="stylesheet">
+<link th:href="@{/static/sys/css/plugins/sweetalert/sweetalert.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/font-awesome.min.css?v=4.4.0}" rel="stylesheet">
+<link th:href="@{/static/sys/css/animate.min.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/style.min.css?v=4.0.0}" rel="stylesheet">
+<link th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" rel="stylesheet" />
+<link rel="stylesheet" th:href="@{/static/sys/css/global.css}">
+<style>
+.openMaxImg:hover {
+	box-shadow: 0px 0px 4px 1px #4e4e4e;
+	cursor: pointer;
+}
+
+/* 鼠标指向表格时,奇数行背景颜色 */
+.layui-table tbody tr:hover, .layui-table-hover {
+	background-color: #eeffee;
+}
+/* 表格头部工具栏背景色 */
+.layui-table-tool {
+	background-color: #eeffee;
+}
+
+.news_search {
+	font-size: 14px;
+}
+
+.layui-form-label {
+	padding: 9px 0;
+	left: 18px;
+	color: black;
+	font-size: 15px;
+	top: 1px;
+	width: 35px;
+}
+
+.layui-form-select {
+	max-width: 8.5rem;
+}
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield;
+}
+</style>
+</head>
+
+<body>
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<!-- Panel Other -->
+		<div class="ibox float-e-margins">
+			<div class="row row-lg">
+				<div class="col-sm-12">
+
+					<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+						<ul class="layui-tab-title">
+							<li class="layui-this">基础设置</li>
+							<li>挑战次数</li>
+							<li>特色配置</li>
+							<li>装备改造</li>
+							<li>活动配置</li>
+						</ul>
+						<div class="layui-tab-content layui-form"  lay-filter="baseForm">
+							<!-- 基础设置 -->
+							<div class="layui-tab-item layui-show">
+								<div class="example">
+									<table class="layui-table">
+										<tbody>
+											<tr>
+												<th>名称</th>
+												<th>数值</th>
+												<th>名称</th>
+												<th>数值</th>
+												<th>名称</th>
+												<th>数值</th>
+											</tr>
+											<tr>
+												<td>仙魔消耗积分</td>
+												<td><input type="number" class="form-control"
+													name="flyXianMo"></td>
+												<td>真身最高等级</td>
+												<td><input type="number" class="form-control"
+													name="realMaxLevel"></td>
+												<td>元血婴最高等级</td>
+												<td><input type="number" class="form-control"
+													name="upgradeMaxLevel"></td>
+											</tr>
+											<tr>
+												<td colspan="1">游戏名称</td>
+												<td colspan="1"><input type="text"
+													class="form-control" name="gameName"></td>
+												<td>充值链接</td>
+												<td colspan="1"><input type="text"
+													class="form-control" name="chargeLink"></td>
+												<td>后台链接</td>
+												<td colspan="1"><input type="text"
+													class="form-control" name="manageLink"></td>
+											</tr>
+											<tr>
+												<td>宝宝强化几率</td>
+												<td colspan="1"><input type="number"
+													class="form-control" name="qhcgjv"></td>
+												<td>宠物心法最高层数</td>
+												<td><input type="number" class="form-control"
+														   name="petXinfaMaxLevel"></td>
+												<td>宠物心法每层加成(%)</td>
+												<td><input type="number" class="form-control"
+														   name="petXinfaRate"></td>
+											</tr>
+
+										
+										<tr>
+											<td>宠物心法消耗(金)</td>
+											<td><input type="number" class="form-control"
+													   name="petXinfaGold"></td>
+											<td>宠物心法消耗(银)</td>
+											<td><input type="number" class="form-control"
+													   name="petXinfaSilver"></td>
+											<td>宠物心法消耗(积分)</td>
+											<td><input type="number" class="form-control"
+													   name="petXinfaPoint"></td>
+										</tr>
+											<tr>
+												<td>充值比例</td>
+												<td colspan="6"><input type="number"
+													class="form-control" name="chongzhibili"></td>
+											</tr>
+
+											<tr>
+												<td>加速器次数阈值(调整到合适的就行)</td>
+												<td colspan="6"><input type="text"
+													class="form-control" name=addSpeedCount></td>
+												<!-- <td>加速器间隔阈值(秒)</td>
+												<td colspan="2"><input type="text"
+													class="form-control" name="addSpeedTime"></td> -->
+											</tr>
+											<tr>
+												<td>自动断线(秒),切勿设置太小否则全体掉线、如果要关闭填0即可</td>
+												<td colspan="3"><input type="number"
+													class="form-control" name=autoDisConnectionTime></td>
+												<td>发言最低等级</td>
+												<td><input type="number" class="form-control"
+													name="minSpeakLevel"></td>
+											</tr>
+											<tr>
+												
+												<td>说话间隔(秒)</td>
+												<td><input type="number" class="form-control"
+													name="speakIntervalTime"></td>
+												<td>说话次数</td>
+												<td><input type="number" class="form-control"
+													name="speakIntervalCount"></td>
+												<td>说话暂停时长</td>
+												<td><input type="number" class="form-control"
+													name="speakPauseTime"></td>
+											</tr>
+											<tr>
+												<td>开局动画(切勿私自开启否则会掉线)</td>
+												<td colspan="2">
+													<input type="checkbox"  lay-skin="switch" lay-text="关|开" name="closeStartAnimation" lay-filter="closeStartAnimation">
+												</td>
+												<td>语音开关</td>
+												<td colspan="3">
+													<input type="checkbox"  lay-skin="switch" lay-text="关|开" name="voiceStatus" lay-filter="voiceStatus">
+												</td>
+											</tr>
+											<tr>
+												<td>回收神兽</td>
+												<td colspan="1"><input type="text"
+													class="form-control" name=recoveryShenShouScore></td>
+												<td>回收变异</td>
+												<td colspan="1"><input type="text"
+													class="form-control" name="recoveryBianYiScore"></td>
+												<td>回收装备</td>
+												<td colspan="1"><input type="text"
+													class="form-control" name="recoveryEquipScore"></td>
+											</tr>
+											<tr>
+												<td>人物附灵最低等级</td>
+												<td colspan="1"><input type="text"
+													class="form-control" name=charaFuLingLevel></td>
+												<td>宠物附灵最低等级</td>
+												<td colspan="1"><input type="text"
+													class="form-control" name="petFuLingLevel"></td>
+												<td>宠物继承单价</td>
+												<td colspan="1"><input type="text"
+													class="form-control" name="petInheritScore"></td>
+											</tr>
+											<tr>
+												<td>积分抽奖单价</td>
+												<td colspan="1"><input type="text"
+													class="form-control" name="chargeNpcOnePrice"></td>
+												<td>问道小子客户端地址</td>
+												<td colspan="4"><input type="text"
+													class="form-control" name="xiaoziUrl"></td>
+											</tr>
+											
+											<tr>
+												<td colspan="6">
+													<a class="layui-btn layui-btn-danger layui-btn save">保存</a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<!-- 基础设置 -->
+							<!-- 挑战次数 -->
+							<div class="layui-tab-item">
+								<div class="example">
+									<table class="layui-table">
+										<tbody>
+											<tr>
+												<th>名称</th>
+												<th>数值</th>
+												<th>名称</th>
+												<th>数值</th>
+												<th>名称</th>
+												<th>数值</th>
+											</tr>
+											<tr>
+												<td>掌门次数</td>
+												<td><input type="number" class="form-control"
+													name="zmcs"></td>
+												<td>除暴次数</td>
+												<td><input type="number" class="form-control"
+													name="chubaoNum"></td>
+												<td>师门次数</td>
+												<td><input type="number" class="form-control"
+													name="shimenNum"></td>
+											</tr>
+											<tr>
+												<td>白帮忙次数</td>
+												<td><input type="number" class="form-control"
+													name="baibangmangNum"></td>
+												<td>修行/十绝次数</td>
+												<td><input type="number" class="form-control"
+													name="xiuxingcishuNum"></td>
+												<td>修行队伍人数</td>
+												<td><input type="number" class="form-control"
+													name="xiuxingDuiwuNum"></td>
+											</tr>
+											<tr>
+												<td>通天塔次数</td>
+												<td><input type="number" class="form-control"
+													name="tongtiantaNum"></td>
+												<td>八仙次数</td>
+												<td><input type="number" class="form-control"
+													name="baxianNum"></td>
+												<td>战神次数</td>
+												<td><input type="number" class="form-control"
+													name="zhanshenNum"></td>
+											</tr>
+											
+											<tr>
+												<td>攻城boos次数</td>
+												<td><input type="number" class="form-control"
+													name="bossNum"></td>
+												<td>天地星次数</td>
+												<td><input type="number" class="form-control"
+													name="tiandixingNum"></td>
+												<td>地图守护神次数</td>
+												<td><input type="number" class="form-control"
+													name="ditushouhuNum"></td>
+											</tr>
+											<tr>
+												<td>证道殿次数</td>
+												<td colspan="1"><input type="number"
+													class="form-control" name="zhengdaodianNum">
+												</td>
+												<td>英雄会次数</td>
+												<td><input type="number"
+													class="form-control" name="yingxionghuiNum">
+												</td>
+												<td>超级boos次数</td>
+												<td  colspan="1"><input type="number" class="form-control"
+													name="superBossNum"></td>
+											</tr>
+											<tr>
+												<td>上古妖王次数</td>
+												<td colspan="1"><input type="number"
+													class="form-control" name="shangguNum"></td>
+												<td>万年妖王次数</td>
+												<td colspan="1"><input type="number"
+													class="form-control" name="wannianNum"></td>
+												<td>悬赏次数(仙界叛逆)</td>
+												<td colspan="1"><input type="number"
+													class="form-control" name="xuanshangcishu"></td>
+											</tr>
+											<tr>
+												<td>帮派日常挑战次数</td>
+												<td colspan="1"><input type="number"
+													class="form-control" name="partyFightNum"></td>
+												<td>帮派任务次数</td>
+												<td colspan="1"><input type="number"
+													class="form-control" name="partyNum"></td>
+												<td>年兽活动次数</td>
+												<td colspan="1"><input type="number"
+													class="form-control" name="newYearBeastNum"></td>
+											</tr>
+											<tr>
+												<td>七杀试炼次数</td>
+												<td colspan="1"><input type="number"
+													class="form-control" name="qishaCount"></td>
+												<td>九天真君每日挑战次数</td>
+												<td colspan="1"><input type="number"
+													class="form-control" name="totalCheckpoint"></td>
+												<td>18层地狱每日挑战次数</td>
+												<td colspan="1"><input type="number"
+													class="form-control" name="diyuZongcishu"></td>
+											</tr>
+											<tr>
+												<td>魔龙每日挑战次数</td>
+												<td colspan="1"><input type="number"
+													class="form-control" name="molongCount"></td>
+												<td>地狱深渊每日挑战次数</td>
+												<td colspan="1"><input type="number"
+													class="form-control" name="diyushenyuanNum"></td>
+												<td>诛仙台每日挑战次数</td>
+												<td colspan="1"><input type="number"
+																	   class="form-control" name="zhuxianCishu"></td>
+											</tr>
+											<tr>
+												<td colspan="6">
+													<a class="layui-btn layui-btn-danger layui-btn save">保存</a>
+												</td>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<!-- 挑战次数 -->
+							<!-- 特色配置 -->
+							<div class="layui-tab-item">
+								<div class="example">
+									<table class="layui-table">
+										<tbody>
+										<tr>
+											<th>超级后台，基本都可以改，望君好好研究</th>
+											<th>超级后台，基本都可以改，望君好好研究</th>
+											<th>超级后台，基本都可以改，望君好好研究</th>
+											<th>超级后台，基本都可以改，望君好好研究</th>
+											<th>超级后台，基本都可以改，望君好好研究</th>
+											<th>超级后台，基本都可以改，望君好好研究</th>
+										</tr>
+										<tr>
+												<td>是否称号叠加（1表示叠加，0表示不叠加）</td>
+												<td colspan="1"><input type="number"
+													class="form-control" name="isChenghaodie"></td>
+												<td>邀请码返利比例</td>
+												<td colspan="1"><input type="number"
+													class="form-control" name="yaoqingbili"></td>
+											<td>单次抽奖消耗好运牌数量(不用的话写0)</td>
+											<td colspan="1"><input type="number"
+																   class="form-control" name="choujiangDaojuCount"></td>
+											</tr>
+
+											</tr>
+											<tr>
+												<td>10个鬼丹兑换所有属性</td>
+												<td colspan="1"><input type="number"
+																	   class="form-control" name="guidanCount"></td>
+												<td>10个鬼王内丹兑换所有相性</td>
+												<td colspan="1"><input type="number"
+																	   class="form-control" name="guiwangneidanCount"></td>
+												<td>青铜卡兑换金额</td>
+												<td colspan="1"><input type="number"
+													class="form-control" name="qingtongChongzhi"></td>
+											</tr>
+											<tr>
+												<td>白银卡兑换金额</td>
+												<td colspan="1"><input type="number"
+													class="form-control" name="baiyinChongzhi"></td>
+												<td>黄金卡兑换金额</td>
+												<td colspan="1"><input type="number"
+													class="form-control" name="huangjinChongzhi"></td>
+												<td>铂金卡兑换金额</td>
+												<td colspan="1"><input type="number"
+													class="form-control" name="bojinChongzhi"></td>
+											</tr>
+											<tr>
+												<td>钻石卡兑换金额</td>
+												<td colspan="1"><input type="number"
+													class="form-control" name="zuanshiChongzhi"></td>
+												<td>星耀卡兑换金额</td>
+												<td colspan="1"><input type="number"
+													class="form-control" name="xingyaoChongzhi"></td>
+												<td>王者卡兑换金额</td>
+												<td colspan="1"><input type="number"
+													class="form-control" name="wangzheChongzhi"></td>
+											</tr>
+
+											<tr>
+												<td>1层诛仙台称号</td>
+												<td colspan="2"><input type="string"
+													class="form-control" name="zhu1"></td>
+												<td>2层诛仙台称号</td>
+												<td colspan="2"><input type="string"
+													class="form-control" name="zhu2"></td>
+												<td>3层诛仙台称号</td>
+												<td colspan="2"><input type="string"
+													class="form-control" name="zhu3"></td>
+											</tr>
+											<tr>
+												<td>4层诛仙台称号</td>
+												<td colspan="2"><input type="string"
+													class="form-control" name="zhu4"></td>
+												<td>5层诛仙台称号</td>
+												<td colspan="2"><input type="string"
+													class="form-control" name="zhu5"></td>
+												<td>6层诛仙台称号</td>
+												<td colspan="2"><input type="string"
+													class="form-control" name="zhu6"></td>
+											</tr>
+											<tr>
+												<td>7层诛仙台称号</td>
+												<td colspan="2"><input type="string"
+													class="form-control" name="zhu7"></td>
+												<td>8层诛仙台称号</td>
+												<td colspan="2"><input type="string"
+													class="form-control" name="zhu8"></td>
+												<td>9层诛仙台称号</td>
+												<td colspan="2"><input type="string"
+													class="form-control" name="zhu9"></td>
+											</tr>
+
+											<tr>
+												<td>1转称号</td>
+												<td colspan="2"><input type="string"
+													class="form-control" name="hao1"></td>
+												<td>2转称号</td>
+												<td colspan="2"><input type="string"
+													class="form-control" name="hao2"></td>
+												<td>3转称号</td>
+												<td colspan="2"><input type="string"
+													class="form-control" name="hao3"></td>
+											</tr>
+
+											<tr>
+												<td>4转称号</td>
+												<td colspan="2"><input type="string"
+													class="form-control" name="hao4"></td>
+												<td>5转称号</td>
+												<td colspan="2"><input type="string"
+													class="form-control" name="hao5"></td>
+												<td>6转称号</td>
+												<td colspan="2"><input type="string"
+													class="form-control" name="hao6"></td>
+											</tr>
+
+											<tr>
+												<td>7转称号</td>
+												<td colspan="2"><input type="string"
+													class="form-control" name="hao7"></td>
+												<td>8转称号</td>
+												<td colspan="2"><input type="string"
+													class="form-control" name="hao8"></td>
+												<td>9转称号</td>
+												<td colspan="2"><input type="string"
+													class="form-control" name="hao9"></td>
+											</tr>
+										<tr>
+											<td>神魂精修最大等级</td>
+											<td><input type="number" class="form-control"
+													   name="shenHunUpMaxLevel"></td>
+											<td>神魂精修积分</td>
+											<td colspan="1"><input type="number" class="form-control"
+																   name="shenHunCostPoint"></td>
+											<td>神魂精修银元宝</td>
+											<td><input type="number" class="form-control"
+													   name="shenHunCostSilverCoin"></td>
+											<td>神魂是否必定成功</td>
+											<td colspan="1">
+												<select name="shenHunUpType">
+													<option value="1">是</option>
+													<option value="0">否</option>
+												</select>
+											</td>
+										</tr>
+											<tr>
+												<td colspan="6">
+													<a class="layui-btn layui-btn-danger layui-btn save">保存</a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<!-- 特色配置 -->
+							
+							<!-- 改造设置 -->
+							<div class="layui-tab-item">
+								<div class="example">
+									<table class="layui-table">
+										<tbody>
+											<tr>
+												<th>名称</th>
+												<th>类型</th>
+												<th>数值</th>
+												<th>名称</th>
+												<th>类型</th>
+												<th>数值</th>
+											</tr>
+											<tr>
+												<td>改造1</td>
+												<td>
+													<select name="n1Type">
+													  <option value="元宝">元宝</option>
+													  <option value="积分">积分</option>
+													</select>
+												</td>
+												<td>
+													<input type="number" class="form-control"
+														name="n1">
+												</td>
+												<td>改造2</td>
+												<td>
+													<select name="n2Type">
+													  <option value="元宝">元宝</option>
+													  <option value="积分">积分</option>
+													</select>
+												</td>
+												<td><input type="number" class="form-control"
+													name="n2"></td>
+											</tr>
+											<tr>
+												<td>改造3</td>
+												<td>
+													<select name="n3Type">
+													  <option value="元宝">元宝</option>
+													  <option value="积分">积分</option>
+													</select>
+												</td>
+												<td><input type="number" class="form-control"
+													name="n3"></td>
+												<td>改造4</td>
+												<td>
+													<select name="n4Type">
+													  <option value="元宝">元宝</option>
+													  <option value="积分">积分</option>
+													</select>
+												</td>
+												<td><input type="number" class="form-control"
+													name="n4"></td>
+											</tr>
+											<tr>
+												<td>改造5</td>
+												<td>
+													<select name="n5Type">
+													  <option value="元宝">元宝</option>
+													  <option value="积分">积分</option>
+													</select>
+												</td>
+												<td><input type="number" class="form-control"
+													name="n5"></td>
+												<td>改造6</td>
+												<td>
+													<select name="n6Type">
+													  <option value="元宝">元宝</option>
+													  <option value="积分">积分</option>
+													</select>
+												</td>
+												<td><input type="number" class="form-control"
+													name="n6"></td>
+											</tr>
+											<tr>
+												<td>改造7</td>
+												<td>
+													<select name="n7Type">
+													  <option value="元宝">元宝</option>
+													  <option value="积分">积分</option>
+													</select>
+												</td>
+												<td><input type="number" class="form-control"
+													name="n7"></td>
+												<td>改造8</td>
+												<td>
+													<select name="n8Type">
+													  <option value="元宝">元宝</option>
+													  <option value="积分">积分</option>
+													</select>
+												</td>
+												<td><input type="number" class="form-control"
+													name="n8"></td>
+											</tr>
+											<tr>
+												<td>改造9</td>
+												<td>
+													<select name="n9Type">
+													  <option value="元宝">元宝</option>
+													  <option value="积分">积分</option>
+													</select>
+												</td>
+												<td><input type="number" class="form-control"
+													name="n9"></td>
+												<td>改造10</td>
+												<td>
+													<select name="n10Type">
+													  <option value="元宝">元宝</option>
+													  <option value="积分">积分</option>
+													</select>
+												</td>
+												<td><input type="number" class="form-control"
+													name="n10"></td>
+											</tr>
+											<tr>
+												<td>改造11</td>
+												<td>
+													<select name="n11Type">
+													  <option value="元宝">元宝</option>
+													  <option value="积分">积分</option>
+													</select>
+												</td>
+												<td colspan="6"><input type="number" class="form-control"
+													name="n11"></td>
+											</tr>
+											<tr>
+												<td>武器单价</td>
+												<td colspan="2"><input type="number" class="form-control"
+													name="equipPrice"></td>
+													
+												<td>防具单价</td>
+												<td colspan="2"><input type="number" class="form-control"
+													name="defPrice"></td>
+											</tr>
+											<tr>
+												<td colspan="7">
+													<a class="layui-btn layui-btn-danger layui-btn equip-save">保存</a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<!-- 改造设置 -->
+							
+							<!-- 备用 -->
+							<div class="layui-tab-item">
+								<div class="example layui-form">
+									<table class="layui-table">
+										<tbody>
+											<tr>
+												<th>名称</th>
+												<th>操作</th>
+												<th>名称</th>
+												<th>操作</th>
+											</tr>
+											<tr>
+												<td>年兽活动</td>
+												<td><a class="layui-btn layui-btn-danger layui-btn newYearBeastDlg">配置</a></td>
+												<td>五行竞猜</td>
+												<td><a class="layui-btn layui-btn-danger layui-btn wuxingConfig">配置</a></td>
+											</tr>
+											<tr>
+												<td>赠送功能</td>
+												<td><a class="layui-btn layui-btn-danger layui-btn givingConfig">配置</a></td>
+												<td>攻城BOSS</td>
+												<td><a class="layui-btn layui-btn-danger layui-btn gongcheng">配置</a></td>
+											</tr>
+											<tr>
+												<td>VIP福利</td>
+												<td><a class="layui-btn layui-btn-danger layui-btn vipConfig">配置</a></td>
+												<td>升级奖励大使</td>
+												<td><a class="layui-btn layui-btn-danger layui-btn npcForReward">配置</a></td>
+											</tr>
+											<tr>
+												<td>擂台配置</td>
+												<td><a class="layui-btn layui-btn-danger layui-btn ctConfig">配置</a></td>
+												<td>桃子萝卜配置</td>
+												<td><a class="layui-btn layui-btn-danger layui-btn luobo_taozi">配置</a></td>
+											</tr>
+											<tr>
+												<td>全局双倍配置</td>
+												<td><a class="layui-btn layui-btn-danger layui-btn global_double">配置</a></td>
+											</tr>
+											
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<!-- 备用 -->
+							<div class="layui-tab-item">
+								<div class="example layui-form">备用</div>
+							</div>
+							<!-- 隐藏字段 -->
+							<div class="hide">
+								<input type="hidden" class="form-control" name="stopServer">
+								<input type="hidden" class="form-control" name="isChargeSpeak">
+								<input type="hidden" class="form-control" name="isChargeSpeakMoney">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End Panel Other -->
+	</div>
+
+	<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/js/bootstrap.min.js?v=3.3.5}"></script>
+	<script th:src="@{/static/sys/js/content.min.js}"></script>
+	<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/plugins/sweetalert/sweetalert.min.js}"></script>
+	<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+	<script th:line="javascript">
+		var path = '[[${session.path}]]';
+		layui.use([ "form", "layer", "element" ], function() {
+			var layer = layui.layer;
+			var form = layui.form;
+			var config;
+			loadConfig();
+			function loadConfig() {
+				//加载配置操作信息
+				$.post(path+"/sys/wd/getConfig", function(data) {
+					config = data.data;
+					var base = config.baseConfig;
+					//设置信息
+					form.val("baseForm", {
+						"chongzhibili" : base.chongzhibili,
+						"yaoqingbili" : base.yaoqingbili,
+						"flyXianMo" : base.flyXianMo,
+						"realMaxLevel" : base.realMaxLevel,
+						"upgradeMaxLevel" : base.upgradeMaxLevel,
+						"chargeLink" : base.chargeLink,
+						"manageLink" : base.manageLink,
+						"zmcs" : base.zmcs,
+						"qhcgjv" : base.qhcgjv,
+						"chubaoNum" : base.chubaoNum,
+						"shimenNum" : base.shimenNum,
+						"baibangmangNum" : base.baibangmangNum,
+						"xiuxingcishuNum" : base.xiuxingcishuNum,
+						"xiuxingDuiwuNum" : base.xiuxingDuiwuNum,
+						"tongtiantaNum" : base.tongtiantaNum,
+						"baxianNum" : base.baxianNum,
+						"zhanshenNum" : base.zhanshenNum,
+						"bossNum" : base.bossNum,
+						"tiandixingNum" : base.tiandixingNum,
+						"zhengdaodianNum" : base.zhengdaodianNum,
+						"yingxionghuiNum" : base.yingxionghuiNum,
+						"ditushouhuNum" : base.ditushouhuNum,
+						"shangguNum" : base.shangguNum,
+						"wannianNum" : base.wannianNum,
+						"superBossNum" : base.superBossNum,
+						"gameName" : base.gameName,
+						"addSpeedCount" : base.addSpeedCount,
+						"addSpeedTime" : base.addSpeedTime,
+						"autoDisConnectionTime" : base.autoDisConnectionTime,
+						"partyFightNum" : base.partyFightNum,
+						"partyNum" : base.partyNum,
+						"stopServer" : base.stopServer,
+						"isChargeSpeak" : base.isChargeSpeak,
+						"isChargeSpeakMoney" : base.isChargeSpeakMoney,
+						"closeStartAnimation" : base.closeStartAnimation,
+						"xuanshangcishu" : base.xuanshangcishu,
+						"newYearBeastNum" : base.newYearBeastNum,
+						"minSpeakLevel" : base.minSpeakLevel,
+						"speakIntervalTime" : base.speakIntervalTime,
+						"speakIntervalCount" : base.speakIntervalCount,
+						"speakPauseTime" : base.speakPauseTime,
+						"recoveryShenShouScore" : base.recoveryShenShouScore,
+						"recoveryBianYiScore" : base.recoveryBianYiScore,
+						"recoveryEquipScore" : base.recoveryEquipScore,
+						"voiceStatus" : base.voiceStatus,
+						"charaFuLingLevel" : base.charaFuLingLevel,
+						"petFuLingLevel" : base.petFuLingLevel,
+						"petInheritScore" : base.petInheritScore,
+						"qishaCount" : base.qishaCount,
+						"totalCheckpoint" : base.totalCheckpoint,
+						"molongCount" : base.molongCount,
+						"diyushenyuanNum" : base.diyushenyuanNum,
+						"chargeNpcOnePrice" : base.chargeNpcOnePrice,
+						"xiaoziUrl" : base.xiaoziUrl,
+						"shenHunCostPoint": base.shenHunCostPoint,
+						"shenHunCostSilverCoin": base.shenHunCostSilverCoin,
+						"shenHunUpMaxLevel": base.shenHunUpMaxLevel,
+						"shenHunUpType": base.shenHunUpType,
+						"petXinfaMaxLevel": base.petXinfaMaxLevel,
+						"petXinfaSilver" : base.petXinfaSilver,
+						"petXinfaPoint" : base.petXinfaPoint,
+						"petXinfaMaxLevel" : base.petXinfaMaxLevel,
+						"petXinfaRate" : base.petXinfaRate,
+						"guidanCount" : base.guidanCount,
+						"guiwangneidanCount" : base.guiwangneidanCount,
+						"petXinfaGold" : base.petXinfaGold,
+						"diyuZongcishu" : base.diyuZongcishu,
+
+						"qingtongChongzhi" : base.qingtongChongzhi,
+						"baiyinChongzhi" : base.baiyinChongzhi,
+						"huangjinChongzhi" : base.huangjinChongzhi,
+						"bojinChongzhi" : base.bojinChongzhi,
+						"zuanshiChongzhi" : base.zuanshiChongzhi,
+						"xingyaoChongzhi" : base.xingyaoChongzhi,
+						"wangzheChongzhi" : base.wangzheChongzhi,
+						"isChenghaodie" : base.isChenghaodie,
+						"hao1" : base.hao1,
+						"hao2" : base.hao2,
+						"hao3" : base.hao3,
+						"hao4" : base.hao4,
+						"hao5" : base.hao5,
+						"hao6" : base.hao6,
+						"hao7" : base.hao7,
+						"hao8" : base.hao8,
+						"hao9" : base.hao9,
+						"zhu1" : base.zhu1,
+						"zhu2" : base.zhu2,
+						"zhu3" : base.zhu3,
+						"zhu4" : base.zhu4,
+						"zhu5" : base.zhu5,
+						"zhu6" : base.zhu6,
+						"zhu7" : base.zhu7,
+						"zhu8" : base.zhu8,
+						"zhu9" : base.zhu9,
+						"choujiangDaojuCount" : base.choujiangDaojuCount,
+						"zhuxianCishu" : base.zhuxianCishu,
+					});
+				})
+			}
+			//改造配置
+			$.post(path+"/wd/config/getEquipGaizaoConfig", function(data) {
+					var equipConfig = data.data;
+					//设置信息
+					form.val("baseForm", {
+						"n1" : equipConfig.n1,
+						"n2" : equipConfig.n2,
+						"n3" : equipConfig.n3,
+						"n4" : equipConfig.n4,
+						"n5" : equipConfig.n5,
+						"n6" : equipConfig.n6,
+						"n7" : equipConfig.n7,
+						"n8" : equipConfig.n8,
+						"n9" : equipConfig.n9,
+						"n10" : equipConfig.n10,
+						"n11" : equipConfig.n11,
+						"n1Type" : equipConfig.n1Type,
+						"n2Type" : equipConfig.n2Type,
+						"n3Type" : equipConfig.n3Type,
+						"n4Type" : equipConfig.n4Type,
+						"n5Type" : equipConfig.n5Type,
+						"n6Type" : equipConfig.n6Type,
+						"n7Type" : equipConfig.n7Type,
+						"n8Type" : equipConfig.n8Type,
+						"n9Type" : equipConfig.n9Type,
+						"n10Type" : equipConfig.n10Type,
+						"n11Type" : equipConfig.n11Type,
+						"n12Type" : equipConfig.n12Type,
+						"defPrice" : equipConfig.defPrice,
+						"equipPrice" : equipConfig.equipPrice
+					});
+			});
+			
+			$(".save").click(function() {
+				var load = $.load("保存中...");
+				var t = $(this);
+				//请求后端修改
+				var val = form.val("baseForm");
+				console.log(val.voiceStatus)
+				if(val.closeStartAnimation == "on") {
+					val.closeStartAnimation = 1;
+				}else {
+					val.closeStartAnimation = 0;
+				}
+				if(val.voiceStatus == "on") {
+					val.voiceStatus = 1;
+				}else {
+					val.voiceStatus = 0;
+				}
+				$.post(path+"/sys/wd/setBaseConfig", val, function(data) {
+					if (data.status == 200) {
+						layer.msg("修改成功");
+					} else {
+						layer.msg(data.retmsg);
+					}
+					layer.close(load);
+				})
+			});
+			
+			$(".equip-save").click(function() {
+				var load = $.load("保存中...");
+				var t = $(this);
+				//请求后端修改
+				var val = form.val("baseForm");
+				$.post(path+"/wd/config/updateEquipGaizaoConfig", val, function(data) {
+					if (data.status == 200) {
+						layer.msg("修改成功");
+					} else {
+						layer.msg(data.retmsg);
+					}
+					layer.close(load);
+				})
+			});
+			form.on("switch(closeStartAnimation)",function(d){
+				$.post(path+"/sys/wd/setCloseStartAnimation",{"status":d.elem.checked==true?1:0},function(data){
+					if(data.status == 200) {
+						layer.msg("设置成功.");
+					}
+				})
+			});
+			form.on("switch(voiceStatus)",function(d){
+				$.post(path+"/sys/wd/setVoiceStatus",{"status":d.elem.checked==true?1:0},function(data){
+					if(data.status == 200) {
+						layer.msg("设置成功.");
+					}
+				})
+			});
+			//年兽
+			$(".newYearBeastDlg").click(function(){
+				var open = layer.open({
+					  title:"年兽活动配置(ctrl+s可快速保存)",
+					  type:2,
+					  area:["600px","80%"],
+					  content:path+"/sys/jump?page=/active/newYearBeast.html"
+			  	})
+			});
+			$(".wuxingConfig").click(function(){
+				var open = layer.open({
+					  title:"五行竞猜配置(ctrl+s可快速保存)",
+					  type:2,
+					  area:["600px","80%"],
+					  content:path+"/sys/jump?page=/active/wuxing.html"
+			  	})
+			});
+			$(".givingConfig").click(function(){
+				var open = layer.open({
+					  title:"赠送配置(ctrl+s可快速保存)",
+					  type:2,
+					  area:["600px","80%"],
+					  content:path+"/sys/jump?page=/active/givingConfig.html"
+			  	})
+			});
+			$(".gongcheng").click(function(){
+				var open = layer.open({
+					  title:"攻城BOSS配置(ctrl+s可快速保存)",
+					  type:2,
+					  area:["400px","400px"],
+					  content:path+"/sys/jump?page=/active/gongcheng.html"
+			  	})
+			});
+			$(".vipConfig").click(function(){
+				var open = layer.open({
+					  title:"VIP福利配置",
+					  type:2,
+					  area:["100%","100%"],
+					  content:path+"/sys/jump?page=/active/vip_config.html"
+			  	})
+			});
+			$(".npcForReward").click(function(){
+				var open = layer.open({
+					  title:"升级奖励配置(ctrl+s可快速保存)",
+					  type:2,
+					  area:["600px","500px"],
+					  content:path+"/sys/jump?page=/active/npc_for_reward.html"
+			  	})
+			});
+			//擂台
+			$(".ctConfig").click(function(){
+				var open = layer.open({
+					  title:"擂台配置(ctrl+s可快速保存)",
+					  type:2,
+					  area:["600px","80%"],
+					  content:path+"/sys/jump?page=/active/ctConfig.html"
+			  	})
+			});
+			$(".luobo_taozi").click(function(){
+				var open = layer.open({
+					  title:"萝卜桃子配置(ctrl+s可快速保存)",
+					  type:2,
+					  area:["600px","95%"],
+					  content:path+"/sys/jump?page=/active/luobo_taozi.html"
+			  	})
+			});
+			$(".global_double").click(function(){
+				var open = layer.open({
+					  title:"全局双倍配置(ctrl+s可快速保存)",
+					  type:2,
+					  area:["600px","80%"],
+					  content:path+"/sys/jump?page=/active/global_double.html"
+			  	})
+			});
+			$(".yaota").click(function(){
+				var open = layer.open({
+					  title:"九层妖塔配置(ctrl+s可快速保存)",
+					  type:2,
+					  area:["600px","80%"],
+					  content:path+"/sys/jump?page=/active/yaota.html"
+			  	})
+			});
+		});
+	</script>
+</body>
+
+</html>

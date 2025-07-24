@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fengshen.db.dao.PartyMemberMapper">
+  <resultMap id="BaseResultMap" type="com.fengshen.db.domain.PartyMember">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="chara_id" jdbcType="INTEGER" property="charaId" />
+    <result column="chara_gid" jdbcType="VARCHAR" property="charaGid" />
+    <result column="party_id" jdbcType="VARCHAR" property="partyId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="polar" jdbcType="INTEGER" property="polar" />
+    <result column="job" jdbcType="VARCHAR" property="job" />
+    <result column="last_week_active" jdbcType="INTEGER" property="lastWeekActive" />
+    <result column="curr_week_active" jdbcType="INTEGER" property="currWeekActive" />
+    <result column="active" jdbcType="INTEGER" property="active" />
+    <result column="logout_time" jdbcType="TIMESTAMP" property="logoutTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.fengshen.db.domain.PartyMember">
+    <result column="info" jdbcType="LONGVARCHAR" property="info" />
+  </resultMap>
+  
+</mapper>

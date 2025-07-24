@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<artifactId>wgames-59</artifactId>
+		<groupId>org.gamew</groupId>
+		<version>4.0.0</version>
+	</parent>
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>gamew-server</artifactId>
+	<packaging>jar</packaging>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>cn.hutool</groupId>
+			<artifactId>hutool-all</artifactId>
+			<version>5.5.8</version>
+		</dependency>
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-all</artifactId>
+			<version>4.1.7.Final</version><!--$NO-MVN-MAN-VER$ -->
+		</dependency>
+		<dependency>
+			<groupId>org.gamew</groupId>
+			<artifactId>gamew-db</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.gamew</groupId>
+			<artifactId>gamew-utils</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.5</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.2.2</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.6</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.2.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sf.json-lib</groupId>
+			<artifactId>json-lib</artifactId>
+			<version>2.4</version>
+			<classifier>jdk15</classifier>
+		</dependency>
+		<dependency>
+			<groupId>it.unimi.dsi</groupId>
+			<artifactId>fastutil</artifactId>
+			<version>8.1.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		<!-- log4j2依赖 -->
+		<!-- <dependency>
+		    <groupId>org.apache.logging.log4j</groupId>
+		    <artifactId>log4j-core</artifactId>
+		</dependency> -->
+	</dependencies>
+
+	<build>
+		<finalName>taishan</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<!--跳过测试 -->
+					<skipTests>true</skipTests>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<encoding>utf-8</encoding>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<fork>false</fork>
+				</configuration>
+			</plugin>
+
+			<!-- maven打包成jar的插件 -->
+			<!-- 打包jar文件时，配置manifest文件，加入lib包的jar依赖 -->
+			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-jar-plugin</artifactId> 
+				<configuration> 把target/classes/下的文件导入到jar内 <classesDirectory>target/classes/</classesDirectory> 
+				<finalName>${project.artifactId}-${project.version}</finalName> <archive> 
+				<manifest> 指定程序入口 <mainClass>${spring-cloud-main-class}</mainClass> 打包时 MANIFEST.MF文件不记录的时间戳版本 
+				<useUniqueVersions>false</useUniqueVersions> <addClasspath>true</addClasspath> 
+				服务依赖的jar包放在lib目录下 <classpathPrefix>lib/</classpathPrefix> <addDefaultImplementationEntries>true</addDefaultImplementationEntries> 
+				</manifest> </archive> </configuration> </plugin> <plugin> <groupId>org.apache.maven.plugins</groupId> 
+				<artifactId>maven-dependency-plugin</artifactId> <executions> <execution> 
+				<id>copy-dependencies</id> <phase>package</phase> <goals> <goal>copy-dependencies</goal> 
+				</goals> <configuration> <includeScope>compile</includeScope> <type>jar</type> 
+				<includeTypes>jar</includeTypes> 存放服务依赖的jar包，存放在服务相同目录的lib文件夹下 <outputDirectory> 
+				${project.build.directory}/lib </outputDirectory> </configuration> </execution> 
+				</executions> </plugin> -->
+			
+		</plugins>
+	</build>
+</project>

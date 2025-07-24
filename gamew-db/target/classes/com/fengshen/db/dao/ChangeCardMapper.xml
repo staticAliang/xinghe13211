@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fengshen.db.dao.ChangeCardMapper">
+  <resultMap id="BaseResultMap" type="com.fengshen.db.domain.ChangeCard">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="icon" jdbcType="INTEGER" property="icon" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="leve" jdbcType="INTEGER" property="leve" />
+    <result column="time" jdbcType="INTEGER" property="time" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.fengshen.db.domain.ChangeCard">
+    <result column="attr" jdbcType="LONGVARCHAR" property="attr" />
+  </resultMap>
+</mapper>

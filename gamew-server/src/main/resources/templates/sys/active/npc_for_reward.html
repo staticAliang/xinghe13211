@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+    <title>升级奖励大使配置</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="favicon.ico"> 
+    <link rel="stylesheet" th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" />
+    <style type="text/css">
+    	input::-webkit-outer-spin-button,
+	    input::-webkit-inner-spin-button {
+	        -webkit-appearance: none;
+	    }
+	    input[type="number"]{
+	        -moz-appearance: textfield;
+	    }
+    </style>
+</head>
+
+<body>
+	<div class="layui-form" style="width: 90%; margin-top: 31px;"
+		lay-filter="showForm">
+  		<div class="layui-form-item">
+		    <label class="layui-form-label">70级</label>
+		    <div class="layui-input-block">
+		    	<input type="text" name="2ee3028051f059e9ad57743f80ab5860" class="layui-input" autocomplete="off">
+		    </div>
+  		</div>
+  		<div class="layui-form-item">
+		    <label class="layui-form-label">80级</label>
+		    <div class="layui-input-block">
+		    	<input type="text" name="f3285ad36aea51fd9f3c831b62818a83" class="layui-input" autocomplete="off">
+		    </div>
+  		</div>
+  		<div class="layui-form-item">
+		    <label class="layui-form-label">90级</label>
+		    <div class="layui-input-block">
+		    	<input type="text" name="fc164c14f5f45512a79dbbf89ef47bf3" class="layui-input" autocomplete="off">
+		    </div>
+  		</div>
+  		<div class="layui-form-item">
+		    <label class="layui-form-label">100级</label>
+		    <div class="layui-input-block">
+		    	<input type="text" name="fb33f062d73f5dfe83440db547a44096" class="layui-input" autocomplete="off">
+		    </div>
+  		</div>
+  		<div class="layui-form-item">
+		    <label class="layui-form-label">110级</label>
+		    <div class="layui-input-block">
+		    	<input type="text" name="45a34b68cec95251aff8a7e6aa37bb89" class="layui-input" autocomplete="off">
+		    </div>
+  		</div>
+  		<div class="layui-form-item">
+		    <label class="layui-form-label">120级</label>
+		    <div class="layui-input-block">
+		    	<input type="text" name="8ff29f968d7851d098c6a8dbe72018a3" class="layui-input" autocomplete="off">
+		    </div>
+  		</div>
+  		<div class="layui-form-item">
+		    <label class="layui-form-label">130级</label>
+		    <div class="layui-input-block">
+		    	<input type="text" name="6518b4267cf5561dba569174d3bcb87b" class="layui-input" autocomplete="off">
+		    </div>
+  		</div>
+		
+		<div class="layui-form-item">
+			<a class="layui-btn layui-btn-danger layui-btn" style="margin-left: 109px;" id="save">保存</a>
+		</div>
+		</div>
+		<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+		<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+		<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+		<script th:src="@{/static/sys/js/public.js}"></script>
+		<script th:line="javascript">
+		var path = '[[${session.path}]]';
+		var layer;
+		var table;
+		var params;
+		var util;
+		layui.use(['layer','table','form','util', "laydate"], function(){
+			util = layui.util;
+		  	layer = layui.layer;
+		  	table = layui.table;
+		  	form = layui.form;
+		  	var laydate = layui.laydate;
+		  	//加载信息
+		  	$.post(path+"/ws/configInfo/getOneConfigInfoData",{"uuid":"8afc361ba57649b093c2b480a00897b1"},function(data){
+		  		if(data.status == 200) {
+		  			var config = data.data;
+		  			var configJson = JSON.parse(config.data);
+		  			form.val("showForm",{
+		  				"2ee3028051f059e9ad57743f80ab5860":configJson["2ee3028051f059e9ad57743f80ab5860"].reward,
+		  				"f3285ad36aea51fd9f3c831b62818a83":configJson["f3285ad36aea51fd9f3c831b62818a83"].reward,
+		  				"fc164c14f5f45512a79dbbf89ef47bf3":configJson["fc164c14f5f45512a79dbbf89ef47bf3"].reward,
+		  				"fb33f062d73f5dfe83440db547a44096":configJson["fb33f062d73f5dfe83440db547a44096"].reward,
+		  				"45a34b68cec95251aff8a7e6aa37bb89":configJson["45a34b68cec95251aff8a7e6aa37bb89"].reward,
+		  				"8ff29f968d7851d098c6a8dbe72018a3":configJson["8ff29f968d7851d098c6a8dbe72018a3"].reward,
+		  				"6518b4267cf5561dba569174d3bcb87b":configJson["6518b4267cf5561dba569174d3bcb87b"].reward,
+		  			});
+		  		}
+		  	})
+		  	$(document).keydown(function(e) {
+			    var key = undefined;
+			    var possible = [ e.key, e.keyIdentifier, e.keyCode, e.which ];
+			    while (key === undefined && possible.length > 0) {
+			        key = possible.pop();
+			    }
+			    if (key && (key == '115' || key == '83' ) && (e.ctrlKey || e.metaKey) && !(e.altKey)){
+			        e.preventDefault();
+			        save();
+			        return false;
+			    }
+			    return true;
+			}); 
+			$(document).on("click","#save",function(){
+				save();
+		  	})
+		  	function save(){
+				var da = form.val("showForm");
+		  		var load = $.load("正在保存...");
+	  			$.post(path+"/ws/configInfo/updateNpcForReward",da,function(data){
+	  				if(data.status == 200) {
+	  					layer.msg("修改成功");
+	  				}
+	  				layer.close(load);
+	  			})
+			}
+		});
+	</script>
+</body>
+
+</html>

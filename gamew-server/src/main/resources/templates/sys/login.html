@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>兰亭序-后台管理系统</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<link th:href="@{/static/sys/css/bootstrap.min.css?v=3.3.5}" rel="stylesheet">
+<link th:href="@{/static/sys/css/font-awesome.min.css?v=4.4.0}"
+	rel="stylesheet">
+<link th:href="@{/static/sys/css/animate.min.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/style.min.css?v=4.0.0}" rel="stylesheet">
+<link th:href="@{/static/sys/css/plugins/sweetalert/sweetalert.css}"
+	rel="stylesheet">
+<link rel="stylesheet" th:href="@{/static/sys/layui/css/layui.css}" />
+<link rel="shortcut icon" th:href="@{/static/favicon.ico}" />
+<link rel="bookmark" th:href="@{/static/favicon.ico}" />
+<script>
+	if (window.top !== window.self) {
+		window.top.location = window.location;
+	}
+</script>
+<style type="text/css">
+body {
+	background-size: cover;
+}
+</style>
+</head>
+
+<body class="gray-bg" th:background="@{/static/sys/img/bd3c0de93901213f10c9f8b143e736d12e2e9595.png}">
+	<div class="middle-box text-center loginscreen  animated fadeInDown">
+		<div>
+			<div style="margin-top: 13%;background-position-x: 25px;background-image: url(/32b4dc6e4ce74714b7823c8ec64ea9f3/static/sys/img/2593bb203b6ef35fcc65184e5d8eda7a_28260.png);background-repeat: no-repeat;background-size: 73%;height: 200px;">
+			</div>
+			<form id="form">
+				<div class="form-group">
+					<input type="text" class="form-control" placeholder="请输入用户名"
+						name="username" required="required" autofocus="autofocus" autocomplete="off">
+				</div>
+				<div class="form-group">
+					<input type="password" class="form-control" placeholder="请输入密码"
+						name="password" required="required">
+				</div>
+				<button type="submit" class="btn btn-success block full-width m-b">登录</button>
+			</form>
+		</div>
+	</div>
+	<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/js/bootstrap.min.js?v=3.3.5}"></script>
+	<script th:src="@{/static/sys/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/plugins/sweetalert/sweetalert.min.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+		$(function() {
+			var path = [[${session.path}]];
+			console.log(path);
+			var layer;
+			layui.use("layer", function() {
+				layer = layui.layer;
+			})
+			$("#form").submit(function() {
+				var username = $("input[name='account']").val();
+				var password = $("input[name='passwd']").val();
+				login(username, password);
+				return false;
+			})
+			function login(username, password) {
+				var load = layer.msg('正在登录...', {
+					icon : 16,
+					shade : 0.01,
+					time : 50000
+				});
+				$.ajax({
+					url :path+"/sys/user/login",
+					type : 'post',
+					data : $("#form").serialize(),
+					success : function(data) {
+						if (data.status == 200) {
+							window.location.href = path+"/sys/index.html";
+						} else {
+							swal({
+								title : data.retmsg,
+								timer : 1000,
+								showConfirmButton : false,
+								type : "error"
+							});
+						}
+						layer.close(load);
+					},
+					error : function(XMLHttpRequest, msg, e) {
+						layer.close(load);
+						swal({
+							title : "网络繁忙...",
+							timer : 1000,
+							showConfirmButton : false,
+							type : "error"
+						});
+					}
+				})
+			}
+		})
+	</script>
+
+</body>
+
+</html>

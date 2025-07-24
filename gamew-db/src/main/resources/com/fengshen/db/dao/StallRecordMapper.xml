@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fengshen.db.dao.StallRecordMapper">
+  <resultMap id="BaseResultMap" type="com.fengshen.db.domain.StallRecord">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="gid" jdbcType="VARCHAR" property="gid" />
+    <result column="cid" jdbcType="INTEGER" property="cid" />
+    <result column="owner_name" jdbcType="VARCHAR" property="ownerName" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="stall_record_type" jdbcType="INTEGER" property="stallRecordType" />
+    <result column="goods_uuid" jdbcType="VARCHAR" property="goodsUuid" />
+    <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
+    <result column="item_type" jdbcType="INTEGER" property="iteamType" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="price" jdbcType="INTEGER" property="price" />
+    <result column="req_level" jdbcType="INTEGER" property="reqLevel" />
+    <result column="item_polar" jdbcType="INTEGER" property="itemPolar" />
+    <result column="buy_type" jdbcType="INTEGER" property="buyType" />
+    <result column="level" jdbcType="INTEGER" property="level" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.fengshen.db.domain.StallRecord">
+    <result column="data" jdbcType="LONGVARCHAR" property="data" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, gid, cid, owner_name, status, stall_record_type, goods_uuid, goods_name, item_type, end_time, price, 
+    req_level, item_polar, buy_type, level, add_time
+  </sql>
+  <sql id="Blob_Column_List">
+    data
+  </sql>
+</mapper>

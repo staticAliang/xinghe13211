@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+		<title>试道基础gu</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<link rel="stylesheet" th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" media="all">
+		<link rel="stylesheet" th:href="@{/static/sys/css/admin.css}" media="all">
+		<link rel="stylesheet" th:href="@{/static/sys/css/global.css}">
+		<style type="text/css">
+			.whLoad {
+				background-repeat: no-repeat;
+				background-position: center center;
+			}
+			.weatherShadow {
+				position: absolute;
+				height: 100%;
+				background: #ff000000;
+				width: 100%;
+				margin-top: -24px;
+			}
+			
+			.layui-table tbody tr:hover,
+			.layui-table-hover {
+				background-color: #eeffee;
+			}
+			/* 表格头部工具栏背景色 */
+			
+			.layui-table-tool {
+				background-color: #eeffee;
+			}
+			
+			.baseSettings {
+				height: 50px;
+				background: #f5f3f3;
+			}
+			
+			.b-title {
+				background: red;
+				font-size: 14px;
+			}
+			
+			#comment {
+				width: 100%;
+				height: 243px;
+				resize: none;
+				font-size: 20px;
+				border: 0;
+				border-radius: 5px;
+				background-color: rgba(245, 245, 245, 0.98);
+				padding: 10px;
+				margin-left: -10px;
+			}
+			
+			#comment:hover {
+				box-shadow: 0px 1px 2px 2px #efeee5;
+			}
+			/* 大于等于991px */
+			
+			@media screen and (min-width: 991px) {
+				#newCharaSet {}
+			}
+			
+			input[type='number']::-webkit-outer-spin-button,
+			input[type='number']::-webkit-inner-spin-button {
+				-webkit-appearance: none !important;
+				margin: 0;
+			}
+			
+			.carColor {
+				background: #e4e4e4
+			}
+			.layui-tab-title li{
+				-webkit-user-select:none;
+			   -moz-user-select:none;
+			   -ms-user-select:none;
+			   user-select:none;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="layui-fluid">
+			<div class="layui-row layui-col-space15">
+				<div class="layui-col-md12">
+					<div class="layui-row layui-col-space15">
+						<div class="layui-col-md12">
+							<div class="layui-card" style="min-height:740px;">
+								<div class="layui-tab layui-tab-brief" lay-filter="tabs">
+									<ul class="layui-tab-title">
+										<li class="layui-this">试道配置</li>
+										<li>试道元魔</li>
+										<li>阶段管理</li>
+										<li>试道数据</li>
+									</ul>
+									<div class="layui-tab-content">
+										<!-- 试道配置 开始 -->
+										<div class="layui-tab-item layui-form layui-show" lay-filter="shidaoForm">
+											<table class="layui-table">
+												<tbody>
+													<tr>
+														<td>名称</td>
+														<td>类型</td>
+														<td>操作</td>
+													</tr>
+													<tr>
+														<td>时间</td>
+														<td>开启时间</td>
+														<td>
+															<div style="width: 50px; ">
+																<a class="layui-btn layui-btn-danger layui-btn-xs" id="shidao_times">配置</a>
+															</div>
+														</td>
+													</tr>
+													<tr>
+														<td>元魔阶段</td>
+														<td>元魔时间</td>
+														<td>
+															<div style="width: 50px; ">
+																<a class="layui-btn layui-btn-danger layui-btn-xs" id="yuanmoTime">配置</a>
+															</div>
+														</td>
+													</tr>
+													<tr>
+														<td>巅峰阶段</td>
+														<td>玩家对决时间</td>
+														<td>
+															<div style="width: 50px; ">
+																<a class="layui-btn layui-btn-danger layui-btn-xs" id="pkTime">配置</a>
+															</div>
+														</td>
+													</tr>
+													<tr>
+														<td>试道阶段队伍数量</td>
+														<td>注意这个是队伍数量而不是人数,如果低于这个值则自动结束该阶段</td>
+														<td>
+															<a class="layui-btn layui-btn-danger layui-btn-xs" id="shidao_team">配置</a>
+														</td>
+													</tr>
+													<tr>
+														<td>单个队伍人数</td>
+														<td>单个队伍最小人数和最大人数,必须按照格式来否则报错--示例5-5</td>
+														<td>
+															<a class="layui-btn layui-btn-danger layui-btn-xs" id="minOneTeamNum">配置</a>
+														</td>
+													</tr>
+													<tr>
+														<td>开火时间</td>
+														<td>队伍巅峰阶段PK休息时间(秒)</td>
+														<td>
+															<a class="layui-btn layui-btn-danger layui-btn-xs" id="freeTime">配置</a>
+														</td>
+													</tr>
+													<tr>
+														<td>主动PK</td>
+														<td>是否开启主动PK,系统默认关闭.如需打开请自行操作</td>
+														<td>
+															<div style="width:100px;height: 0px;margin-top: -20px;">
+																<input type="checkbox" name="isCloseActivePk" lay-skin="switch" lay-text="开启|关闭" lay-filter="isCloseActivePk">
+															</div>
+														</td>
+													</tr>
+													<tr>
+														<td>元魔数量</td>
+														<td>刷新数量</td>
+														<td>
+															<div style="width: 50px; ">
+																<a class="layui-btn layui-btn-danger layui-btn-xs" id="shidao_yuanmo_count">配置</a>
+															</div>
+														</td>
+													</tr>
+													<tr>
+														<td>最大回合</td>
+														<td>战斗中最高回合数,默认20回合(-1表示关闭)</td>
+														<td>
+															<div style="width: 50px; ">
+																<a class="layui-btn layui-btn-danger layui-btn-xs" id="maxRound">配置</a>
+															</div>
+														</td>
+													</tr>
+													<tr>
+														<td>第一名</td>
+														<td>奖励</td>
+														<td>
+															<div style="width: 50px; ">
+																<a class="layui-btn layui-btn-danger layui-btn-xs" id="shidao_jiangli_no1">配置</a>
+															</div>
+														</td>
+													</tr>
+													<tr>
+														<td>第二名</td>
+														<td>奖励</td>
+														<td>
+															<div style="width: 50px; ">
+																<a class="layui-btn layui-btn-danger layui-btn-xs" id="shidao_jiangli_no2">配置</a>
+															</div>
+														</td>
+													</tr>
+													<tr>
+														<td>第三名</td>
+														<td>奖励</td>
+														<td>
+															<div style="width: 50px; ">
+																<a class="layui-btn layui-btn-danger layui-btn-xs" id="shidao_jiangli_no3">配置</a>
+															</div>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+										<!-- 试道配置 结束 -->
+										
+										<!-- 试道元魔 -->
+										<div class="layui-tab-item layui-form">
+											<table class="layui-table">
+												<tbody>
+													<tr>
+														<td>阶段</td>
+														<td>数量</td>
+														<td>操作</td>
+													</tr>
+													<tr>
+														<td>70-79</td>
+														<td class="no_70-79">0</td>
+														<td>
+															<a class="layui-btn layui-btn-xs clearYuanMo" data="70" >清除</a>
+															<a class="layui-btn layui-btn-danger layui-btn-xs refreshYuanMo" data="70" >刷新</a>
+														</td>
+													</tr>
+													<tr>
+														<td>80-89</td>
+														<td class="no_80-89">0</td>
+														<td>
+															<a class="layui-btn layui-btn-xs clearYuanMo" data="80" >清除</a>
+															<a class="layui-btn layui-btn-danger layui-btn-xs refreshYuanMo" data="80" >刷新</a>
+														</td>
+													</tr>
+													<tr>
+														<td>90-99</td>
+														<td class="no_60-69">0</td>
+														<td>
+															<a class="layui-btn layui-btn-xs clearYuanMo" data="90" >清除</a>
+															<a class="layui-btn layui-btn-danger layui-btn-xs refreshYuanMo" data="90">刷新</a>
+														</td>
+													</tr>
+													<tr>
+														<td>100-109</td>
+														<td class="no_100-109">0</td>
+														<td>
+															<a class="layui-btn layui-btn-xs clearYuanMo" data="100" >清除</a>
+															<a class="layui-btn layui-btn-danger layui-btn-xs refreshYuanMo" data="100" >刷新</a>
+														</td>
+													</tr>
+													<tr>
+														<td>110-119</td>
+														<td class="no_110-119">0</td>
+														<td>
+															<a class="layui-btn layui-btn-xs clearYuanMo" data="110" >清除</a>
+															<a class="layui-btn layui-btn-danger layui-btn-xs refreshYuanMo" data="110" >刷新</a>
+														</td>
+													</tr>
+													<tr>
+														<td>120-129</td>
+														<td class="no_120-129">0</td>
+														<td>
+															<a class="layui-btn layui-btn-xs clearYuanMo" data="120" >清除</a>
+															<a class="layui-btn layui-btn-danger layui-btn-xs refreshYuanMo" data="120" >刷新</a>
+														</td>
+													</tr>
+													<tr>
+														<td>130-139</td>
+														<td class="no_130-139">0</td>
+														<td>
+															<a class="layui-btn layui-btn-xs clearYuanMo" data="130" >清除</a>
+															<a class="layui-btn layui-btn-danger layui-btn-xs refreshYuanMo" data="130" >刷新</a>
+														</td>
+													</tr>
+													<tr>
+														<td>140-149</td>
+														<td class="no_140-149">0</td>
+														<td>
+															<a class="layui-btn layui-btn-xs clearYuanMo" data="140" >清除</a>
+															<a class="layui-btn layui-btn-danger layui-btn-xs refreshYuanMo" data="140" >刷新</a>
+														</td>
+													</tr>
+													<tr>
+														<td>150-159</td>
+														<td class="no_150-159">0</td>
+														<td>
+															<a class="layui-btn layui-btn-xs clearYuanMo" data="150" >清除</a>
+															<a class="layui-btn layui-btn-danger layui-btn-xs refreshYuanMo" data="150" >刷新</a>
+														</td>
+													</tr>
+													<tr>
+														<td>160-169</td>
+														<td class="no_160-169">0</td>
+														<td>
+															<a class="layui-btn layui-btn-xs clearYuanMo" data="160" >清除</a>
+															<a class="layui-btn layui-btn-danger layui-btn-xs refreshYuanMo" data="160" >刷新</a>
+														</td>
+													</tr>
+													<tr>
+														<td>170-179</td>
+														<td class="no_170-179">0</td>
+														<td>
+															<a class="layui-btn layui-btn-xs clearYuanMo" data="170" >清除</a>
+															<a class="layui-btn layui-btn-danger layui-btn-xs refreshYuanMo" data="170" >刷新</a>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+										<!-- 试道元魔 -->
+										
+										<!-- 试道阶段 -->
+										<div class="layui-tab-item layui-form" lay-filter="configInit">
+											<table class="layui-table">
+												<tbody>
+													<tr>
+														<td>阶段</td>
+														<td>人数</td>
+														<td>操作</td>
+													</tr>
+													<tr>
+														<td>70-79</td>
+														<td class="no70">0</td>
+														<td>
+															<a class="layui-btn layui-btn-xs outShiDaoChara" style="margin-top: 8px;" data="70">踢出</a>&nbsp;&nbsp;&nbsp;
+															<input type="checkbox" value="70-79" lay-skin="switch" lay-text="开|关" name="btn70" lay-filter="shidaoSwitch">
+														</td>
+													</tr>
+													<tr>
+														<td>80-89</td>
+														<td class="no80">0</td>
+														<td>
+															<a class="layui-btn layui-btn-xs outShiDaoChara" style="margin-top: 8px;" data="80">踢出</a>&nbsp;&nbsp;&nbsp;
+															<input type="checkbox" value="80-89" lay-skin="switch" lay-text="开|关" name="btn80" lay-filter="shidaoSwitch">
+														</td>
+													</tr>
+													<tr>
+														<td>90-99</td>
+														<td class="no90">0</td>
+														<td>
+															<a class="layui-btn layui-btn-xs outShiDaoChara" style="margin-top: 8px;" data="90">踢出</a>&nbsp;&nbsp;&nbsp;
+															<input type="checkbox" value=90-99 lay-skin="switch" lay-text="开|关" name="btn90" lay-filter="shidaoSwitch">
+														</td>
+													</tr>
+													<tr>
+														<td>100-109</td>
+														<td class="no100">0</td>
+														<td>
+															<a class="layui-btn layui-btn-xs outShiDaoChara" style="margin-top: 8px;" data="100">踢出</a>&nbsp;&nbsp;&nbsp;
+															<input type="checkbox" value="100-109" lay-skin="switch" lay-text="开|关" name="btn100" lay-filter="shidaoSwitch">
+														</td>
+													</tr>
+													<tr>
+														<td>110-119</td>
+														<td class="no110">0</td>
+														<td>
+															<a class="layui-btn layui-btn-xs outShiDaoChara" style="margin-top: 8px;" data="110">踢出</a>&nbsp;&nbsp;&nbsp;
+															<input type="checkbox" value="110-119" lay-skin="switch" lay-text="开|关" name="btn110" lay-filter="shidaoSwitch">
+														</td>
+													</tr>
+													<tr>
+														<td>120-129</td>
+														<td class="no120">0</td>
+														<td>
+														<div style="width:100px">
+															<a class="layui-btn layui-btn-xs outShiDaoChara" style="margin-top: 8px;" data="120">踢出</a>&nbsp;&nbsp;&nbsp;
+															<input type="checkbox" value="120-129" lay-skin="switch" lay-text="开|关" name="btn120" lay-filter="shidaoSwitch"></div>
+														</td>
+													</tr>
+													<tr>
+														<td>130-139</td>
+														<td class="no130">0</td>
+														<td>
+															<a class="layui-btn layui-btn-xs outShiDaoChara" style="margin-top: 8px;" data="130">踢出</a>&nbsp;&nbsp;&nbsp;
+															<input type="checkbox" value="130-139" lay-skin="switch" lay-text="开|关" name="btn130" lay-filter="shidaoSwitch">
+														</td>
+													</tr>
+													<tr>
+														<td>140-149</td>
+														<td class="no140">0</td>
+														<td>
+															<a class="layui-btn layui-btn-xs outShiDaoChara" style="margin-top: 8px;" data="140">踢出</a>&nbsp;&nbsp;&nbsp;
+															<input type="checkbox" value="140-149" lay-skin="switch" lay-text="开|关" name="btn140" lay-filter="shidaoSwitch">
+														</td>
+													</tr>
+													<tr>
+														<td>150-159</td>
+														<td class="no150">0</td>
+														<td>
+															<a class="layui-btn layui-btn-xs outShiDaoChara" style="margin-top: 8px;" data="150">踢出</a>&nbsp;&nbsp;&nbsp;
+															<input type="checkbox" value="150-159" lay-skin="switch" lay-text="开|关" name="btn150" lay-filter="shidaoSwitch">
+														</td>
+													</tr>
+													<tr>
+														<td>160-169</td>
+														<td class="no160">0</td>
+														<td>
+															<a class="layui-btn layui-btn-xs outShiDaoChara" style="margin-top: 8px;" data="160">踢出</a>&nbsp;&nbsp;&nbsp;
+															<input type="checkbox" value="160-169" lay-skin="switch" lay-text="开|关" name="btn160" lay-filter="shidaoSwitch">
+														</td>
+													</tr>
+													<tr>
+														<td>170-179</td>
+														<td class="no170">0</td>
+														<td>
+															<a class="layui-btn layui-btn-xs outShiDaoChara" style="margin-top: 8px;" data="170">踢出</a>&nbsp;&nbsp;&nbsp;
+															<input type="checkbox" value="170-179" lay-skin="switch" lay-text="开|关" name="btn170" lay-filter="shidaoSwitch">
+														</td>
+													</tr>
+													<tr>
+														<td colspan="3"><a class="layui-btn layui-btn-lg layui-btn-normal shiDaoCharaRefresh" style="margin-top: 8px;">刷新</a></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+										
+										<!-- 试道阶段 -->
+										
+										<!-- 场内数据 -->
+										<div class="layui-tab-item layui-form">
+											<div style="height:50px">
+												<div style="float:left">
+													<h1>倒计时:
+													<span id="active_time" style="color:#FF5722">00:00:00</span></h1>
+												</div>
+												<div style="float:right">
+													<h1>当前阶段:
+													<span id="shidaoStep">暂未开始</span></h1>
+												</div>
+											</div>
+											<div id="shidaoEchats" style="height:500px;witdh:100%">
+											
+											</div>
+										</div>
+										<!-- 历史数据 -->
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- gm配置开关 -->
+	</body>
+	<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+	<script th:src="@{/static/sys/js/public.js}"></script>
+	<script th:src="@{/static/sys/js/echats/echarts.min.js}"></script>
+
+	<script type="text/javascript" th:line="javascript">
+		var path = '[[${session.path}]]';
+		layui.use(['element', 'carousel', 'table', "util", "form", "layer", "slider", "laydate"], function() {
+			var e = layui.$;
+			var layer = layui.layer;
+			var laydate = layui.laydate;
+			var util = layui.util;
+			var form = layui.form;
+			var table = layui.table;
+			var element = layui.element;
+			var carousel = layui.carousel;
+			var slider = layui.slider;
+			var myChartPie;
+			var config ={};
+			function load() {
+				layer.load(2, {
+					time: 10 * 1000
+				});
+			}
+			$(".flush").click(function() {
+				table.render(params.options)
+			})
+
+			function isRepeat(arr) {
+				var hash = {};
+				for(var i in arr) {
+					if(hash[arr[i]]) {
+						return true;
+					}
+					// 不存在该元素，则赋值为true，可以赋任意值，相应的修改if判断条件即可
+					hash[arr[i]] = true;
+				}
+				return false;
+			}
+
+			function charNum(thisArr, arr) {
+				var count = 0;
+				for(var i = 0; i < arr.length; i++) {
+					if(thisArr == arr[i]) {
+						count++;
+					}
+				}
+				return count;
+			}
+			loadConfig();
+
+			function loadConfig() {
+				//加载配置操作信息
+				$.post(path+"/sys/wd/getConfig",{"configName":"shidao"}, function(data) {
+					config.shidao = data.data;
+					var openProject = config.shidao.openProject;
+					form.val("configInit", {
+					  "btn70":openProject["70-79"],
+					  "btn80":openProject["80-89"],
+					  "btn90":openProject["80-89"],
+					  "btn100":openProject["100-109"],
+					  "btn110":openProject["110-119"],
+					  "btn120":openProject["120-129"],
+					  "btn130":openProject["130-139"],
+					  "btn140":openProject["140-149"],
+					  "btn150":openProject["150-159"],
+					  "btn160":openProject["160-169"],
+					  "btn170":openProject["170-179"]
+					});
+					form.val("shidaoForm", {
+					  "isCloseActivePk":data.data.isCloseActivePk,
+					});
+				})
+			}
+			
+			function checkNum(val) {
+				var reg = /^[0-9]+.?[0-9]*$/
+				if(reg.test(val)) {
+					return true
+				}
+				return false;
+			}
+			//试道时间选择
+			var shidaoWeeks = [];
+			$("#shidao_times").click(function() {
+				var html = '<table class="layui-table" id="haidao_times_table"><tbody><tr> <td>说明</td><td>时间(点击框打开时间选择)</td> <td>操作</td>';
+				//请求接口获取历史时间
+				var shidao = config.shidao;
+				if(shidao.times != "" && shidao.times != undefined && shidao.times.length >= 2) {
+					//加载试道时间
+					html += '</tr><tr><td>报名开始时间</td><td class="shidao_start_time_td" colspan="2"><input readonly="readonly" type="text" class="layui-input shidao_update_time" value="' + shidao.times[0] + '"/></td></tr>';
+					html += '</tr><tr><td>报名结束时间</td><td class="shidao_end_time_td" colspan="2"><input readonly="readonly" type="text" class="layui-input shidao_update_time2" value="' + shidao.times[1] + '"/></td></tr>';
+				}
+				html += '</tr><tr><td>星期</td><td class="shidao_week_time_td">';
+				var i = 0;
+				$(shidao.week).each(function(i, o) {
+					html += "<span>" + o + "<span>";
+					if(i >= 0 && i < shidao.week.length - 1) {
+						html += ",";
+					}
+					i++;
+				})
+				html += '</td><td><a class="layui-btn layui-btn-danger layui-btn-xs update_week_time">修改</a></td></tr>';
+				html += '</tbody></table>';
+				html += '<a class="layui-btn layui-btn-danger layui-btn" id="save_shidao_time_or_week">保存</a>';
+				layer.open({
+					title: "试道开启时间配置",
+					type: 1,
+					area: ["500px", "500px"],
+					content: '<div style="margin: 12px auto; text-align: center;"><div style="margin-top: 26px; height: 74px; width: 95%; margin: 0 auto;" >' + html + '</div></div>',
+					success: function() {
+						laydate.render({
+							elem: '.shidao_update_time',
+							type: 'time',
+							format: "HH:mm"
+						});
+						laydate.render({
+							elem: '.shidao_update_time2',
+							type: 'time',
+							format: "HH:mm"
+						});
+					}
+				})
+			});
+			//试道开启时间和星期保存监听
+			$(document).on("click", "#save_shidao_time_or_week", function() {
+				//提交
+				var time1 = $(".shidao_update_time").val();
+				var time2 = $(".shidao_update_time2").val();
+				var weeksArra = $(".shidao_week_time_td");
+				var w = "";
+				if(weeksArra.text().length > 0) {
+					w = weeksArra.text();
+				}
+				var d = {
+					"type": "timeAndWeek",
+					"time1": time1,
+					"time2": time2,
+					"week": w
+				}
+				shidaoSubmit(d);
+			})
+
+			//修改更新时间
+			$(document).on("click", ".update_week_time", function() {
+				layer.open({
+					title: "试道开启日期配置",
+					type: 1,
+					content: '<div class="layui-form" lay-filter="shidaoWeekForm"> <div class="layui-form-item" style="text-align: center; margin-top: 48px;"> <div class="layui-input-block" style="margin: 0 auto;"> <input type="checkbox" name="shidao_week" value="周一" title="周一" lay-filter="shidaoWeekCheckbox" /> <input type="checkbox" name="shidao_week" value="周二" title="周二" lay-filter="shidaoWeekCheckbox" /> </br> <input type="checkbox" name="shidao_week" value="周三" title="周三" lay-filter="shidaoWeekCheckbox" /> <input type="checkbox" name="shidao_week" value="周四" title="周四" lay-filter="shidaoWeekCheckbox" /> </br> <input type="checkbox" name="shidao_week" value="周五" title="周五" lay-filter="shidaoWeekCheckbox" /> <input type="checkbox" name="shidao_week" value="周六" title="周六" lay-filter="shidaoWeekCheckbox" /> </br> <input type="checkbox" value="周日" name="shidao_week" title="周日" lay-filter="shidaoWeekCheckbox" /> </br> </div> </div> </div>',
+					success: function() {
+						var shidao = config.shidao;
+						var weeksStr = $(".shidao_week_time_td").text();
+						if(weeksStr != "") {
+							$(weeksStr.split(",")).each(function(i, o) {
+								$("input[value=" + o + "][name='shidao_week']").prop("checked", "checked");
+							})
+						}
+						//设置时间
+						form.render("checkbox");
+					},
+					cancel: function() {}
+				})
+
+			})
+			//时间监听
+			form.on("checkbox(shidaoWeekCheckbox)", function(d) {
+				shidaoWeeks = [];
+				var html = "";
+				$("input[name='shidao_week']").each(function(i, o) {
+					var shidao_week = $(o);
+					if(shidao_week.prop("checked")) {
+						shidaoWeeks.push(shidao_week.val());
+						html += "" + shidao_week.val() + ",";
+					}
+				})
+				html = html.substring(0, html.length - 1);
+				$(".shidao_week_time_td").html(html);
+				shidaoWeeks.sort();
+			})
+			//试道队伍人数
+			$("#shidao_team").click(function() {
+				layer.prompt({
+					title: '试道最少队伍',
+					formType: 0,
+					value: config.shidao.teamNumber
+				}, function(val, index) {
+					if(checkNum(val)) {
+						//校验人数
+						if(parseInt(val) > 0 && parseInt(val) <= 5) {
+							//请求后端.
+							var d = {
+								"type": "team",
+								"value": val
+							};
+							shidaoSubmit(d);
+							layer.close(index);
+						} else {
+							layer.msg("队伍人数范围在1~5");
+						}
+					} else {
+						layer.msg("请输入数字");
+					}
+				});
+			})
+			//单个队伍人数
+			$("#minOneTeamNum").click(function() {
+				layer.prompt({
+					title: '单个队伍人数',
+					formType: 0,
+					value: config.shidao.minOneTeamNum
+				}, function(val, index) {
+					//请求后端.
+					var d = {
+						"type": "minOneTeamNum",
+						"value": val
+					};
+					shidaoSubmit(d);
+				});
+			})
+			//队伍间隔时间
+			$("#freeTime").click(function() {
+				layer.prompt({
+					title: '间隔时间(秒),填0表示关闭自动匹配',
+					formType: 0,
+					value: config.shidao.freeTime
+				}, function(val, index) {
+					if(!checkNum(val)) {
+						layer.msg("请输入数字");
+						return false;
+					}
+					
+					//请求后端.
+					var d = {
+						"type": "freeTime",
+						"value": val
+					};
+					shidaoSubmit(d);
+				});
+			})
+			//试道主动PK开关监听
+			form.on('switch(isCloseActivePk)', function(data){
+				//请求后端.
+				var d = {
+					"type": "isCloseActivePk"
+				};
+				if(data.elem.checked) {
+					d.value = 1;					
+				}else {
+					d.value = 0;
+				}
+				shidaoSubmit(d);
+			}); 
+			
+			//试道元魔数量
+			$("#shidao_yuanmo_count").click(function() {
+				layer.prompt({
+					title: '试道元魔数量',
+					formType: 0,
+					value: config.shidao.count
+				}, function(val, index) {
+					//请求后端.
+					var d = {
+						"type": "count",
+						"value": val
+					};
+					shidaoSubmit(d);
+				});
+			})
+			//最大回合数
+			$("#maxRound").click(function() {
+				layer.prompt({
+					title: '最大回合数',
+					formType: 0,
+					value:config.shidao.maxRound
+				}, function(val, index) {
+					//请求后端.
+					var d = {
+						"type": "maxRound",
+						"value": val
+					};
+					shidaoSubmit(d);
+				});
+			})
+
+			function shidaoSubmit(d) {
+				var load = $.load("请求中");
+				$.post(path+"/sys/wd/shidaoSet", d, function(data) {
+					if(data.status == 200) {
+						loadConfig();
+						layer.msg("操作成功");
+						setTimeout(function() {
+							layer.closeAll();
+						}, 500)
+					} else {
+						layer.msg(data.retmsg);
+					}
+					layer.close(load);
+				})
+
+			}
+			//第1名奖励
+			$("#shidao_jiangli_no1").click(function() {
+				shidaoJiangliHtml("试道第一名奖励", "no1");
+			})
+			//第2名奖励
+			$("#shidao_jiangli_no2").click(function() {
+				shidaoJiangliHtml("试道第二名奖励", "no2");
+			})
+			//第3名奖励
+			$("#shidao_jiangli_no3").click(function() {
+				shidaoJiangliHtml("试道第三名奖励", "no3");
+			})
+
+			function shidaoJiangliHtml(title, type) {
+				var shidao = config.shidao;
+				var html = '<div class="layui-form" style="width:90%;margin-top:31px;" lay-filter="shidaoWeekForm">';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">金元宝</label> <div class="layui-input-block"> <input type="number" name="shidao_data_jinyuanbao" class="layui-input"> </div></div>';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">银元宝</label> <div class="layui-input-block"> <input type="number" name="shidao_data_yinyuanbao" class="layui-input"> </div></div>';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">充值积分</label> <div class="layui-input-block"> <input type="number" name="shidao_data_jifen" class="layui-input"> </div></div>';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">称谓</label> <div class="layui-input-block"> <input type="text" name="shidao_data_chengwei" class="layui-input"> </div></div>';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">宠物</label> <div class="layui-input-block"> <textarea type="text" name="shidao_data_chongwu" placeholder="请严格按照示例" style="resize:none;height:100px;width:100%"></textarea> <span>宠物示例:太极熊|zuoqi,朱雀|shenshou,乖乖狗|bianyi,,青蛙|putong(<font color="red">多个宠物用逗号隔开</font>)</span></div></div>';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">道具</label> <div class="layui-input-block"> <textarea type="text" name="shidao_data_daoju" placeholder="多个道具用逗号隔开" style="resize:none;height:100px;width:100%"></textarea> <span>多个道具用逗号隔开</span></div></div>';
+				html += '<div class="layui-form-item"><a class="layui-btn layui-btn-danger layui-btn" style="margin-left: 109px;" id="saveShiDaoDataForm" data-type="' + type + '">保存</a></div>'
+				html += '</div>';
+				layer.open({
+					title: title + "(数值默认为0)",
+					type: 1,
+					content: html,
+					area: ["50%"],
+					success: function() {
+						var no;
+						if(type == "no1") {
+							no = shidao.no1;
+						} else if(type == "no2") {
+							no = shidao.no2;
+						} else if(type == "no3") {
+							no = shidao.no3;
+						}
+						form.val("shidaoWeekForm", {
+							shidao_data_jinyuanbao: no.jinyuanbao,
+							shidao_data_yinyuanbao: no.yinyuanbao,
+							shidao_data_jifen: no.jifen,
+							shidao_data_chengwei: no.chengwei,
+							shidao_data_chongwu: no.chongwu,
+							shidao_data_daoju: no.daoju
+						})
+					}
+				})
+			}
+
+			//试道奖励监听
+			$(document).on("click", "#saveShiDaoDataForm", function() {
+				var d = form.val("shidaoWeekForm");
+				var t = $(this);
+				var jinyuanbao = $("input[name='shidao_data_jinyuanbao']").val();
+				var yinyuanbao = $("input[name='shidao_data_yinyuanbao']").val();
+				var jifen = $("input[name='shidao_data_jifen']").val();
+				var chengwei = $("input[name='shidao_data_chengwei']").val();
+				var chongwu = $("textarea[name='shidao_data_chongwu']").val();
+				var daoju = $("textarea[name='shidao_data_daoju']").val();
+				if(jinyuanbao == "" || jinyuanbao == undefined) {
+					jinyuanbao = 0;
+				}
+				if(yinyuanbao == "" || yinyuanbao == undefined) {
+					yinyuanbao = 0;
+				}
+				if(jifen == "" || jifen == undefined) {
+					jifen = 0;
+				}
+				var d = {
+					"jinyuanbao": jinyuanbao,
+					"yinyuanbao": yinyuanbao,
+					"jifen": jifen,
+					"chengwei": chengwei,
+					"chongwu": chongwu,
+					"daoju": daoju
+				};
+				if(t.attr("data-type") == "no1") {
+					d.type = "no1";
+				} else if(t.attr("data-type") == "no2") {
+					d.type = "no2";
+				} else if(t.attr("data-type") == "no3") {
+					d.type = "no3";
+				}
+				shidaoSubmit(d);
+			})
+			$("#shuaxing_time").click(function() {
+				layer.prompt({
+					title: 'cron表达式(<a href="https://cron.qqe2.com">在线cron生成</a>)',
+					formType: 0,
+					value: config.baseConfig.shuaxing.cron
+				}, function(val, index) {
+					//请求后端.
+					$.post(path+"/sys/wd/setBaseConfig", {
+						"cron": val
+					}, function(data) {
+						if(data.status == 200) {
+							layer.msg("操作成功.");
+							layer.close(index);
+							//刷新配置
+							loadConfig();
+						}
+					})
+				});
+			})
+			$("#shuaxing_count").click(function() {
+				layer.prompt({
+					title: '每次刷新数量',
+					formType: 0,
+					value: config.baseConfig.shuaxing.count
+				}, function(val, index) {
+					//请求后端.
+					if(!isNum(val)) {
+						layer.msg("请输入数字");
+						return;
+					}
+					$.post(path+"/sys/wd/setBaseConfig", {
+						"count": val
+					}, function(data) {
+						if(data.status == 200) {
+							layer.msg("操作成功.");
+							layer.close(index);
+							//刷新配置
+							loadConfig();
+						}
+					})
+				});
+			})
+			$("#yuanmoTime").click(function() {
+				layer.prompt({
+					title: '击杀元魔时间(单位分)',
+					formType: 0,
+					value: config.shidao.f1 / 1000 / 60
+				}, function(val, index) {
+					if(checkNum(val)) {
+						//校验人数
+						if(parseInt(val) > 0) {
+							//请求后端.
+							var d = {
+								"type": "f1",
+								"value": val
+							};
+							shidaoSubmit(d);
+							layer.close(index);
+						} else {
+							layer.msg("请输入正确的时间");
+						}
+					} else {
+						layer.msg("请输入数字");
+					}
+				});
+			})
+			$("#pkTime").click(function() {
+				layer.prompt({
+					title: '玩家pk时间(单位分)',
+					formType: 0,
+					value: config.shidao.f2 / 1000 / 60
+				}, function(val, index) {
+					if(checkNum(val)) {
+						//校验人数
+						if(parseInt(val) > 0) {
+							//请求后端.
+							var d = {
+								"type": "f2",
+								"value": val
+							};
+							shidaoSubmit(d);
+							layer.close(index);
+						} else {
+							layer.msg("请输入正确的时间");
+						}
+					} else {
+						layer.msg("请输入数字");
+					}
+				});
+			})
+			
+			//试道阶段开启或关闭监听
+			form.on('switch(shidaoSwitch)', function(data){
+			  $.post(path+"/sys/wd/shidao/getShiDaoInfo",{"type":"openProject","jieduan":data.value,"value":data.elem.checked==true?1:0},function(data){
+				  if(data.status == 200) {
+					  layer.msg("设置成功");
+				  }else {
+					  layer.msg(data.retmsg);
+				  }
+			  })
+			});
+			//获取试道数量
+			$.post(path+"/sys/wd/shidao/getShiDaoInfo",{"type":"shidaoYuanMoInfo"},function(data){
+				  if(data.status == 200) {
+					  if(data.data != undefined) {
+						$(".no_70-79").html(data.data["70"]);
+						$(".no_80-89").html(data.data["80"]);
+						$(".no_90-99").html(data.data["90"]);
+						$(".no_100-109").html(data.data["100"]);
+						$(".no_110-119").html(data.data["110"]);
+						$(".no_120-129").html(data.data["120"]);
+						$(".no_130-139").html(data.data["130"]);
+						$(".no_140-149").html(data.data["140"]);
+						$(".no_150-159").html(data.data["150"]);
+						$(".no_160-169").html(data.data["160"]);
+						$(".no_170-179").html(data.data["170"]);
+					  }
+				  }else {
+					  layer.msg(data.retmsg);
+				  }
+		  	})
+		  	getShiDaoJieDuanNum();
+		  	function getShiDaoJieDuanNum() {
+				//获取试道阶段人数
+				 $.post(path+"/sys/wd/shidao/getShiDaoInfo",{"type":"shidaoCharaInfo"},function(data){
+					  if(data.status == 200) {
+						  	if(data.data != undefined) {
+						  		$(".no60").html(data.data["60"]);
+								$(".no70").html(data.data["70"]);
+								$(".no80").html(data.data["80"]);
+								$(".no90").html(data.data["90"]);
+								$(".no100").html(data.data["100"]);
+								$(".no110").html(data.data["110"]);
+								$(".no120").html(data.data["120"]);
+								$(".no130").html(data.data["130"]);
+								$(".no140").html(data.data["140"]);
+								$(".no150").html(data.data["150"]);
+								$(".no160").html(data.data["160"]);
+								$(".no170").html(data.data["170"]);
+						  	}
+					  }else {
+						  layer.msg(data.retmsg);
+					  }
+			  	})
+			}
+		  	
+		  	//试道阶段人数刷新
+		  	$(".shiDaoCharaRefresh").click(function(){
+		  		getShiDaoJieDuanNum();
+		  		layer.msg("刷新成功");
+		  	})
+		  	
+		  	//试道元魔设置，clearYuanMo,refreshYuanMo
+		  	$(".clearYuanMo").click(function(){
+		  		var data = $(this).attr("data");
+		  		 $.post(path+"/sys/wd/shidao/getShiDaoInfo",{"type":"shidaoYuanMoClear","jieduan":data},function(data){
+					  if(data.status == 200) {
+						  layer.msg("清除成功");
+					  }else {
+						  layer.msg(data.retmsg);
+					  }
+			  	})
+		  	})
+	  		$(".refreshYuanMo").click(function(){
+		  		var data = $(this).attr("data");
+		  		 $.post(path+"/sys/wd/shidao/getShiDaoInfo",{"type":"refreshYuanMo","jieduan":data},function(data){
+					  if(data.status == 200) {
+						  layer.msg("刷新成功");
+					  }else {
+						  layer.msg(data.retmsg);
+					  }
+			  	})
+		  	})
+		  	//踢出去
+	  		$(".outShiDaoChara").click(function(){
+		  		var data = $(this).attr("data");
+		  		 $.post(path+"/sys/wd/shidao/getShiDaoInfo",{"type":"shidaoCharaOut","jieduan":data},function(data){
+					  if(data.status == 200) {
+						  layer.msg("操作成功");
+					  }else {
+						  layer.msg(data.retmsg);
+					  }
+			  	})
+		  	});
+		  	element.on('tab(tabs)', function(data){
+		  		if(data.index == 3) {
+		  			//场内数据
+		  			myChart.resize();
+		  			loadShiDaoInnerData();
+		  		}
+		  	});
+		  	var countTimeObj;
+		  	var timeRefreshShiDaoInfo;
+		  	function countTime(value) {
+		  		if(value == -1) {
+		  			//停止
+		  			clearInterval(countTimeObj);
+		  			clearInterval(timeRefreshShiDaoInfo);
+		  		}
+		         //获取当前时间
+		         var date = new Date();
+		         var now = date.getTime();
+		         //设置截止时间
+		         //在pc端浏览器可以这样写
+		         var endDate = new Date(value);
+		         //移动端必须这样写，因为ios不支持日期中间是-链接，会报错
+		         //var endDate = new Date("2019/7/22 00:00:00");
+		         var end = endDate.getTime();
+		         //时间差
+		         var differTime = end - now;
+		         //定义变量,h,m,s保存倒计时的时间
+		         var h, m, s;
+		         if (differTime >= 0) {
+		             h = Math.floor(differTime / 1000 / 60 / 60);
+		             m = Math.floor(differTime / 1000 / 60 % 60);
+		             s = Math.floor(differTime / 1000 % 60);
+		             h = h < 10 ? ("0" + h) : h;
+		             m = m < 10 ? ("0" + m) : m;
+		             s = s < 10 ? ("0" + s) : s;
+		             var timeDom = h + ":" +  m + ":" +  s;
+		             $("#active_time").text(timeDom);
+		             //递归调用函数所以是延时器不是定时器
+		             countTimeObj = setTimeout(function () {
+		                 countTime(value)
+		             }, 1000);
+		        } else {
+		             var timeDom ="00:00:00";
+		             $("#active_time").text(timeDom);
+         		}
+	        }
+		  	function loadShiDaoInnerData() {
+		  		$.post(path+"/sys/wd/shidao/getRankInfo",function(data){
+		  			if(data.status == 200) {
+		  				var shidao = data.data;
+		  				if(shidao.status>0) {
+		  					//每3秒定时请求试道信息
+						  	if(timeRefreshShiDaoInfo == undefined) {
+						  		timeRefreshShiDaoInfo = setInterval(function () {
+						  			loadShiDaoInnerData();
+					            }, 3000);
+						  	} 
+		  				}
+		  				if(shidao.status == 1) {
+				  			countTime(shidao.startTime);
+				  			$("#shidaoStep").html("开始报名")
+		  				}else if(shidao.status == 2) {
+				  			countTime(shidao.durationTime);
+				  			$("#shidaoStep").html("击杀元魔")
+		  				}else if(shidao.status == 3) {
+				  			countTime(shidao.pkTime);
+				  			$("#shidaoStep").html("巅峰对决")
+				  			shidaoEchats({"max":shidao.sortNum,"seriesData":shidao.series});
+		  				}else {
+		  					$("#shidaoStep").html("暂未开始")
+		  				}
+		  			}
+			  	})
+		  	}
+    	 	var myChart = echarts.init(document.getElementById('shidaoEchats'));
+		    function shidaoEchats(seriesData) {
+		    	 var text = "暂无数据";
+		    	 if(seriesData == undefined) {
+		    		 seriesData = {};
+		    		 seriesData.seriesData = [];
+		    	 }
+		    	 if(seriesData.seriesData.length > 0) {
+		    		 text = "";
+		    	 }
+		    	 option = {
+    			 	title: {
+   				 		textStyle:{
+   				 			color:"grey",
+   				   			fontSize: 20
+   				 		},
+			   			text:text,
+   				   		left:"center",
+  				   		top:"center"
+   				    },
+    			    tooltip: {
+    			        trigger: 'axis',
+    			        axisPointer: {
+    			            type: 'shadow'
+    			        },
+    			        formatter: function(params){
+    			        	var html = "";
+    			        	$(params).each(function(i,o){
+    			        		var seriesName = o.seriesName;
+    			        		var name = o.name;
+    			        		var value = o.value;
+    			        		html+=o.marker;
+    			        		html+="<span>阶段："+seriesName+"</span>&nbsp;";
+    			        		html+="</br>";
+    			        		html+="<span>队长："+name+"</span>&nbsp;";
+    			        		html+="</br>";
+    			        		html+="<span>对决值："+value+"</span>";
+    			        		if(i<params.length-1) {
+	    			        		html+="<hr class='layui-bg-gray'>";
+    			        		}
+    			        	});
+    			        	return html;
+    			        },
+    			        confine:true,
+    			    },
+    			    legend: {
+    			        data: ['70-79', '80-89', '90-99', '100-109', '110-119', '120-129', '130-139', '140-149', '150-159', '160-169', '170-179']
+    			    },
+    			    grid: {
+    			        left: '3%',
+    			        right: '4%',
+    			        bottom: '3%',
+    			        containLabel: true
+    			    },
+    			    xAxis: [
+    			        {
+    			            type: 'category',
+    			            data: ['第一名', '第二名', '第三名', '第四名']
+    			        }
+    			    ],
+    			    yAxis: [
+    			        {
+    			            type: 'value',
+    			            max:seriesData.max
+    			        }
+    			    ],
+    			    series: seriesData.seriesData
+   				};
+		     	myChart.setOption(option);
+		     	window.addEventListener('resize',function () {//执行
+		     		myChart.resize();
+		     	})
+		     }
+		     shidaoEchats();
+		});
+	</script>
+
+</html>

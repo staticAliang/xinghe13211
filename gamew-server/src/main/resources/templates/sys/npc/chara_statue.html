@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+    <title>npc雕像</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="favicon.ico"> 
+	<link th:href="@{/static/sys/css/bootstrap.min.css?v=3.3.5}" rel="stylesheet">
+<link th:href="@{/static/sys/css/plugins/sweetalert/sweetalert.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/font-awesome.min.css?v=4.4.0}" rel="stylesheet">
+<link th:href="@{/static/sys/css/animate.min.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/style.min.css?v=4.0.0}" rel="stylesheet">
+<link th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" rel="stylesheet" />
+<link rel="stylesheet" th:href="@{/static/sys/css/global.css}">
+     <style>
+    	.openMaxImg:hover{
+   		    box-shadow: 0px 0px 4px 1px #4e4e4e;
+   		    cursor: pointer;
+    	}
+		/* 鼠标指向表格时,奇数行背景颜色 */
+		.layui-table tbody tr:hover,.layui-table-hover {
+		    background-color: #eeffee;
+		}
+		/* 表格头部工具栏背景色 */
+		.layui-table-tool {
+		    background-color: #eeffee;
+		}
+		.news_search{
+			font-size:14px;
+		}
+		.layui-form-label{
+			padding: 9px 0;
+		    left: 18px;
+		    color: black;
+		    font-size: 15px;
+		    top: 1px;
+	        width: 35px;
+		}
+		.layui-form-select {
+		    max-width: 8.5rem;
+		}
+		input::-webkit-outer-spin-button,
+	    input::-webkit-inner-spin-button {
+	        -webkit-appearance: none;
+	    }
+	    input[type="number"]{
+	        -moz-appearance: textfield;
+	    }
+    </style>
+</head>
+
+<body>
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<!-- Panel Other -->
+		<div class="ibox float-e-margins">
+			<div class="row row-lg">
+				<div class="col-sm-12">
+					<!-- Example Events -->
+					<blockquote class="layui-elem-quote news_search">
+							<div class="layui-inline">
+							    <a class="layui-btn search_btn_cl addNpc">添加</a>
+							</div>
+					</blockquote>
+					<div class="example">
+						<table id="table" lay-filter="test">
+							
+						</table>
+					</div>
+					<!-- End Example Events -->
+				</div>
+			</div>
+		</div>
+		<!-- End Panel Other -->
+	</div>
+
+			<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/js/bootstrap.min.js?v=3.3.5}"></script>
+	<script th:src="@{/static/sys/js/content.min.js}"></script>
+	<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/plugins/sweetalert/sweetalert.min.js}"></script>
+	<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+	<script th:src="@{/static/sys/js/public.js}"></script>
+		<script th:line="javascript">
+		var path = '[[${session.path}]]';
+		var layer;
+		var table;
+		var params;
+		var util;
+		layui.use(['layer','table','form','util'], function(){
+			util = layui.util;
+		  	layer = layui.layer;
+		  	table = layui.table;
+		  	var date = layui.laydate;
+		  	form = layui.form;
+		  	var cols =  [
+				{
+					title: 'id',
+					field: 'id'
+				}, 
+				{
+					title: '名字',
+					field: 'npcName'
+				},
+				{
+					title: 'serverid',
+					field: 'serverid'
+				},
+				{
+					title: '创建时间',
+					field: 'addTime',
+					templet: function(value) {
+						if(value.addTime != undefined){
+							return util.toDateString(value.addTime,"yyyy-MM-dd HH:mm:ss");
+						}else {
+							return "";
+						}
+					}
+				}
+			];
+		  	params = $.myRendar({"table":table,"elem":"#table","url":path+"/sys/npcStatue/getAll","method":"post","cols":cols,toolbar:false,templet:function(data){
+				var html = '<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>';
+				html += '<button  class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</button>';
+				return html;
+			},success:function(res,curr,count){
+				pageNum = curr;
+			}});
+		  	var pageNum = 1
+		  	table.on('tool(test)', function(obj){
+				  var data = obj.data;
+				  var layEvent = obj.event;
+				  var t = $(this);
+				  var obj = {};
+				  if(layEvent == "edit") {
+					  var json = format(data.data,false);
+					  	//解析json数据.
+						var html = '<div class="layui-form" style="width:90%;margin-top:31px;" lay-filter="npcStatueForm">';
+						html += '<div class="layui-form-item"> <label class="layui-form-label">数据</label> <div class="layui-input-block" id="jsonShow"> <textarea type="text" name="name" class="layui-textarea" style="height:500px" id="npcStatueData"> '+json+'</textarea></div></div>';
+						html += '<div class="layui-form-item"><a class="layui-btn layui-btn-danger layui-btn" lay-submit style="margin-left: 109px;" id="updateNpcStatueForm" data-id="' + data.id + '" data-name="'+data.npcName+'">保存</a></div>'
+						html += '</div>';
+						var index = layer.open({
+							title: false,
+							area: ["95%","95%"],
+							type: 1,
+							shadeClose:true,
+							content: html,
+							success: function() {
+								 
+							}
+						});
+				  }else if(layEvent == "del") {
+					  layer.confirm("删除后无法恢复,确定删除吗?",function(){
+						  obj.id = data.id;
+						  obj.deleted = true;
+						  u(obj)
+					  })
+				  }else if(layEvent == "cancel") {
+					  obj.id = data.id;
+					  obj.deleted = false;
+					  u(obj)
+				  }
+				 
+			});
+		    function u(obj) {
+		    	var load = $.load();
+		  		 $.post(path+"/sys/npcStatue/updateNpcStatue",obj,function(d){
+				  		if(d.status == 200) {
+							layer.msg("操作成功");
+							setTimeout(function(){
+								params.options.page.curr = pageNum;
+								table.render(params.options);
+							},500)
+						}else {
+							layer.msg(d.retmsg);
+						}
+				  		layer.close(load);
+				  });
+		  	}
+		    $(document).on("click","#updateNpcStatueForm",function(){
+		    	var d = form.val("npcStatueForm");
+		    	var id = $(this).attr("data-id");
+		    	var name = $(this).attr("data-name");
+		    	var val = $("#npcStatueData").val();
+		    	if(val != "") {
+		    		if(!isJSON(val)) {
+			    		layer.msg("格式错误");
+			    	}else {
+			    		u({"id":id,"npcName":name,"data":format(val,true)});
+			    	}
+		    	}
+		    })
+		  	
+		  	function isJSON(str) {
+		  	    if (typeof str == 'string') {
+		  	        try {
+		  	            var obj=JSON.parse(str);
+		  	            if(typeof obj == 'object' && obj ){
+		  	                return true;
+		  	            }else{
+		  	                return false;
+		  	            }
+
+		  	        } catch(e) {
+		  	            console.log('error：'+str+'!!!'+e);
+		  	            return false;
+		  	        }
+		  	    }
+		  	}
+		  	
+		  	function format(txt, compress) {
+		  	    var indentChar = '    ';
+		  	    if (/^\s*$/.test(txt)) {
+		  	        console.log('数据为空,无法格式化! ');
+		  	        return;
+		  	    }
+		  	    try {
+		  	        var data = eval('(' + txt + ')');
+		  	    } catch (e) {
+		  	        console.log('数据源语法错误,格式化失败! 错误信息: ' + e.description, 'err');
+		  	        return;
+		  	    }
+		  	    var draw = [],
+		  	        last = false,
+		  	        This = this,
+		  	        line = compress ? '' : '\n',
+		  	        nodeCount = 0,
+		  	        maxDepth = 0;
+
+		  	    var notify = function (name, value, isLast, indent, formObj) {
+		  	        nodeCount++; /*节点计数*/
+		  	        for (var i = 0, tab = ''; i < indent; i++)
+		  	            tab += indentChar; /* 缩进HTML */
+		  	        tab = compress ? '' : tab; /*压缩模式忽略缩进*/
+		  	        maxDepth = ++indent; /*缩进递增并记录*/
+		  	        if (value && value.constructor == Array) {
+		  	            /*处理数组*/
+		  	            draw.push(
+		  	                tab + (formObj ? '"' + name + '":' : '') + '[' + line
+		  	            ); /*缩进'[' 然后换行*/
+		  	            for (var i = 0; i < value.length; i++)
+		  	                notify(i, value[i], i == value.length - 1, indent, false);
+		  	            draw.push(
+		  	                tab + ']' + (isLast ? line : ',' + line)
+		  	            ); /*缩进']'换行,若非尾元素则添加逗号*/
+		  	        } else if (value && typeof value == 'object') {
+		  	            /*处理对象*/
+		  	            draw.push(
+		  	                tab + (formObj ? '"' + name + '":' : '') + '{' + line
+		  	            ); /*缩进'{' 然后换行*/
+		  	            var len = 0,
+		  	                i = 0;
+		  	            for (var key in value)
+		  	                len++;
+		  	            for (var key in value)
+		  	                notify(key, value[key], ++i == len, indent, true);
+		  	            draw.push(
+		  	                tab + '}' + (isLast ? line : ',' + line)
+		  	            ); /*缩进'}'换行,若非尾元素则添加逗号*/
+		  	        } else {
+		  	            if (typeof value == 'string') value = '"' + value + '"';
+		  	            draw.push(
+		  	                tab +
+		  	                (formObj ? '"' + name + '":' : '') +
+		  	                value +
+		  	                (isLast ? '' : ',') +
+		  	                line
+		  	            );
+		  	        }
+		  	    };
+		  	    var isLast = true,
+		  	        indent = 0;
+		  	    notify('', data, isLast, indent, false);
+		  	    return draw.join('');
+		  	}
+		  	
+		  	$(".addNpc").click(function(){
+		  		var html = '<div class="layui-form" style="width:90%;margin-top:31px;" lay-filter="addNpcForm">';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">名字</label> <div class="layui-input-block"> <input type="text" name="name" class="layui-input"> </div></div>';
+				html += '<div class="layui-form-item"> <label class="layui-form-label">人物模板</label> <div class="layui-input-block"> <textarea type="text" name="data" class="layui-textarea" style="height:500px" id="npcStatueData"> </textarea> </div></div>';
+				html += '<div class="layui-form-item"><a class="layui-btn layui-btn-danger layui-btn" lay-submit style="margin-left: 109px;" id="addNpcForm">保存</a></div>'
+				html += '</div>';
+				layer.open({
+					title: false,
+					area: ["400px"],
+					type: 1,
+					shadeClose:true,
+					content: html,
+					success: function() {
+						
+					}
+				});
+		  	})
+		  	
+		  	$(document).on("click","#addNpcForm",function(){
+		  		var d = form.val("addNpcForm");
+		  		if(d.name == "") {
+		  			layer.msg("名字不能为空");
+		  			return;
+		  		}
+		  		if(d.data != "") {
+		  			if(!isJSON(val)) {
+			    		layer.msg("格式错误");
+			    		return;
+			    	}
+		  		}
+		  		$.post(path+"/sys/npcStatue/addNpcStatue",d,function(){
+		  			
+		  		})
+		  	})
+		  	
+		});
+	</script>
+</body>
+
+</html>

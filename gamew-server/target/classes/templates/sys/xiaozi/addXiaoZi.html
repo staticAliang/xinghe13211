@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>角色控制</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="stylesheet" th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" />
+<link rel="stylesheet" th:href="@{/static/sys/css/global.css}">
+<style type="text/css">
+.layadmin-homepage-pad-ver {
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+
+.layadmin-homepage-pad-img {
+	box-shadow: 0 0 0 4px rgba(0, 0, 0, .1);
+	border-radius: 50%;
+}
+
+.layadmin-homepage-min-font {
+	margin: 5px 0 10px;
+	font-size: .9em;
+	color: #afb9c3;
+}
+
+.layadmin-homepage-font {
+	font-weight: 600;
+	color: rgb(43, 66, 91);
+	font-size: 1.2em;
+}
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield;
+}
+</style>
+</head>
+
+<body>
+	<div style="margin: 20px auto">
+		<div class="layui-form" style="width: 400px" lay-filter="xiaoziForm">
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">昵称</label>
+					<div class="layui-input-inline">
+						<input type="tel" name="name" lay-verify="required|text"
+							autocomplete="off" class="layui-input" placeholder="请输入昵称">
+
+					</div>
+					<button type="button" style="height: 38px; width: 38px;"
+						class="layui-btn layui-btn-primary layui-btn-sm" id="randomName">
+						<i class="layui-icon">&#xe63f;</i>
+					</button>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">模板ID</label>
+				<div class="layui-input-block">
+					<input type="text" name="templeatId" required lay-verify="required"
+						placeholder="请输入模板ID" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button class="layui-btn" id="create_xiaozi">创建小子</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+	<script th:line="javascript">
+		var path = '[[${session.path}]]';
+		var openType = $.getQueryString("openType");
+		layui.use([ 'layer', 'form', 'util' ], function() {
+			var layer = layui.layer;
+		  	var form = layui.form;
+		  	
+		  	$("#create_xiaozi").click(function(){
+		  		var xiaozi = form.val("xiaoziForm");
+		  		if(xiaozi.name == "" || xiaozi.name.length==0) {
+		  			layer.msg("请输入昵称");
+		  			return;
+		  		}else if(xiaozi.templeatId == "" || xiaozi.templeatId.length==0) {
+		  			layer.msg("请输入模板id");
+		  			return;
+		  		}
+		  		var load = $.load("创建中...");
+		  		$.post(path+"/wd/xiaozi/addXiaoZi",xiaozi,function(data) {
+		  			if(data.status == 200) {
+		  				//问道小子页面打开的则需要刷新主页面
+		  				if(openType == "wendaoxiaozi") {
+		  					window.parent.reloadData();
+		  				}
+		  				form.val("xiaoziForm",{
+		  					name:""
+		  				});	
+		  				layer.msg("创建成功");
+		  			}else {
+		  				layer.msg(data.retmsg);
+		  			}
+		  			layer.close(load);
+		  		})
+		  	})
+		  	
+		  	$("#randomName").click(function(){
+		  		$.post(path+"/wd/xiaozi/getRandomName",function(data) {
+		  			if(data.status == 200) {
+		  				form.val("xiaoziForm",{
+		  					name:data.data.name
+		  				});	  				
+		  			}
+		  		})
+		  	})
+		})
+	</script>
+</body>
+
+</html>

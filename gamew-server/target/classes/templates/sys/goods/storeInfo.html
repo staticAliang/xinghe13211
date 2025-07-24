@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>商品库存</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+
+<link rel="shortcut icon" href="favicon.ico">
+<link th:href="@{/static/sys/css/bootstrap.min.css?v=3.3.5}" rel="stylesheet">
+<link th:href="@{/static/sys/css/plugins/sweetalert/sweetalert.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/font-awesome.min.css?v=4.4.0}" rel="stylesheet">
+<link th:href="@{/static/sys/css/animate.min.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/style.min.css?v=4.0.0}" rel="stylesheet">
+<link th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" rel="stylesheet" />
+<link rel="stylesheet" th:href="@{/static/sys/css/global.css}">
+<style>
+.openMaxImg:hover {
+	box-shadow: 0px 0px 4px 1px #4e4e4e;
+	cursor: pointer;
+}
+
+
+/* 鼠标指向表格时,奇数行背景颜色 */
+.layui-table tbody tr:hover, .layui-table-hover {
+	background-color: #eeffee;
+}
+/* 表格头部工具栏背景色 */
+.layui-table-tool {
+	background-color: #eeffee;
+}
+
+.news_search {
+	font-size: 14px;
+}
+
+.layui-form-label {
+	padding: 9px 0;
+	left: 18px;
+	color: black;
+	font-size: 15px;
+	top: 1px;
+	width: 70px;
+}
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield;
+}
+</style>
+</head>
+
+<body>
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<!-- Panel Other -->
+		<div class="ibox float-e-margins">
+			<div class="row row-lg">
+				<div class="col-sm-12">
+					<blockquote class="layui-elem-quote news_search">
+						<div class="layui-inline">
+							<div class="layui-input-inline">
+								<input type="text" placeholder="商品名"
+									class="layui-input search_btn" type-close autocomplete="off">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<a class="layui-btn" id="query">查询</a>
+						</div>
+						<div class="layui-inline">
+							<a class="layui-btn layui-btn-danger" id="refreshCache">刷新缓存</a>
+						</div>
+					</blockquote>
+
+
+					<!-- Example Events -->
+					<div class="example">
+						<table id="table" lay-filter="test">
+
+						</table>
+					</div>
+					<!-- End Example Events -->
+				</div>
+			</div>
+		</div>
+		<!-- End Panel Other -->
+	</div>
+
+		<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/js/bootstrap.min.js?v=3.3.5}"></script>
+	<script th:src="@{/static/sys/js/content.min.js}"></script>
+	<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/plugins/sweetalert/sweetalert.min.js}"></script>
+	<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+	<script th:src="@{/static/sys/js/public.js}"></script>
+	<script th:line="javascript">
+	var path = '[[${session.path}]]';
+		var layer;
+		var table;
+		var params;
+		var util;
+		layui.use([ 'layer', 'table', 'form', 'laydate', 'util' ], function() {
+			util = layui.util;
+			layer = layui.layer;
+			table = layui.table;
+			var date = layui.laydate;
+			form = layui.form;
+			var cols = [ {
+				title : 'id',
+				field : 'id',
+			}, {
+				title : '名字',
+				field : 'name',
+			}, {
+				title : '品质',
+				field : 'quality',
+			}, {
+				title : '属性',
+				field : 'value',
+			},
+			{
+				title : '类型',
+				field : 'totalScore',
+				templet: function(value) {
+					var type = "";
+					switch(value.totalScore){
+					case 1:
+						type = "装备";
+						break;
+					case 2:
+						type = "药品";
+						break;
+					case 3:
+						type = "任务物品";
+						break;
+					case 4:
+						type = "书籍";
+						break;
+					case 5:
+						type = "特殊物品";
+						break;
+					case 6:
+						type = "升级物品";
+						break;
+					case 7:
+						type = "法宝";
+						break;
+					case 8:
+						type = "传送道具";
+						break;
+					case 9:
+						type = "付费服务道具";
+						break;
+					case 10:
+						type = "付费功能道具";
+						break;
+					case 11:
+						type = "地毯道具";
+						break;
+					case 12:
+						type = "变身卡";
+						break;
+					case 13:
+						type = "天书";
+						break;
+					case 14:
+						type = "礼包";
+						break;
+					case 18:
+						type = "家具";
+						break;
+					case 19:
+						type = "种植收获的材料";
+						break;
+					case 20:
+						type = "菜肴";
+						break;
+					case 21:
+						type = "居所中钓到的鱼";
+						break;
+					case 23:
+						type = "特效";
+						break;
+					case 24:
+						type = "跟随小精灵";
+						break;
+					case 25:
+						type = "自定义外观道具";
+						break;
+					case 28:
+						type = "玩具";
+						break;
+					case 29:
+						type = "队标";
+						break;
+					case 30:
+						type = "魂器";
+						break;
+					case 31:
+						type = "太阴之气";
+						break;
+					case 32:
+						type = "地宫道具";
+						break;
+					}
+					
+					return type;
+				}
+			},
+			{	
+				title: '状态',
+				field: 'deleted',
+				templet: function(value) {
+					if(value.deleted){
+						return "已删除";
+					}else {
+						return "正常";
+					}
+				}
+			}
+			];
+			params = $.myRendar({
+				"table" : table,
+				"elem" : "#table",
+				"url" : path+"/sys/wd/goods/getStoreInfoGoods",
+				"method" : "post",
+				"cols" : cols,
+				toolbar : false,
+				width:"150",
+				templet:function(data){
+					var html = "";
+					if(!data.deleted) {
+						html+='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-id="'+data.id+'" >删除</a>';
+					}else {
+						html+='<a class="layui-btn layui-btn-wring layui-btn-xs" lay-event="cancel" data-id="'+data.id+'">恢复</a>';
+					}
+					return html;
+				}
+			});
+			
+			
+			$("#query").click(function(data){
+				var name = $(".search_btn").val();
+				if(name.trim() != "" && name.length > 0) {
+					params.options.where = {"name":name};
+				}else {
+					params.options.where = {};
+				}
+				table.render(params.options);
+			})
+			table.on('tool(test)', function(obj){
+				  var data = obj.data;
+				  var layEvent = obj.event;
+				  var t = $(this);
+				  var obj = {};
+				  if(layEvent == "del") {
+					  layer.confirm("确定删除吗?",function(){
+						  obj.id = data.id;
+						  obj.deleted = true;
+						  u(obj)
+					  })
+					  
+				  }else if(layEvent == "cancel") {
+					  layer.confirm("确定恢复?",function(){
+						  obj.id = data.id;
+						  obj.deleted = false;
+						  u(obj)
+					  })
+				  }
+			});
+			function u(obj) {
+				 $.post(path+"/sys/wd/goods/updateStoreInfo",obj,function(d){
+					  if(d.status == 200) {
+						  layer.msg("修改成功");
+						  table.render(params.options);
+					  }else {
+						  layer.msg(d.retmsg);
+					  }
+				  })
+			}
+			
+			$("#refreshCache").click(function(){
+				$.post(path+"/sys/wd/goods/refreshCacheStoreInfo",function(data){
+					layer.msg(data.retmsg);
+				})
+			})
+			
+		});
+	</script>
+</body>
+
+</html>

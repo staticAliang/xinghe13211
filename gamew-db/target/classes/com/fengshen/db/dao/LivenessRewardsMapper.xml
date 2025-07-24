@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fengshen.db.dao.LivenessRewardsMapper">
+  <resultMap id="BaseResultMap" type="com.fengshen.db.domain.LivenessRewards">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="gid" jdbcType="VARCHAR" property="gid" />
+    <result column="activity" jdbcType="INTEGER" property="activity" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+  </resultMap>
+</mapper>

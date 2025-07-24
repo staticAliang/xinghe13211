@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>战斗管理</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+
+<link rel="shortcut icon" href="favicon.ico">
+<link th:href="@{/static/sys/css/bootstrap.min.css?v=3.3.5}" rel="stylesheet">
+<link th:href="@{/static/sys/css/plugins/sweetalert/sweetalert.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/font-awesome.min.css?v=4.4.0}" rel="stylesheet">
+<link th:href="@{/static/sys/css/animate.min.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/style.min.css?v=4.0.0}" rel="stylesheet">
+<link th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" rel="stylesheet" />
+<link rel="stylesheet" th:href="@{/static/sys/css/global.css}">
+<style>
+.openMaxImg:hover {
+	box-shadow: 0px 0px 4px 1px #4e4e4e;
+	cursor: pointer;
+}
+
+
+/* 鼠标指向表格时,奇数行背景颜色 */
+.layui-table tbody tr:hover, .layui-table-hover {
+	background-color: #eeffee;
+}
+/* 表格头部工具栏背景色 */
+.layui-table-tool {
+	background-color: #eeffee;
+}
+
+.news_search {
+	font-size: 14px;
+}
+
+.layui-form-label {
+	padding: 9px 0;
+	left: 18px;
+	color: black;
+	font-size: 15px;
+	top: 1px;
+	width: 70px;
+}
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield;
+}
+</style>
+</head>
+
+<body>
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<!-- Panel Other -->
+		<div class="ibox float-e-margins">
+			<div class="row row-lg layui-form" lay-filter="choujiang">
+				<div class="col-sm-12">
+					<div class="example">
+						<blockquote class="layui-elem-quote news_search layui-form">
+							<div class="layui-inline">
+								<div class="layui-input-inline">
+									<input type="text" placeholder="请输入角色名" class="layui-input search_btn" id="name" type-close autocomplete="off">
+								</div>
+							</div>
+							<div class="layui-inline">
+								<a class="layui-btn query_btn">查询</a>
+							</div>
+							<div class="layui-inline">
+								<button type="button" class="layui-btn layui-btn-primary flush"><i class="layui-icon layui-icon-refresh"></i></button>
+							</div>
+							<div class="layui-inline">
+								<div style="font-size: 23px; margin-left: 20px;">
+									<span style="color:#359f6a">战斗数量:</span>
+									<span id="onlineNumber">0</span>
+								</div>
+							</div>
+						</blockquote>
+						<table id="table" lay-filter="test">
+
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/js/bootstrap.min.js?v=3.3.5}"></script>
+	<script th:src="@{/static/sys/js/content.min.js}"></script>
+	<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/plugins/sweetalert/sweetalert.min.js}"></script>
+	<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+	<script th:src="@{/static/sys/js/public.js}"></script>
+	<script th:line="javascript">
+	var path = '[[${session.path}]]';
+		var layer;
+		var table;
+		var params;
+		var util;
+		layui.use([ 'layer', 'table', 'form', 'laydate', 'util' ], function() {
+			util = layui.util;
+			layer = layui.layer;
+			table = layui.table;
+			var date = layui.laydate;
+			form = layui.form;
+			var cols = [ {
+				title : 'uid',
+				field : 'uid',
+			}, 
+			{
+				title : '持续回合',
+				field : 'roundNum',
+			},
+			{
+				title : '开始时间',
+				field : 'startTime',
+				templet:function(value){
+					if(value.startTime != undefined){
+						return util.timeAgo(value.startTime);
+					}else {
+						return "";
+					}
+				}
+			},
+			{
+				title : '本回开始',
+				field : 'roundTime',
+			},
+			 {
+				title : '战斗状态',
+				field : 'isPauseFight',
+			}
+			];
+			params = $.myRendar({
+				"table" : table,
+				"elem" : "#table",
+				"url" : path+"/fight/getFightLists",
+				"method" : "post",
+				"cols" : cols,
+				toolbar : false,
+				height:500,
+				page:false,
+				success:function(c,curr) {
+					$("#onlineNumber").text(c.data.length);
+				},
+				templet:function(data){
+					var html = '<a class="layui-btn layui-btn-xs" lay-event="details">详情</a>';
+					html += '<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">强制结束战斗</a>';
+					return html;
+				}
+			});
+			table.on('tool(test)', function(obj){
+				  var data = obj.data;
+				  var layEvent = obj.event;
+				  var t = $(this);
+				  if(layEvent == "del") {
+					  layer.confirm('确认强制结束战斗吗？',function(){
+						 $.post(path+"/fight/forceStopFight",{"uid":data.uid},function(data){
+							 table.render(params.options);
+							 layer.msg(data.retmsg);
+						 });
+					  })
+				  }else if(layEvent == "details") {
+					  $.post(path+"/fight/getFightInfoDetails",{"uid":data.uid},function(){
+						  layer.open({
+							  title:"战斗详情["+data.uid+"]",
+							  type:2,
+							  area:["95%","95%"],
+							  maxmin:true,
+							  shade:false,
+							  content:path+"/sys/jump?page=/tools/fightManageDtails.html&key="+data.uid
+						  })
+					  })
+				  }
+			});
+			$(".flush").click(function() {
+				table.render(params.options)
+			})
+			
+			$(".query_btn").click(function() {
+				var name = $("#name").val();
+				if(name.trim() != "" && name.length > 0) {
+					params.options.where = {
+						"name": name
+					};
+				} else {
+					params.options.where = {};
+				}
+				table.render(params.options);
+			})
+		});
+	</script>
+</body>
+
+</html>

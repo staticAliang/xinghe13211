@@ -1,0 +1,122 @@
+package com.fengshen.server.domain;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
+public class GoodsFenSe {
+	public Integer groupNo;
+	public Integer groupType;
+	public Integer phy_power;
+	public Integer mag_power;
+	public Integer speed;
+	public Integer life;
+	// 天伤
+	public Integer skill_low_cost;
+	public Integer mstunt_rate;
+	public Integer all_polar;
+	public Integer all_resist_polar;
+	public Integer wood;
+
+	public Integer water;
+	// 水相
+	public Integer fire;
+	// 火相
+	public Integer earth;
+	// 土相
+	public Integer resist_metal;
+	public Integer damage_sel;
+	public Integer stunt_rate;
+	public Integer double_hit_rate;
+	public Integer release_forgotten;
+	public Integer ignore_all_resist_except;
+	public Integer stunt;
+	public Integer def;
+	public Integer dex;
+	public Integer wiz;
+	public Integer family;
+	public Integer life_recover;
+	public Integer all_skill;
+	public Integer portrait;
+	public Integer resist_frozen;
+	public Integer resist_sleep;
+	public Integer resist_forgotten;
+	public Integer resist_confusion;
+	public Integer longevity;
+	public Integer resist_wood;
+	public Integer resist_water;
+	public Integer resist_fire;
+	public Integer resist_earth;
+	public Integer exp_to_next_level;
+	public Integer all_resist_except;
+	public Integer accurate;
+	public Integer mana;
+	public Integer parry;
+	public Integer ignore_resist_wood;
+	public Integer ignore_resist_water;
+	public Integer ignore_resist_fire;
+	public Integer ignore_resist_earth;
+	public Integer ignore_resist_forgotten;
+	public Integer ignore_resist_frozen;
+	public Integer ignore_resist_sleep;
+	public Integer ignore_resist_confusion;
+	public Integer super_excluse_metal;
+	public Integer ignore_resist_poison;
+
+	public GoodsFenSe() {
+		this.groupNo = 3;
+		this.groupType = 2;
+		this.phy_power = 0;
+		this.mag_power = 0;
+		this.speed = 0;
+		this.life = 0;
+		this.skill_low_cost = 0;
+		this.mstunt_rate = 0;
+		this.all_polar = 0;
+		this.all_resist_polar = 0;
+		this.wood = 0;
+
+		this.water = 0;
+		this.fire = 0;
+		this.earth = 0;
+		this.resist_metal = 0;
+		this.damage_sel = 0;
+		this.stunt_rate = 0;
+		this.double_hit_rate = 0;
+		this.release_forgotten = 0;
+		this.ignore_all_resist_except = 0;
+		this.stunt = 0;
+		this.def = 0;
+		this.dex = 0;
+		this.wiz = 0;
+		this.family = 0;
+		this.life_recover = 0;
+		this.all_skill = 0;
+		this.portrait = 0;
+		this.resist_frozen = 0;
+		this.resist_sleep = 0;
+		this.resist_forgotten = 0;
+		this.resist_confusion = 0;
+		this.longevity = 0;
+		this.resist_wood = 0;
+		this.resist_water = 0;
+		this.resist_fire = 0;
+		this.resist_earth = 0;
+		this.exp_to_next_level = 0;
+		this.all_resist_except = 0;
+		this.accurate = 0;
+		this.mana = 0;
+		this.parry = 0;
+		this.ignore_resist_wood = 0;
+		this.ignore_resist_water = 0;
+		this.ignore_resist_fire = 0;
+		this.ignore_resist_earth = 0;
+		this.ignore_resist_forgotten = 0;
+		this.ignore_resist_frozen = 0;
+		this.ignore_resist_sleep = 0;
+		this.ignore_resist_confusion = 0;
+		this.super_excluse_metal = 0;
+		this.ignore_resist_poison = 0;
+	}
+}

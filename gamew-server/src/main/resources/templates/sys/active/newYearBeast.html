@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+    <title>年兽活动配置</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="favicon.ico"> 
+    <link rel="stylesheet" th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" />
+    <style type="text/css">
+    	input::-webkit-outer-spin-button,
+	    input::-webkit-inner-spin-button {
+	        -webkit-appearance: none;
+	    }
+	    input[type="number"]{
+	        -moz-appearance: textfield;
+	    }
+    </style>
+</head>
+
+<body>
+	<div class="layui-form" style="width: 90%; margin-top: 31px;"
+		lay-filter="showForm">
+		<div class="layui-form-item">
+			<label class="layui-form-label" style="width: 70px;">活动地点</label>
+			<div class="layui-input-block">
+				<textarea name="new_year_beast_maps" placeholder="每个地点用、隔开" class="layui-textarea"></textarea>
+				<div class="layui-form-mid layui-word-aux">每个地点用、隔开</div>
+			</div>
+		</div>
+		<div class="layui-form-item">
+		    <label class="layui-form-label">活动状态</label>
+		    <div class="layui-input-block">
+		      <input type="checkbox" name="new_year_beast_status" lay-skin="switch">
+		    </div>
+  		</div>
+  		<div class="layui-form-item">
+		    <label class="layui-form-label">队员消耗</label>
+		    <div class="layui-input-block">
+		      <input type="checkbox" name="new_year_beast_team_cost_status" lay-skin="switch">
+		    </div>
+  		</div>
+ 		<div class="layui-form-item">
+		    <label class="layui-form-label"></label>
+  		</div>
+  		<div class="layui-form-item">
+		    <label class="layui-form-label"></label>
+  		</div>
+  		<div class="layui-form-item">
+		    <label class="layui-form-label">活动时间</label>
+		    <div class="layui-input-block">
+		    	<input readonly="readonly" type="text" class="layui-input" style="width:150px" id="time" name="new_year_beast_time" placeholder="点击打开时间选择"/>
+		    </div>
+  		</div>
+  		<div class="layui-form-item">
+		    <label class="layui-form-label">星期</label>
+		    <div class="layui-input-block">
+		    	<input type="text" name="new_year_beast_week" class="layui-input">
+		    	<div class="layui-form-mid layui-word-aux">每个星期用,隔开</div>
+		    </div>
+  		</div>
+		
+		<div class="layui-form-item">
+			<a class="layui-btn layui-btn-danger layui-btn" style="margin-left: 109px;" id="save">保存</a>
+		</div>
+		</div>
+		<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+		<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+		<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+		<script th:src="@{/static/sys/js/public.js}"></script>
+		<script th:line="javascript">
+		var path = '[[${session.path}]]';
+		var layer;
+		var table;
+		var params;
+		var util;
+		var mapId;
+		layui.use(['layer','table','form','util', "laydate"], function(){
+			util = layui.util;
+		  	layer = layui.layer;
+		  	table = layui.table;
+		  	form = layui.form;
+		  	var laydate = layui.laydate;
+		  	
+		  	//加载信息
+		  	$.post(path+"/ws/configInfo/getConfigInfoDataByUUIDS",{"uuids":"new_year_beast_maps,new_year_beast_status,new_year_beast_team_cost_status,new_year_beast_time,new_year_beast_week"},function(data){
+		  		if(data.status == 200) {
+		  			var config = data.data;
+		  			var new_year_beast_status = 0;
+		  			var new_year_beast_maps = "北海沙滩";
+		  			var new_year_beast_team_cost_status = 0;
+		  			var new_year_beast_time = "00:00 ~ 00:00";
+		  			var new_year_beast_week = "";
+		  			$(config).each(function(i,o){
+		  				if(o.keyName == "new_year_beast_status") {
+		  					if(o.data == "关闭") {
+			  					new_year_beast_status = false;
+		  					}else {
+			  					new_year_beast_status = true;
+		  					}
+		  				}else if(o.keyName == "new_year_beast_maps") {
+		  					new_year_beast_maps = o.data;
+		  				}else if(o.keyName == "new_year_beast_team_cost_status") {
+		  					if(o.data == "关闭") {
+		  						new_year_beast_team_cost_status = false;
+		  					}else {
+		  						new_year_beast_team_cost_status = true;
+		  					}
+		  				}else if(o.keyName == "new_year_beast_time") {
+		  					new_year_beast_time = o.data;
+		  				}else if(o.keyName == "new_year_beast_week") {
+		  					new_year_beast_week = o.data;
+		  				}
+		  			})
+		  			form.val("showForm",{
+		  				"new_year_beast_status":new_year_beast_status,
+		  				"new_year_beast_maps":new_year_beast_maps,
+		  				"new_year_beast_team_cost_status":new_year_beast_team_cost_status,
+		  				"new_year_beast_time":new_year_beast_time,
+		  				"new_year_beast_week":new_year_beast_week,
+		  			});
+		  			laydate.render({
+						elem: '#time',
+						type: 'time',
+						format: "HH:mm",
+						range: "~"
+					});
+		  		}
+		  	})
+		  	$(document).keydown(function(e) {
+			    var key = undefined;
+			    var possible = [ e.key, e.keyIdentifier, e.keyCode, e.which ];
+			    while (key === undefined && possible.length > 0) {
+			        key = possible.pop();
+			    }
+			    if (key && (key == '115' || key == '83' ) && (e.ctrlKey || e.metaKey) && !(e.altKey)){
+			        e.preventDefault();
+			        save();
+			        return false;
+			    }
+			    return true;
+			}); 
+			$(document).on("click","#save",function(){
+				save();
+		  	})
+		  	function save(){
+				var da = form.val("showForm");
+				if(da.new_year_beast_status == "on") {
+					da.new_year_beast_status = "开启";
+				}else {
+					da.new_year_beast_status = "关闭";
+				}
+				if(da.new_year_beast_team_cost_status == "on") {
+					da.new_year_beast_team_cost_status = "开启";
+				}else {
+					da.new_year_beast_team_cost_status = "关闭";
+				}
+		  		var load = $.load("正在保存...");
+		  		var objData = new Array();
+		  		objData.push({uuid: "new_year_beast_status",data :da.new_year_beast_status});
+	  			objData.push({uuid: "new_year_beast_maps",data :da.new_year_beast_maps});
+	  			objData.push({uuid: "new_year_beast_team_cost_status",data :da.new_year_beast_team_cost_status});
+	  			objData.push({uuid: "new_year_beast_time",data :da.new_year_beast_time});
+	  			objData.push({uuid: "new_year_beast_week",data :da.new_year_beast_week});
+	  			
+	  			
+	  			
+	           	var objDataJSON = JSON.stringify(objData);
+		  		$.ajax({
+                    type:'post',
+				    url:path+"/ws/configInfo/updateConfigInfos",
+				    data:objDataJSON,
+				    contentType : 'application/json',
+                    success:function (data) {
+                    	if(data.status == 200) {
+							layer.msg("保存成功");
+						}else {
+		  					layer.msg(data.retmsg);
+		  				}
+                    	layer.close(load);	
+				    }
+                });
+			}
+			
+			var shidaoWeeks = [];
+			$(document).on("click", "#save_shidao_time_or_week", function() {
+				//提交
+				var time1 = $(".shidao_update_time").val();
+				var time2 = $(".shidao_update_time2").val();
+				var weeksArra = $(".shidao_week_time_td");
+				var w = "";
+				if(weeksArra.text().length > 0) {
+					w = weeksArra.text();
+				}
+				var d = {
+					"type": "timeAndWeek",
+					"time1": time1,
+					"time2": time2,
+					"week": w
+				}
+				shidaoSubmit(d);
+			})
+
+			//修改更新时间
+			$(document).on("click", ".update_week_time", function() {
+				layer.open({
+					title: "试道开启日期配置",
+					type: 1,
+					content: '<div class="layui-form" lay-filter="shidaoWeekForm"> <div class="layui-form-item" style="text-align: center; margin-top: 48px;"> <div class="layui-input-block" style="margin: 0 auto;"> <input type="checkbox" name="shidao_week" value="周一" title="周一" lay-filter="shidaoWeekCheckbox" /> <input type="checkbox" name="shidao_week" value="周二" title="周二" lay-filter="shidaoWeekCheckbox" /> </br> <input type="checkbox" name="shidao_week" value="周三" title="周三" lay-filter="shidaoWeekCheckbox" /> <input type="checkbox" name="shidao_week" value="周四" title="周四" lay-filter="shidaoWeekCheckbox" /> </br> <input type="checkbox" name="shidao_week" value="周五" title="周五" lay-filter="shidaoWeekCheckbox" /> <input type="checkbox" name="shidao_week" value="周六" title="周六" lay-filter="shidaoWeekCheckbox" /> </br> <input type="checkbox" value="周日" name="shidao_week" title="周日" lay-filter="shidaoWeekCheckbox" /> </br> </div> </div> </div>',
+					success: function() {
+						var shidao = config.shidao;
+						var weeksStr = $(".shidao_week_time_td").text();
+						if(weeksStr != "") {
+							$(weeksStr.split(",")).each(function(i, o) {
+								$("input[value=" + o + "][name='shidao_week']").prop("checked", "checked");
+							})
+						}
+						//设置时间
+						form.render("checkbox");
+					},
+					cancel: function() {}
+				})
+
+			})
+			//时间监听
+			form.on("checkbox(shidaoWeekCheckbox)", function(d) {
+				shidaoWeeks = [];
+				var html = "";
+				$("input[name='shidao_week']").each(function(i, o) {
+					var shidao_week = $(o);
+					if(shidao_week.prop("checked")) {
+						shidaoWeeks.push(shidao_week.val());
+						html += "" + shidao_week.val() + ",";
+					}
+				})
+				html = html.substring(0, html.length - 1);
+				$(".shidao_week_time_td").html(html);
+				shidaoWeeks.sort();
+			})
+			
+			
+			
+		});
+	</script>
+</body>
+
+</html>

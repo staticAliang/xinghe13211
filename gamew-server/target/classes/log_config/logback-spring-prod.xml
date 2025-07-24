@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<!-- 控制台打印日志的相关配置 -->
+	<appender name="STDOUT"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<!-- 日志格式 -->
+		<encoder>
+			<pattern>%d{yyyy-MMM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{15} - %msg%n</pattern>
+		</encoder>
+		<!-- 日志级别过滤器 -->
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<!-- 过滤的级别 -->
+			<level>INFO</level>
+			<!-- 匹配时的操作：接收 （记录） -->
+			<onMatch>ACCEPT</onMatch>
+			<!-- 不匹配时的操作：拒绝DENY（不记录）接受：ACCEPT（记录） -->
+			<onMismatch>ACCEPT</onMismatch>
+		</filter>
+	</appender>
+	<appender name="ERROR"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- 保存日志文件的路径 -->
+		<file>./logs/api_error.log</file>
+		<!-- 日志格式 -->
+		<encoder>
+			<pattern>%d{yyyy-MMM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{15} - %msg%n</pattern>
+		</encoder>
+		<!-- 日志级别过滤器 -->
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<!-- 过滤的级别 -->
+			<level>ERROR</level>
+			<!-- 匹配时的操作：接收（记录） -->
+			<onMatch>ACCEPT</onMatch>
+			<!-- 不匹配时的操作：拒绝（不记录） -->
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<!-- 循环政策：基于时间创建日志文件 -->
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- 日志文件名格式 -->
+			<fileNamePattern>./logs/api_error.%d{yyyy-MM-dd}.log
+			</fileNamePattern>
+			<!-- 最大保存时间：30天 -->
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+	</appender>
+
+	<appender name="INFO"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- 保存日志文件的路径 -->
+		<file>./logs/api_info.log</file>
+		<!-- 日志格式 -->
+		<encoder>
+			<pattern>%d{yyyy-MMM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{15} - %msg%n</pattern>
+		</encoder>
+		<!-- 日志记录器的滚动策略，按日期，按大小记录 -->
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- 每天日志归档路径以及格式 -->
+			<fileNamePattern>./logs/${log.path}/log-info-%d{yyyy-MM-dd}.%i.log
+			</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>100MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+			<!--日志文件保留天数 -->
+			<maxHistory>15</maxHistory>
+		</rollingPolicy>
+		<!-- 此日志文件只记录info级别的 -->
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>info</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+	</appender>
+
+	<!-- 基于dubug处理日志：具体控制台或者文件对日志级别的处理还要看所在appender配置的filter，如果没有配置filter，则使用root配置 -->
+	<root level="INFO">
+		<!-- <appender-ref ref="STDOUT" /> -->
+		<appender-ref ref="ERROR" />
+		<!-- <appender-ref ref="INFO" /> -->
+	</root>
+</configuration>

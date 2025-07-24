@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fengshen.db.dao.CharaPetMapper">
+  <resultMap id="BaseResultMap" type="com.fengshen.db.domain.CharaPet">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="uuid" jdbcType="VARCHAR" property="uuid" />
+    <result column="cid" jdbcType="INTEGER" property="cid" />
+    <result column="pet_name" jdbcType="VARCHAR" property="petName" />
+    <result column="owner_name" jdbcType="VARCHAR" property="ownerName" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.fengshen.db.domain.CharaPet">
+    <result column="pet" jdbcType="LONGVARCHAR" property="pet" />
+  </resultMap>
+  
+ 	<update id="updateBatch" parameterType="java.util.List" >
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update chara_pet
+            <set>
+                <if test="item.uuid != null">
+                    uuid = #{item.uuid,jdbcType=VARCHAR},
+                </if>
+                <if test="item.cid != null">
+                    cid = #{item.cid,jdbcType=VARCHAR},
+                </if>
+                <if test="item.petName != null">
+                    pet_name = #{item.petName,jdbcType=VARCHAR},
+                </if>
+                <if test="item.ownerName != null">
+                    owner_name = #{item.ownerName,jdbcType=VARCHAR},
+                </if>
+                pet = #{item.pet,jdbcType=LONGVARCHAR},
+                update_time =  #{item.updateTime,jdbcType=TIMESTAMP}
+            </set>
+            where id = #{item.id,jdbcType=INTEGER}
+        </foreach>
+    </update>
+</mapper>

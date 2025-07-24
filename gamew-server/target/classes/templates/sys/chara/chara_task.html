@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+    <title>角色任务管理</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="favicon.ico"> 
+	<link th:href="@{/static/sys/css/bootstrap.min.css?v=3.3.5}" rel="stylesheet">
+<link th:href="@{/static/sys/css/plugins/sweetalert/sweetalert.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/font-awesome.min.css?v=4.4.0}" rel="stylesheet">
+<link th:href="@{/static/sys/css/animate.min.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/style.min.css?v=4.0.0}" rel="stylesheet">
+<link th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" rel="stylesheet" />
+<link rel="stylesheet" th:href="@{/static/sys/css/global.css}">
+
+     <style>
+    	.openMaxImg:hover{
+   		    box-shadow: 0px 0px 4px 1px #4e4e4e;
+   		    cursor: pointer;
+    	}
+		
+		/* 鼠标指向表格时,奇数行背景颜色 */
+		.layui-table tbody tr:hover,.layui-table-hover {
+		    background-color: #eeffee;
+		}
+		/* 表格头部工具栏背景色 */
+		.layui-table-tool {
+		    background-color: #eeffee;
+		}
+		.news_search{
+			font-size:14px;
+		}
+		.layui-form-label{
+			padding: 9px 0;
+		    left: 18px;
+		    color: black;
+		    font-size: 15px;
+		    top: 1px;
+	        width: 35px;
+		}
+		.layui-form-select {
+		    max-width:12.5rem;
+		}
+		input::-webkit-outer-spin-button,
+	    input::-webkit-inner-spin-button {
+	        -webkit-appearance: none;
+	    }
+	    input[type="number"]{
+	        -moz-appearance: textfield;
+	    }
+    </style>
+</head>
+
+<body>
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<!-- Panel Other -->
+		<div class="ibox float-e-margins">
+			<div class="row row-lg">
+				<div class="col-sm-12">
+					<!-- Example Events -->
+					<div class="example">
+						<table id="table" lay-filter="test">
+							
+						</table>
+					</div>
+					<!-- End Example Events -->
+				</div>
+			</div>
+		</div>
+		<!-- End Panel Other -->
+	</div>
+
+		<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/js/bootstrap.min.js?v=3.3.5}"></script>
+	<script th:src="@{/static/sys/js/content.min.js}"></script>
+	<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/plugins/sweetalert/sweetalert.min.js}"></script>
+	<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+	<script th:src="@{/static/sys/js/public.js}"></script>
+		<script th:line="javascript">
+		var layer;
+		var table;
+		var params;
+		var util;
+		var mapId;
+		var ps = $.getQueryString("ps");
+		var path = '[[${session.path}]]';
+		layui.use(['layer','table','form','util'], function(){
+			util = layui.util;
+		  	layer = layui.layer;
+		  	table = layui.table;
+		  	form = layui.form;
+		  	var cols =  [
+		  		{
+					title: '类型',
+					field: 'task_type'
+				}, 
+				{
+					title: '名称',
+					field: 'show_name'
+				},
+				{
+					title: '任务类型',
+					field: 'attrib',
+					width:100,
+					templet:function(value){
+						if(value.attrib == 1) {
+							return "可放弃";
+						}
+						return "不可放弃";
+					}
+				},
+				{
+					title: '描述',
+					field: 'task_prompt',
+					width:400
+				}
+			];
+		  	var pageNum = 1;
+		  	params = $.myRendar({"table":table,"elem":"#table","url":path+"/wd/chara/getCharaValue","method":"post","cols":cols,toolbar:false,width:150,
+				width:150,
+				page:false,
+				where:{"gid":ps,"type":"task"}
+				,templet:function(data){
+					var html = '<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-id="'+ps+'" data-type="'+data.task_type+'">删除</a>';
+					return html;
+				}
+		  	});
+		  	table.on('tool(test)', function(obj){
+			  	var data = obj.data;
+			  	var layEvent = obj.event;
+			  	var t = $(this);
+			  	var obj2 = {};
+		 		if(layEvent == "del") {
+					 layer.confirm('是否清除任务',function(){
+						  obj2.gid = ps;
+						  obj2.type = "delTask";
+						  obj2.value = data.task_type;
+						  u(obj2,obj)
+						  
+					 })
+				 }
+			});
+		  	function u(obj,o) {
+		  		 $.post(path+"/wd/chara/updateValue",obj,function(d){
+				  		if(d.status == 200) {
+							layer.msg("清除成功");
+							o.del();
+						}else {
+							layer.msg(d.retmsg);
+						}
+				  });
+		  	}
+		  	//查询
+		  	$("#query").click(function(data){
+				var name = $(".search_btn").val();
+				if(name.trim() != "" && name.length > 0) {
+					params.options.where = {"partyName":name};
+				}else {
+					params.options.where = {};
+				}
+				table.render(params.options);
+			})
+		});
+	</script>
+</body>
+
+</html>

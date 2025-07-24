@@ -1,0 +1,44 @@
+th {
+	background-color: rgb(16 16 16) !important;
+	color: #fff !important;
+	font-weight: bold;
+}
+body .layer-skin .layui-layer-title{background:rgb(16 16 16); color:#fff; border: none;}
+body .layer-skin .layui-layer-btn{border-top:1px solid #E9E7E7}
+
+.layui-layer .layui-layer-title{background:rgb(16 16 16); color:#fff; border: none;}
+.layui-layer-title{background:rgb(16 16 16); color:#fff; border: none;}
+
+.layui-layer-setwin .layui-layer-close1{
+	background-position: -187px -38px !important;
+    cursor: pointer;
+}
+.layui-layer-setwin .layui-layer-max {
+    background-position: -15px -40px !important;
+}
+.layui-layer-setwin .layui-layer-min cite{
+	background-color: #2e8ded !important;
+}
+.layui-elem-quote{
+	border-left: 5px solid rgb(16 16 16);
+}
+
+.core-color-theme {
+	color:rgb(16 16 16);
+}
+.layui-laypage .layui-laypage-curr .layui-laypage-em{
+	background:rgb(16 16 16);
+}
+.layui-tab-brief>.layui-tab-title .layui-this{
+	color:rgb(16 16 16);
+}
+.layui-tab-brief>.layui-tab-more li.layui-this:after, .layui-tab-brief>.layui-tab-title .layui-this:after{
+    border-bottom: 2px solid rgb(16 16 16);
+}
+.layui-form-select dl dd.layui-this{
+	background-color: rgb(16 16 16);
+}
+.layui-card-header{
+	background-color: rgb(16 16 16);
+	color:white;
+}

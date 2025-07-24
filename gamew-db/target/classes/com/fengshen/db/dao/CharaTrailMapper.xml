@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fengshen.db.dao.CharaTrailMapper">
+  <resultMap id="BaseResultMap" type="com.fengshen.db.domain.CharaTrail">
+   	<id column="id" jdbcType="INTEGER" property="id" />
+    <result column="data" jdbcType="VARCHAR" property="data" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="source" jdbcType="VARCHAR" property="source" />
+    <result column="chara_name" jdbcType="VARCHAR" property="charaName" />
+    <result column="cid" jdbcType="INTEGER" property="cid" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, data, remarks, type, chara_name, cid, add_time
+  </sql>
+  
+  <select id="getCount" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	explain SELECT count(1) FROM chara_trail
+	where 1 = 1
+	<if test="data != null">
+        and data = #{data,jdbcType=VARCHAR}
+      </if>
+      <if test="remarks != null">
+       and remarks = #{remarks,jdbcType=VARCHAR}
+      </if>
+      <if test="source != null">
+        and source = #{source,jdbcType=VARCHAR}
+      </if>
+      <if test="charaName != null">
+       and chara_name = #{charaName,jdbcType=VARCHAR}
+      </if>
+      <if test="cid != null">
+        and cid = #{cid,jdbcType=INTEGER}
+      </if>
+      <if test="addTime != null">
+        and add_time = #{addTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="startTime != null">
+      	and DATE_FORMAT(add_time,"%Y-%m-%d")&gt;=#{startTime,jdbcType=VARCHAR}  
+      </if>
+      <if test="endTime != null">
+        and DATE_FORMAT(add_time,"%Y-%m-%d")&lt;=#{endTime,jdbcType=VARCHAR}
+      </if>
+  </select>
+</mapper>

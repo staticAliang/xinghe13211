@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<title>兰亭序-后台管理</title>
+
+		<meta name="keywords" content="">
+		<meta name="description" content="">
+		<link th:href="@{/static/sys/css/bootstrap.min.css}" rel="stylesheet">
+		<link th:href="@{/static/sys/css/font-awesome.min.css}" rel="stylesheet">
+		<link th:href="@{/static/sys/css/animate.min.css}" rel="stylesheet">
+		<link th:href="@{/static/sys/css/style.min.css}" rel="stylesheet">
+		<link rel="shortcut icon" th:href="@{/static/favicon.ico}" />
+		<link rel="bookmark" th:href="@{/static/favicon.ico}" />
+		<style type="text/css">
+			.nav.custom-nav-second-level>li.active {
+				border: none;
+			}
+			
+			.nav>li>a i {
+				margin-right: 10px;
+				height: 13px;
+				width: 13px;
+			}
+		</style>
+	</head>
+
+	<body class="fixed-sidebar full-height-layout gray-bg pace-done" style="overflow: hidden">
+		<div id="wrapper">
+			<!--左侧导航开始-->
+			<nav class="navbar-default navbar-static-side" role="navigation">
+				<div class="nav-close">
+					<i class="fa fa-times-circle"></i>
+				</div>
+				<div class="sidebar-collapse">
+					<!--头像-->
+					<div class="headImage">
+						<ul class="nav">
+							<li class="nav-header">
+								<div class="dropdown profile-element">
+									<span> <img alt="image" class="img-circle"
+									th:src="@{/static/sys/img/2593bb203b6ef35fcc65184e5d8eda7a_28260.png}" width="64"
+									height="64" style="background: white;"/>
+								</span>
+									<a data-toggle="dropdown" class="dropdown-toggle" href="#">
+										<span class="clear"> <span class="block m-t-xs"><strong
+											class="font-bold" th:text="${session.nickName}"></strong></span> <span class="text-muted text-xs block"> <span>管理员</span><b class="caret"></b></span>
+										<!--  <span class="block m-t-xs"><strong class="font-bold" th:text="${session.user.nickName}"></strong></span>
+											<span class="text-muted text-xs block"> <span th:text="${session.user.userType}"></span><b class="caret"></b></span> -->
+										</span>
+									</a>
+									<ul class="dropdown-menu animated fadeInRight m-t-xs">
+										<li>
+											<a class="J_menuItem" th:href="@{/sys/jump?page=/user/changePassword.html}">修改密码</a>
+										</li>
+										<li class="divider"></li>
+										<li>
+											<a th:href="@{/sys/user/logout?v=3.0}">安全退出</a>
+										</li>
+									</ul>
+								</div>
+								<div class="logo-element">CANGQIONG</div>
+							</li>
+						</ul>
+					</div>
+					<!--头像-->
+					<!--自定义列表-->
+					<ul class="nav" id="side-menu">
+						<li>
+							<a href="#"> <i class="fa fa-gamepad"></i> <span class="nav-label">游戏管理</span> <span class="fa arrow"></span>
+							</a>
+							<ul class="nav nav-second-level">
+								<li>
+									<a href="#">角色·账号 <span class="fa arrow"></span></a>
+									<ul class="nav nav-third-level collapse" aria-expanded="false" style="height: 0px;">
+										<li>
+											<a class="J_menuItem" th:href="@{/sys/jump?page=/chara/account_list.html}">账号管理</a>
+										</li>
+										<li>
+											<a class="J_menuItem" th:href="@{/sys/jump?page=/chara/chara_list.html}">角色管理</a>
+										</li>
+										<li>
+											<a class="J_menuItem" th:href="@{/sys/jump?page=/chara/chara_zaxiang.html}">角色杂项</a>
+										</li>
+										<li>
+											<a class="J_menuItem" th:href="@{/sys/jump?page=/active/zuolao_info.html.html}">坐牢人员</a>
+										</li>
+									</ul>
+								</li>
+								<li>
+									<a href="#">系统配置 <span class="fa arrow"></span></a>
+									<ul class="nav nav-third-level collapse" aria-expanded="false" style="height: 0px;">
+										<li>
+											<a class="J_menuItem" th:href="@{/sys/jump?page=/game/config_info.html}">综合配置</a>
+										</li>
+										<li>
+											<a class="J_menuItem" th:href="@{/sys/jump?page=/game/about_config.html}">介绍配置</a>
+										</li>
+									</ul>
+								</li>
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/chara/publi_msg.html}">定时公告</a>
+								</li>
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/chara/chara_card.html}">变身卡</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a href="#"> <i class="fa fa-cutlery"></i> <span class="nav-label">基础管理</span> <span class="fa arrow"></span>
+							</a>
+							<ul class="nav nav-second-level">
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/base/list.html}">基础设置</a>
+								</li>
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/base/victory_die_reward.html}">奖励惩罚</a>
+								</li>
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/equip/zhuangbeiInfo.html}">装备信息</a>
+								</li>
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/chara/renwu.html}">任务信息</a>
+								</li>
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/base/cacheBase.html}">缓存设置</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a href="#"> <i class="fa fa-cutlery"></i> <span class="nav-label">工具管理</span> <span class="fa arrow"></span>
+							</a>
+							<ul class="nav nav-second-level">
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/tools/mail.html}">邮件管理</a>
+								</li>
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/tools/fightManage.html}">战斗管理</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a href="#"> <i class="fa fa-table"></i> <span class="nav-label">魂魄管理</span> <span class="fa arrow"></span>
+							</a>
+							<ul class="nav nav-second-level">
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/hunpo/shenhun.html}">神魂配置</a>
+								</li>
+								<li th:if="${session.c7608ca8c7af4a30b7f4f46e7ad47ad3 != null}">
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/hunpo/neidan.html}" >内丹配置</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a href="#"> <i class="fa fa-user"></i> <span class="nav-label">问道小子</span> <span class="fa arrow"></span>
+							</a>
+							<ul class="nav nav-second-level">
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/xiaozi/wdxiaozi.html}">模拟角色</a>
+								</li>
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/xiaozi/wendaoxiaozi_clients.html}">模拟客户端</a>
+								</li>
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/xiaozi/xiaoziTemplate.html}">小子模板</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a href="#"> <i class="glyphicon glyphicon-asterisk"></i>
+								<span class="nav-label">商城管理</span> <span class="fa arrow"></span>
+							</a>
+							<ul class="nav nav-second-level">
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/goods/yuanbaoGoods.html}">元宝商城</a>
+								</li>
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/goods/storeInfo.html}">商城库存</a>
+								</li>
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/goods/charge_point.html}">积分商城</a>
+								</li>
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/goods/rare_shop_item.html}">稀有商城</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a href="#"> <i class="fa fa-money"></i> <span class="nav-label">充值抽奖</span> <span class="fa arrow"></span>
+							</a>
+							<ul class="nav nav-second-level">
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/chara/chengwei.html}">充值称号</a>
+								</li>
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/luck/luckInfo.html}">充值好礼</a>
+								</li>
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/luck/luckDrawNpc.html}">抽奖大使</a>
+								</li>
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/game/day_sign_prize.html}">每日签到</a>
+								</li>
+							</ul>
+						</li>
+
+						<li>
+							<a href="#"> <i class="glyphicon glyphicon-unchecked"></i>
+								<span class="nav-label">npc管理</span> <span class="fa arrow"></span>
+							</a>
+							<ul class="nav nav-second-level">
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/npc/npc_list.html}">ncp列表</a>
+								</li>
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/npc/chara_statue.html}">npc雕像</a>
+								</li>
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/npc/npc_dialogue.html}">npc剧本</a>
+								</li>
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/npc/npc_dialogue_frame.html}">npc菜单</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a href="#"> <i class="glyphicon glyphicon-adjust"></i>
+								<span class="nav-label">怪物·宠物</span> <span class="fa arrow"></span>
+							</a>
+							<ul class="nav nav-second-level">
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/pet/pet.html}">普通怪物</a>
+								</li>
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/pet/fightobject_info.html}">战斗怪物</a>
+								</li>
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/pet/custom_pet_skill.html}">自定义宠物技能</a>
+								</li>
+							</ul>
+						</li>
+						<!-- 集市管理 -->
+						<li>
+							<a href="#"> <i class="fa fa-bed"></i> <span class="nav-label">集市系统</span> <span class="fa arrow"></span>
+							</a>
+							<ul class="nav nav-second-level">
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/market/saleClassifyGood.html}">集市管理</a>
+								</li>
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/market/saleGood.html}">货物列表</a>
+								</li>
+							</ul>
+						</li>
+
+						<!-- 集市管理 -->
+						<li>
+							<a href="#"> <i class="fa fa-bullseye"></i> <span class="nav-label">珍宝系统</span> <span class="fa arrow"></span>
+							</a>
+							<ul class="nav nav-second-level">
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/market/zhenbao.html}">订单管理</a>
+								</li>
+							</ul>
+						</li>
+						<!-- 帮派管理 -->
+						<li>
+							<a href="#"> <i class="fa fa-table"></i> <span class="nav-label">帮派系统</span> <span class="fa arrow"></span>
+							</a>
+							<ul class="nav nav-second-level">
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/party/party_list.html}">帮派管理</a>
+								</li>
+							</ul>
+						</li>
+
+						<!-- 试道系统 -->
+						<li>
+							<a href="#"> <i class="fa fa-gears"></i> <span class="nav-label">试道系统</span> <span class="fa arrow"></span>
+							</a>
+							<ul class="nav nav-second-level">
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/game/shidao_base.html}">基础设置</a>
+								</li>
+							</ul>
+						</li>
+
+						<!-- 大日金乌配置 -->
+						<li>
+							<a href="#"> <i class="fa fa-gears"></i> <span class="nav-label">大日金乌</span> <span class="fa arrow"></span>
+							</a>
+							<ul class="nav nav-second-level">
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/game/dari_base.html}">基础设置</a>
+								</li>
+							</ul>
+						</li>
+
+<!--						&lt;!&ndash; 自定义头顶称号 &ndash;&gt;-->
+<!--						<li>-->
+<!--							<a href="#"> <i class="fa fa-gears"></i> <span class="nav-label">头顶称号</span> <span class="fa arrow"></span>-->
+<!--							</a>-->
+<!--							<ul class="nav nav-second-level">-->
+<!--								<li>-->
+<!--									<a class="J_menuItem" th:href="@{/sys/jump?page=/game/toudingchenghao_base.html}">基础设置</a>-->
+<!--								</li>-->
+<!--							</ul>-->
+<!--						</li>-->
+
+						<li>
+							<a href="#"> <i class="fa fa-cubes"></i> <span class="nav-label">时装管理</span> <span class="fa arrow"></span>
+							</a>
+							<ul class="nav nav-second-level">
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/fasion/custom_fasion.html}">自定义时装</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a href="#"> <i class="fa fa-yc"></i> <span class="nav-label">结婚管理</span> <span class="fa arrow"></span>
+							</a>
+							<ul class="nav nav-second-level">
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/jiehun/weddingList.html}">婚礼礼单</a>
+								</li>
+							</ul>
+						</li>
+
+						<li>
+							<a href="#"> <i class="tree-icon fa fa-database"></i>
+								<span class="nav-label">数据统计</span> <span class="fa arrow"></span>
+							</a>
+							<ul class="nav nav-second-level">
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/user/chara_trail.html}">活动轨迹</a>
+								</li>
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/user/clients.html}">客户端</a>
+								</li>
+							</ul>
+						</li>
+
+						<!-- 系统设置 -->
+						<li>
+							<a href="#"> <i class="tree-icon+ tree-icon fa fa-tv"></i>
+								<span class="nav-label">系统管理</span> <span class="fa arrow"></span>
+							</a>
+							<ul class="nav nav-second-level">
+								<li>
+									<a class="J_menuItem" th:if="${session.user.userType == 0}" th:href="@{/sys/jump?page=/user/sys_user.html}">系统用户</a>
+								</li>
+
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/user/black_list.html}">黑名单</a>
+								</li>
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/user/charge_edit.html}">手工充值</a>
+								</li>
+								<li>
+									<a class="J_menuItem" th:href="@{/sys/jump?page=/chara/system_info.html}">服务进程</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</nav>
+			<!--左侧导航结束-->
+			<!--右侧部分开始-->
+			<div id="page-wrapper" class="gray-bg dashbard-1">
+				<div class="row border-bottom">
+					<nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+						<div class="navbar-header">
+							<a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+						</div>
+					</nav>
+				</div>
+				<div class="row content-tabs">
+					<button class="roll-nav roll-left J_tabLeft">
+					<i class="fa fa-backward"></i>
+				</button>
+					<nav class="page-tabs J_menuTabs">
+						<div class="page-tabs-content">
+							<a href="javascript:;" class="active J_menuTab" data-id="/sys/jump?page=index_v1.html">控制面板</a>
+						</div>
+					</nav>
+					<button class="roll-nav roll-right J_tabRight">
+					<i class="fa fa-forward"></i>
+				</button>
+					<div class="btn-group roll-nav roll-right">
+						<button class="dropdown J_tabClose" data-toggle="dropdown">
+						关闭操作<span class="caret"></span>
+					</button>
+						<ul role="menu" class="dropdown-menu dropdown-menu-right">
+							<li class="J_tabShowActive">
+								<a>定位当前选项卡</a>
+							</li>
+							<li class="divider"></li>
+							<li class="J_tabCloseAll">
+								<a>关闭全部选项卡</a>
+							</li>
+							<li class="J_tabCloseOther">
+								<a>关闭其他选项卡</a>
+							</li>
+						</ul>
+					</div>
+					<a th:href="@{/sys/user/logout?v=3.0}" class="roll-nav roll-right J_tabExit" id="logout"><i class="fa fa fa-sign-out"></i> 退出</a>
+				</div>
+				<!-- 右边页面的嵌入 -->
+				<div class="row J_mainContent" id="content-main">
+					<iframe class="J_iframe" name="iframe0" width="100%" height="100%" th:src="@{/sys/jump?page=index_v1.html}" frameborder="0" data-id="/sys/jump?page=index_v1.html" seamless></iframe>
+				</div>
+				<div class="footer">
+					<div class="pull-right">
+						<a href="javascript:void(0);" id="gameVersion"></a>
+					</div>
+				</div>
+			</div>
+			<!--右侧部分结束-->
+
+			<!--右侧边栏开始-->
+		</div>
+		<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}" type="text/javascript"></script>
+		<script th:src="@{/static/sys/js/jquery-migrate-1.2.1.min.js}" type="text/javascript"></script>
+		<script th:src="@{/static/sys/js/bootstrap.min.js}"></script>
+		<script th:src="@{/static/sys/js/plugins/metisMenu/jquery.metisMenu.js}"></script>
+		<script th:src="@{/static/sys/js/plugins/slimscroll/jquery.slimscroll.min.js}"></script>
+		<script th:src="@{/static/sys/js/plugins/layer/layer.min.js}"></script>
+		<script th:src="@{/static/sys/js/hplus.min.js}"></script>
+		<script th:src="@{/static/sys/js/contabs.min.js}"></script>
+		<script th:src="@{/static/sys/js/plugins/pace/pace.min.js}"></script>
+		<script th:inline="javascript">
+			var gameName = /*[[${session.gameName}]]*/ ;
+			var gameVersion = /*[[${session.gameVersion}]]*/ ;
+			if(gameName != "null" && gameName != undefined) {
+				$("title").html("后台管理(" + gameName + ")");
+			}
+			$("#gameVersion").html("兰亭序·后台管理 " + gameVersion + "");
+		</script>
+	</body>
+
+</html>

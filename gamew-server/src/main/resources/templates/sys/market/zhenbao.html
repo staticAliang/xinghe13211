@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>珍宝管理</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+
+<link rel="shortcut icon" href="favicon.ico">
+<link th:href="@{/static/sys/css/bootstrap.min.css?v=3.3.5}" rel="stylesheet">
+<link th:href="@{/static/sys/css/plugins/sweetalert/sweetalert.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/font-awesome.min.css?v=4.4.0}" rel="stylesheet">
+<link th:href="@{/static/sys/css/animate.min.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/style.min.css?v=4.0.0}" rel="stylesheet">
+<link th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" rel="stylesheet" />
+<link rel="stylesheet" th:href="@{/static/sys/css/global.css}">
+<style>
+
+
+/* 鼠标指向表格时,奇数行背景颜色 */
+.layui-table tbody tr:hover, .layui-table-hover {
+	background-color: #eeffee;
+}
+/* 表格头部工具栏背景色 */
+.layui-table-tool {
+	background-color: #eeffee;
+}
+
+.news_search {
+	font-size: 14px;
+}
+
+.layui-form-label {
+	padding: 9px 0;
+	left: 18px;
+	color: black;
+	font-size: 15px;
+	top: 1px;
+	width: 35px;
+}
+
+.layui-form-select {
+max-width:12.5rem;
+}
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield;
+}
+
+</style>
+</head>
+
+<body>
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<!-- Panel Other -->
+		<div class="ibox float-e-margins">
+			<div class="row row-lg">
+				<div class="col-sm-12">
+					<blockquote class="layui-elem-quote news_search">
+						<div class="layui-inline">
+							<div class="layui-input-inline">
+								<input type="text" placeholder="名字"
+									class="layui-input search_btn" type-close autocomplete="off">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<a class="layui-btn" id="query">查询</a>
+						</div>
+						<div class="layui-inline">
+							<a class="layui-btn marktBtnStatus hide">关闭珍宝</a>
+						</div>
+						<div class="layui-inline">
+							<a class="layui-btn marktBtnSet layui-btn-normal">珍宝配置</a>
+						</div>
+						<div class="layui-inline">
+							<a class="layui-btn marktBtnInit layui-btn-warm">一键修复</a>
+						</div>
+					</blockquote>
+
+					<!-- Example Events -->
+					<div class="example">
+						<table id="table" lay-filter="test">
+
+						</table>
+					</div>
+					<!-- End Example Events -->
+				</div>
+			</div>
+		</div>
+		<!-- End Panel Other -->
+	</div>
+
+		<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/js/bootstrap.min.js?v=3.3.5}"></script>
+	<script th:src="@{/static/sys/js/content.min.js}"></script>
+	<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/plugins/sweetalert/sweetalert.min.js}"></script>
+	<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+	<script th:src="@{/static/sys/js/public.js}"></script>
+	<script th:line="javascript">
+	var path = '[[${session.path}]]';
+		var layer;
+		var table;
+		var params;
+		var util;
+		layui.use([ 'layer', 'table', 'form', 'laydate', 'util' ], function() {
+			util = layui.util;
+			layer = layui.layer;
+			table = layui.table;
+			var date = layui.laydate;
+			form = layui.form;
+			var cols = [ {
+				title: 'id',
+				field: 'id'
+			}, 
+			{
+				title:"用户",
+				field:"master"
+			},
+			{
+				title: '名字',
+				field: 'name'
+			},
+			{
+				title: 'key',
+				field: 'alias'
+			},
+			{
+				title: '价格',
+				field: 'price'
+			},
+			{
+				title:"状态",
+				templet:function(value){
+					var type='<button class="layui-btn layui-btn-primary layui-btn-xs">默认</button>';;
+					if(value.status == 1) {
+						type='<button class="layui-btn layui-btn-xs">公示中</button>';
+					}
+					if(value.status == 2) {
+						type='<button class="layui-btn layui-btn-xs">出售中</button>';
+					}
+					if(value.status == 3) {
+						type='<button class="layui-btn layui-btn-normal layui-btn-xs">已下架</button>';
+					}
+					if(value.status == 4) {
+						type='<button class="layui-btn layui-btn-disabled layui-btn-xs">冻结中</button>';
+					}
+					if(value.status == 5) {
+						type='<button class="layui-btn layui-btn-warm layui-btn-xs">审核中</button>';	
+					}
+					if(value.status == 6) {
+						type='<button class="layui-btn layui-btn-xs">已审核</button>';
+					}
+					if(value.status == 7) {
+						type='<button class="layui-btn layui-btn-disabled layui-btn-danger">审核不通过</button>';
+					}
+					return type;
+				}
+			},
+			{
+				title:"上架时间",
+				field: 'addTime',
+				templet: function(value) {
+					if(value.addTime != undefined){
+						return util.timeAgo(value.addTime);
+					}else {
+						return "";
+					}
+				}
+			},
+			];
+			params = $.myRendar({
+				"table" : table,
+				"elem" : "#table",
+				"url" : path+"/sys/wd/stall_gold/getGoods",
+				"method" : "post",
+				"cols" : cols,
+				toolbar : false,
+				templet:function(data){
+					var html = "";
+					if(data.status == 5){
+						html += '<a class="layui-btn layui-btn-normal layui-btn-xs edit" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>审核</a>';
+					}
+					return html;
+				}
+			});
+			
+			table.on('tool(test)', function(obj){
+			  	var data = obj.data;
+			  	var layEvent = obj.event;
+			  	var t = $(this);
+			  	var obj = {};
+		 		if(layEvent == "edit") {
+				  		var html = '<div class="layui-form" style="width:90%;margin-top:31px;" lay-filter="editForm">';
+						//等级
+						html += '<div class="layui-form-item"> <label class="layui-form-label" style=" width:70px;">状态</label> <div class="layui-input-block">';
+						html += "<select name='status' class='goodsStatus'>";
+						html += "<option value='4'>冻结</option>";
+						html += "<option value='5'>审核中</option>";
+						html += "<option value='6'>审核通过</option>";
+						html += "<option value='7'>审核失败</option>";
+						html +="</select>";
+						html+='</div><input type="hidden" value="'+data.id+'" name="id"/><input type="hidden" value="'+data.goodsId+'" name="goodsId"/></div>';
+						
+						html += '<div class="layui-form-item"><a class="layui-btn layui-btn-danger layui-btn" style="margin-left: 109px;" id="updateForm">保存</a></div>'
+						html += '</div>';
+						layer.open({
+							title: "状态编辑",
+							area: ["350px","300px"],
+							type: 1,
+							shadeClose:true,
+							content: html,
+							success: function() {
+								$(".goodsStatus").find("option").each(function(i,o){
+									var op = $(o);
+									if(op.val() == data.status) {
+										op.attr("selected","selected")
+									}
+								})
+								form.render('select');
+							}
+						});
+				  }
+			});
+			//修改状态
+			$(document).on("click","#updateForm",function(){
+				var editForm = form.val("editForm");
+				$.post(path+"/sys/wd/stall_gold/checkGoods",editForm,function(data){
+					layer.msg(data.retmsg)
+			  	})
+			})
+			$("#query").click(function(data){
+				var name = $(".search_btn").val();
+				if(name.trim() != "" && name.length > 0) {
+					params.options.where = {"master":name};
+				}else {
+					params.options.where = {};
+				}
+				table.render(params.options);
+			})
+			var config;
+			$.post(path+"/sys/wd/getConfig",function(data){
+		  		var status = data.data.marketConfig.zhenbaoStatus;
+		  		config = data.data.marketConfig;
+		  		if(status == 1) {
+		  			$(".marktBtnStatus").html("开启珍宝");
+		  			$(".marktBtnStatus").attr("data-status","0")
+		  			$(".marktBtnStatus").addClass("layui-btn-danger");
+		  		}else {
+		  			$(".marktBtnStatus").html("关闭珍宝");
+		  			$(".marktBtnStatus").attr("data-status","1")
+		  			$(".marktBtnStatus").removeClass("layui-btn-danger");
+		  		}
+		  		$(".marktBtnStatus").removeClass("hide");
+		  	})
+		  	
+		  	$(".marktBtnStatus").click(function(data){
+		  		var status = $(this).attr("data-status");
+		  		$.post(path+"/sys/wd/stall_gold/setMarketConfig",{"zhenbaoStatus":status},function(data){
+		  			if(data.status == 200) {
+						layer.msg("修改成功");		  				
+		  			}else {
+		  				layer.msg(data.retmsg);
+		  			}
+		  		})
+		  		if(status == 1) {
+		  			$(".marktBtnStatus").html("开启珍宝");
+		  			$(".marktBtnStatus").attr("data-status","0")
+		  			$(".marktBtnStatus").addClass("layui-btn-danger");
+		  		}else {
+		  			$(".marktBtnStatus").html("关闭珍宝");
+		  			$(".marktBtnStatus").attr("data-status","1")
+		  			$(".marktBtnStatus").removeClass("layui-btn-danger");
+		  		}
+		  	})
+		  	$(".marktBtnSet").click(function(){
+		  		var html = '<div class="layui-form" style="width:90%;margin-top:31px;" lay-filter="marketSetForm">';
+				html += '<div class="layui-form-item"> <label class="layui-form-label" style="width:120px">公示时间(分)</label> <div class="layui-input-block"> <input type="text" autocomplete="off" name="zhenbaoPublicTimes" class="layui-input" lay-verify="required" style="width:250px;margin-left:46px" value="'+config.zhenbaoPublicTimes+'"> </div></div>';
+				html += '<div class="layui-form-item"> <label class="layui-form-label" style="width:120px">下架时间(分)</label> <div class="layui-input-block"> <input type="text" autocomplete="off" name="zhenbaoDownGoodTimes" class="layui-input" lay-verify="required" style="width:250px;margin-left:46px" value="'+config.zhenbaoDownGoodTimes+'"> </div></div>';
+				html += '<div class="layui-form-item"> <label class="layui-form-label" style="width:120px">是否审核</label> <div class="layui-input-block" style="margin-left: 156px;"> <input type="checkbox"  lay-skin="switch" id="zhenbao_cost_order_status" lay-text="开|关"  name="zhenbao_cost_order_status" lay-filter="zhenbao_cost_order_status"> </div></div>';
+				
+				html += '<div class="layui-form-item"> <label class="layui-form-label" style="width:100px">消耗</label> <div class="layui-input-block" style="margin-left: 156px;">';
+				html += "<select name='level' id='level'>";
+				html +="<option value='金元宝'>金元宝</option>"
+				html +="<option value='积分'>积分</option>"
+				html+="</select>";
+				html+='</div></div>';
+				
+				html += '<div class="layui-form-item"><a class="layui-btn layui-btn-danger layui-btn" lay-submit style="margin-left: 109px;" id="updateZhenbaoForm">保存</a></div>';
+				html += '</div>';
+				layer.open({
+					title: false,
+					area: ["450px","320px"],
+					type: 1,
+					shadeClose:true,
+					content: html,
+					success: function() {
+						$.post(path+"/ws/configInfo/getConfigInfoDataByUUIDSToMap",{"uuids":"zhenbao_cost_type,zhenbao_cost_order_status"},function(data){
+							$("#level option[value='"+data.data.zhenbao_cost_type.data+"']").attr("selected", true);								
+							form.render('select');
+							$("#editFormBtn").attr("data-id",data.data.id);
+							if(data.data.zhenbao_cost_order_status.data == undefined) {
+								$("#zhenbao_cost_order_status").attr("checked", true);	
+							}else {
+								if(data.data.zhenbao_cost_order_status.data == "开启") {
+									$("#zhenbao_cost_order_status").attr("checked", true);	
+								}else {
+									$("#zhenbao_cost_order_status").attr("checked", false);	
+								}
+							}
+							form.render('checkbox');
+						})
+					}
+				});
+		  	})
+		  	$(".marktBtnInit").click(function(){
+		  		//一键修复珍宝
+	  			var load = $.load("正在修复,请稍后...");
+		  		$.post(path+"/sys/wd/stall_gold/marktBtnInit",function(data){
+		  			if(data.status == 200) {
+		  				layer.msg("修复成功");
+		  			}
+		  			layer.close(load);
+				})
+		  	})
+		  	
+		  	$(document).on("click","#updateZhenbaoForm",function(){
+		  		$.post(path+"/sys/wd/stall_gold/setMarketConfig",{"zhenbaoPublicTimes":$("input[name='zhenbaoPublicTimes']").val(),"zhenbaoDownGoodTimes":$("input[name='zhenbaoDownGoodTimes']").val()},function(data){
+		  			if(data.status == 200) {
+						layer.msg("修改成功");
+						//刷新配置
+						$.post(path+"/sys/wd/getConfig",function(data){
+					  		config = data.data.marketConfig;
+					  	})
+		  			}else {
+		  				layer.msg(data.retmsg);
+		  			}
+		  		})
+		  		var marketSetForm = form.val("marketSetForm");
+		  		//设置配置信息
+		  		$.post(path+"/ws/configInfo/updateConfigInfoByUUID2",{"uuid":"zhenbao_cost_type","data":marketSetForm.level},function(data){
+		  			if(data.status == 200) {
+		  				layer.msg("设置成功");
+		  			}else {
+		  				layer.msg(data.retmsg);
+		  			}
+		  		})
+		  		
+		  	});
+			form.on('switch(zhenbao_cost_order_status)', function(data){
+				var status = "关闭";
+				if(data.elem.checked) {
+					status = "开启";
+				}
+				$.post(path+"/ws/configInfo/updateConfigInfoByUUID2",{"uuid":"zhenbao_cost_order_status","data":status},function(data){
+		  			if(data.status == 200) {
+		  				layer.msg("设置成功");
+		  			}else {
+		  				layer.msg(data.retmsg);
+		  			}
+		  		}) 
+			})
+		});
+	</script>
+</body>
+
+</html>

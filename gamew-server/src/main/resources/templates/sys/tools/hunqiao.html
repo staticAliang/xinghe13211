@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>魂窍发送</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="stylesheet"
+	th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" />
+<style type="text/css">
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield;
+}
+</style>
+</head>
+
+<body>
+	<div style=" width: 335px; margin: 45px auto; ">
+		<div class="layui-form" lay-filter="formData">
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label" style="width: 30px">颜色</label>
+					<div class="layui-input-inline" style="width: 120px;">
+						<select name="char_zb_ss_type" lay-filter="char_zb_ss_type_filter">
+							<option value="">请选择类型</option>
+							<option value="蓝色">蓝色</option>
+							<option value="粉色">粉色</option>
+							<option value="金色">金色</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label" style="width: 30px">属性</label>
+					<div class="layui-input-inline" style="width: 120px;">
+						<select name="ssAttr1" class="ssAttr">
+							<option value="">选择属性</option>
+							<option value="phy_power">物伤</option>
+							<option value="mag_power">法伤</option>
+							<option value="max_life">气血</option>
+							<option value="def">防御</option>
+							<option value="speed">速度</option>
+							<option value="str">力量</option>
+							<option value="wiz">灵力</option>
+							<option value="dex">敏捷</option>
+							<option value="con">体质</option>
+							<option value="all_attrib">所有属性</option>
+							<option value="stunt_rate">物理必杀率</option>
+							<option value="mstunt_rate">法术必杀率</option>
+							<option value="ignore_resist_metal">忽视目标抗金</option>
+							<option value="ignore_resist_wood">忽视目标抗木</option>
+							<option value="ignore_resist_water">忽视目标抗水</option>
+							<option value="ignore_resist_fire">忽视目标抗火</option>
+							<option value="ignore_resist_earth">忽视目标抗土</option>
+							<option value="ignore_all_resist_polar">忽视所有抗性</option>
+							<option value="ignore_all_resist_except">忽视所有抗异常</option>
+							<option value="ignore_resist_forgotten">忽视目标抗遗忘</option>
+							<option value="ignore_resist_poison">忽视目标抗中毒</option>
+							<option value="ignore_resist_frozen">忽视目标抗冰冻</option>
+							<option value="ignore_resist_sleep">忽视目标抗昏睡</option>
+							<option value="ignore_resist_confusion">忽视目标抗混乱</option>
+							<option value="resist_metal">金抗性</option>
+							<option value="resist_wood">木抗性</option>
+							<option value="resist_water">水抗性</option>
+							<option value="resist_fire">火抗性</option>
+							<option value="resist_earth">土抗性</option>
+							<option value="all_resist_polar">所有抗性</option>
+							<option value="all_resist_except">所有抗异常</option>
+							<option value="resist_forgotten">抗遗忘</option>
+							<option value="resist_poison">抗中毒</option>
+							<option value="resist_frozen">抗冰冻</option>
+							<option value="resist_sleep">抗昏睡</option>
+							<option value="resist_confusion">抗混乱</option>
+						</select>
+					</div>
+					<div class="layui-input-inline" style="width: 120px;">
+						<input type="number" name="ssVal1" class="layui-input"
+							placeholder="输入数值">
+					</div>
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label" style="width: 30px">属性</label>
+					<div class="layui-input-inline" style="width: 120px;">
+						<select name="ssAttr2" class="ssAttr">
+							<option value="">选择属性</option>
+							<option value="phy_power">物伤</option>
+							<option value="mag_power">法伤</option>
+							<option value="max_life">气血</option>
+							<option value="def">防御</option>
+							<option value="speed">速度</option>
+							<option value="str">力量</option>
+							<option value="wiz">灵力</option>
+							<option value="dex">敏捷</option>
+							<option value="con">体质</option>
+							<option value="all_attrib">所有属性</option>
+							<option value="stunt_rate">物理必杀率</option>
+							<option value="mstunt_rate">法术必杀率</option>
+							<option value="ignore_resist_metal">忽视目标抗金</option>
+							<option value="ignore_resist_wood">忽视目标抗木</option>
+							<option value="ignore_resist_water">忽视目标抗水</option>
+							<option value="ignore_resist_fire">忽视目标抗火</option>
+							<option value="ignore_resist_earth">忽视目标抗土</option>
+							<option value="ignore_all_resist_polar">忽视所有抗性</option>
+							<option value="ignore_all_resist_except">忽视所有抗异常</option>
+							<option value="ignore_resist_forgotten">忽视目标抗遗忘</option>
+							<option value="ignore_resist_poison">忽视目标抗中毒</option>
+							<option value="ignore_resist_frozen">忽视目标抗冰冻</option>
+							<option value="ignore_resist_sleep">忽视目标抗昏睡</option>
+							<option value="ignore_resist_confusion">忽视目标抗混乱</option>
+							<option value="resist_metal">金抗性</option>
+							<option value="resist_wood">木抗性</option>
+							<option value="resist_water">水抗性</option>
+							<option value="resist_fire">火抗性</option>
+							<option value="resist_earth">土抗性</option>
+							<option value="all_resist_polar">所有抗性</option>
+							<option value="all_resist_except">所有抗异常</option>
+							<option value="resist_forgotten">抗遗忘</option>
+							<option value="resist_poison">抗中毒</option>
+							<option value="resist_frozen">抗冰冻</option>
+							<option value="resist_sleep">抗昏睡</option>
+							<option value="resist_confusion">抗混乱</option>
+						</select>
+					</div>
+					<div class="layui-input-inline" style="width: 120px;">
+						<input type="number" name="ssVal2" class="layui-input"
+							placeholder="输入数值">
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label" style="width: 30px">属性</label>
+					<div class="layui-input-inline" style="width: 120px;">
+						<select name="ssAttr3" class="ssAttr">
+							<option value="">选择属性</option>
+							<option value="phy_power">物伤</option>
+							<option value="mag_power">法伤</option>
+							<option value="max_life">气血</option>
+							<option value="def">防御</option>
+							<option value="speed">速度</option>
+							<option value="str">力量</option>
+							<option value="wiz">灵力</option>
+							<option value="dex">敏捷</option>
+							<option value="con">体质</option>
+							<option value="all_attrib">所有属性</option>
+							<option value="stunt_rate">物理必杀率</option>
+							<option value="mstunt_rate">法术必杀率</option>
+							<option value="ignore_resist_metal">忽视目标抗金</option>
+							<option value="ignore_resist_wood">忽视目标抗木</option>
+							<option value="ignore_resist_water">忽视目标抗水</option>
+							<option value="ignore_resist_fire">忽视目标抗火</option>
+							<option value="ignore_resist_earth">忽视目标抗土</option>
+							<option value="ignore_all_resist_polar">忽视所有抗性</option>
+							<option value="ignore_all_resist_except">忽视所有抗异常</option>
+							<option value="ignore_resist_forgotten">忽视目标抗遗忘</option>
+							<option value="ignore_resist_poison">忽视目标抗中毒</option>
+							<option value="ignore_resist_frozen">忽视目标抗冰冻</option>
+							<option value="ignore_resist_sleep">忽视目标抗昏睡</option>
+							<option value="ignore_resist_confusion">忽视目标抗混乱</option>
+							<option value="resist_metal">金抗性</option>
+							<option value="resist_wood">木抗性</option>
+							<option value="resist_water">水抗性</option>
+							<option value="resist_fire">火抗性</option>
+							<option value="resist_earth">土抗性</option>
+							<option value="all_resist_polar">所有抗性</option>
+							<option value="all_resist_except">所有抗异常</option>
+							<option value="resist_forgotten">抗遗忘</option>
+							<option value="resist_poison">抗中毒</option>
+							<option value="resist_frozen">抗冰冻</option>
+							<option value="resist_sleep">抗昏睡</option>
+							<option value="resist_confusion">抗混乱</option>
+						</select>
+					</div>
+					<div class="layui-input-inline" style="width: 120px;">
+						<input type="number" name="ssVal3" class="layui-input"
+							placeholder="输入数值">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div style="margin: 0px 13px;">
+			<div class="layui-form-mid layui-word-aux">如果不知道最大值就随便填，系统会自动校正</div>
+			<a class="layui-btn" id="char_zb_ss_info_send" style="width: 298px;">发送</a>
+		</div>
+	</div>
+
+
+	<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+	<script th:src="@{/static/sys/js/public.js}"></script>
+	<script th:line="javascript">
+		var path = '[[${session.path}]]';
+		var layer;
+		var table;
+		var params;
+		var util;
+		var mapId;
+		layui.use([ 'layer', 'table', 'form', 'util' ], function() {
+			util = layui.util;
+			layer = layui.layer;
+			table = layui.table;
+			form = layui.form;
+			$("#char_zb_ss_info_send").click(function(){
+				var data = form.val("formData");
+				var isSelected = "";
+				$(".ssAttr").each(function(i,o){
+					var text = $(o).find("option:selected").val();
+					console.log(text);
+					isSelected = text;
+					if(text != "") {
+						return false;
+					}
+				})
+				if(isSelected == "") {
+					layer.msg("至少选中一条属性");
+					return;
+				}
+				var ary = new Array();
+				$(".ssAttr").each(function(i,o){
+					var sel = $(o).find("option:selected");
+					if(sel.val() != "") {
+						ary.push(sel.text());
+					}
+				});
+				var isReplace = false;
+				for(var i = 0; i < ary.length - 1; i++) {
+				  if(ary[i] == ary[i + 1]) {
+					  isReplace = true;
+					  break;
+				  }
+				}
+				if(isReplace) {
+					layer.msg("不允许有重复属性");
+					return;
+				}
+				var charaName = window.parent.getCharaName();
+				if(charaName == "") {
+					layer.msg("请输入角色名");
+					return;
+				}
+				data.charaName = charaName;
+				$.post(path+"/wd/chara/sendHunQiao",data,function(d){
+					if(d.status == 200) {
+						
+					}
+					layer.msg(d.retmsg);
+				})
+			});
+		});
+	</script>
+</body>
+
+</html>

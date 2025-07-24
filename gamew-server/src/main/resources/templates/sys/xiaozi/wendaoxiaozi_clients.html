@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<title>问道小子客户端</title>
+		<meta name="keywords" content="">
+		<meta name="description" content="">
+
+		<link rel="shortcut icon" href="favicon.ico">
+		<link th:href="@{/static/sys/css/bootstrap.min.css?v=3.3.5}" rel="stylesheet">
+		<link th:href="@{/static/sys/css/plugins/sweetalert/sweetalert.css}" rel="stylesheet">
+		<link th:href="@{/static/sys/css/font-awesome.min.css?v=4.4.0}" rel="stylesheet">
+		<link th:href="@{/static/sys/css/animate.min.css}" rel="stylesheet">
+		<link th:href="@{/static/sys/css/style.min.css?v=4.0.0}" rel="stylesheet">
+		<link th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" rel="stylesheet" />
+		<link rel="stylesheet" th:href="@{/static/sys/css/global.css}">
+
+		<style>
+			.openMaxImg:hover {
+				box-shadow: 0px 0px 4px 1px #4e4e4e;
+				cursor: pointer;
+			}
+			/* 鼠标指向表格时,奇数行背景颜色 */
+			
+			.layui-table tbody tr:hover,
+			.layui-table-hover {
+				background-color: #eeffee;
+			}
+			/* 表格头部工具栏背景色 */
+			
+			.layui-table-tool {
+				background-color: #eeffee;
+			}
+			
+			.news_search {
+				font-size: 14px;
+			}
+			
+			.layui-form-label {
+				padding: 9px 0;
+				left: 18px;
+				color: black;
+				font-size: 15px;
+				top: 1px;
+				width: 35px;
+			}
+			
+			.layui-form-select {
+				max-width: 12.5rem;
+			}
+			
+			input::-webkit-outer-spin-button,
+			input::-webkit-inner-spin-button {
+				-webkit-appearance: none;
+			}
+			
+			input[type="number"] {
+				-moz-appearance: textfield;
+			}
+			
+			.layui-icon {
+				height: 30px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="wrapper wrapper-content animated fadeInRight">
+			<!-- Panel Other -->
+			<div class="ibox float-e-margins">
+				<div class="row row-lg">
+					<div class="col-sm-12">
+						<!-- Example Events -->
+						<div class="example">
+							<blockquote class="layui-elem-quote news_search">
+								<div class="layui-inline">
+									<div class="layui-input-inline">
+										<input type="text" placeholder="名字" class="layui-input search_btn" type-close autocomplete="off">
+									</div>
+								</div>
+								<div class="layui-inline">
+									<a class="layui-btn" id="query">查询</a>
+								</div>
+								<div class="layui-inline">
+									<button type="button" class="layui-btn" id="openClients">
+						  	<i class="layui-icon">&#xe608;</i> 打开客户端
+							</button>
+									<button type="button" class="layui-btn layui-bg-cyan" id="batchOpenClients">
+							  <i class="layui-icon">&#xe608;</i> 批量打开客户端
+							</button>
+									<button type="button" class="layui-btn layui-bg-blue" id="closeAllClient">
+							  <i class="layui-icon">&#x1006;</i> 全部关闭
+							</button>
+								</div>
+
+								<div class="layui-inline">
+									<button type="button" class="layui-btn layui-btn-primary flush"><i class="layui-icon layui-icon-refresh"></i></button>
+								</div>
+								<div class="layui-inline">
+									<div style="font-size: 23px; margin-left: 20px;">
+										<span style="color:#359f6a">可用内存:</span>
+										<span id="number">0</span>
+									</div>
+								</div>
+								<div class="layui-inline">
+									<div style="font-size: 23px; margin-left: 20px;">
+										<span style="color:#359f6a">在线客户端:</span>
+										<span id="onlineClientCount">0</span>
+									</div>
+								</div>
+							</blockquote>
+							<table id="users" lay-filter="users">
+
+							</table>
+						</div>
+						<!-- End Example Events -->
+					</div>
+				</div>
+			</div>
+			<!-- End Panel Other -->
+		</div>
+
+		<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+		<script th:src="@{/static/sys/js/bootstrap.min.js?v=3.3.5}"></script>
+		<script th:src="@{/static/sys/js/content.min.js}"></script>
+		<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+		<script th:src="@{/static/sys/js/plugins/sweetalert/sweetalert.min.js}"></script>
+		<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+		<script th:src="@{/static/sys/js/public.js}"></script>
+		<script th:line="javascript">
+			var path = '[[${session.path}]]';
+			var layer;
+			var table;
+			var params;
+			var util;
+			var mapId;
+			var ps = $.getQueryString("ps");
+			var type = $.getQueryString("type");
+			var where = {};
+			var form;
+			var pageNum;
+			layui.use(['layer', 'table', 'form', 'util'], function() {
+				util = layui.util;
+				layer = layui.layer;
+				table = layui.table;
+				form = layui.form;
+
+				var cols = [{
+						title: '客户端id',
+						field: 'uuid',
+					},
+					{
+						title: '在线角色',
+						field: 'name',
+						templet: function(value) {
+							if(value.name == "" || value.name == undefined) {
+								value.name = "暂无角色上线";
+							}
+							return "<a href='javascript:;'>" + value.name + "</a>";
+						}
+					},
+					{
+						title: '状态',
+						field: 'online',
+						templet: function(value) {
+							if(value.online == 1) {
+								return "<font color='green'>在线</font>";
+							}
+							return "<font>离线</font>";
+						}
+					},
+				];
+				var url = path + "/wd/xiaozi/getClients";
+				init();
+
+				function init() {
+					params = $.myRendar({
+						"table": table,
+						"elem": "#users",
+						"url": url,
+						"method": "post",
+						"cols": cols,
+						toolbar: false,
+						where: where,
+						height: "500",
+						page: false,
+						templet: function(data) {
+							var html = '';
+							if(data.online == 0) {
+								html += '<a class="layui-btn layui-btn-xs" lay-event="switchChara">选择角色</a>';
+							}
+							html += '<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="shutdown">强制关闭</a>';
+							return html;
+						},
+						success: function(res, curr, count) {
+							params.options.page.curr = curr;
+							$("#onlineClientCount").text(res.data.length);
+						}
+					});
+				}
+
+				table.on('tool(users)', function(obj) {
+					var data = obj.data;
+					var layEvent = obj.event;
+					var tr = obj.tr;
+					var type = "";
+					var value = $(this).attr("data");
+					var t = $(this);
+					if(layEvent == "shutdown") {
+						$.post(path + "/wd/xiaozi/shutdownClient", {
+							"uuid": data.uuid
+						}, function(d) {
+							layer.msg(d.retmsg);
+							table.render(params.options);
+						});
+					} else if(layEvent == "switchChara") {
+						layer.prompt({
+							title: "输入问道小子角色名"
+						}, function(value, index, elem) {
+							var load = $.load("正在上线...");
+							$.post(path + "/wd/xiaozi/switchCharaLogin", {
+								"name": value,
+								"uuid": data.uuid
+							}, function(d) {
+								layer.msg(d.retmsg);
+								layer.close(load);
+								table.render(params.options);
+							});
+						});
+
+					}
+				});
+				//查询
+				$("#query").click(function(data) {
+					var name = $(".search_btn").val();
+					if(name.trim() != "" && name.length > 0) {
+						params.options.where = {
+							"name": name
+						};
+					} else {
+						params.options.where = {};
+					}
+					table.render(params.options);
+				})
+				$(".flush").click(function() {
+					table.render(params.options);
+					getRam();
+				})
+				//打开客户端
+				$("#openClients").click(function() {
+					var load = $.load("正在打开...");
+					$.post(path + "/wd/xiaozi/openClients", function(d) {
+						if(d.status == 200) {
+							layer.msg("启动成功,(这里打开成功并不代表一定就成功了)");
+							setTimeout(function() {
+								table.render(params.options);
+							}, 1000)
+							getRam();
+						} else {
+							layer.msg("启动失败");
+						}
+						layer.close(load);
+					});
+				})
+				//批量打开客户端
+				$("#batchOpenClients").click(function() {
+					layer.prompt({
+						title: "请输入数量"
+					}, function(value, index, elem) {
+						if(!isNotANumber(value)) {
+							layer.msg("请输入数字");
+							return;
+						}
+						var load = $.load("正在打开...");
+						$.post(path + "/wd/xiaozi/openClients", {
+							"count": value
+						}, function(d) {
+							layer.msg("打开成功,(这里打开成功并不代表一定就成功了)");
+							layer.close(load);
+							setTimeout(function() {
+								table.render(params.options);
+							}, 1000 * value)
+							getRam();
+						});
+					});
+				})
+				getRam();
+
+				function getRam() {
+					$.post(path + "/wd/xiaozi/getAvailableRam", function(d) {
+						$("#number").text(d.data + "M");
+					});
+				}
+
+				function isNotANumber(inputData) {　　
+					if(parseFloat(inputData).toString() == "NaN") {　　　　
+						return false;　　
+					} else {　　　　
+						return true;　　
+					}
+				}
+
+				$("#closeAllClient").click(function() {
+					$.post(path + "/wd/xiaozi/closeAllClient", function(d) {
+						layer.msg("成功关闭所有客户端");
+						table.render(params.options);
+					});
+				})
+			})
+		</script>
+	</body>
+
+</html>

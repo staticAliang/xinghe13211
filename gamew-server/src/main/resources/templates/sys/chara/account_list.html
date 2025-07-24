@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+    <title>帮派管理</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="favicon.ico"> 
+	<link th:href="@{/static/sys/css/bootstrap.min.css?v=3.3.5}" rel="stylesheet">
+	<link th:href="@{/static/sys/css/plugins/sweetalert/sweetalert.css}" rel="stylesheet">
+	<link th:href="@{/static/sys/css/font-awesome.min.css?v=4.4.0}" rel="stylesheet">
+	<link th:href="@{/static/sys/css/animate.min.css}" rel="stylesheet">
+	<link th:href="@{/static/sys/css/style.min.css?v=4.0.0}" rel="stylesheet">
+	<link th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" rel="stylesheet" />
+	<link rel="stylesheet" th:href="@{/static/sys/css/global.css}">
+
+     <style>
+    	.openMaxImg:hover{
+   		    box-shadow: 0px 0px 4px 1px #4e4e4e;
+   		    cursor: pointer;
+    	}
+		
+		/* 鼠标指向表格时,奇数行背景颜色 */
+		.layui-table tbody tr:hover,.layui-table-hover {
+		    background-color: #eeffee;
+		}
+		/* 表格头部工具栏背景色 */
+		.layui-table-tool {
+		    background-color: #eeffee;
+		}
+		.news_search{
+			font-size:14px;
+		}
+		.layui-form-label{
+			padding: 9px 0;
+		    left: 18px;
+		    color: black;
+		    font-size: 15px;
+		    top: 1px;
+	        width: 35px;
+		}
+		.layui-form-select {
+		    max-width:12.5rem;
+		}
+		input::-webkit-outer-spin-button,
+	    input::-webkit-inner-spin-button {
+	        -webkit-appearance: none;
+	    }
+	    input[type="number"]{
+	        -moz-appearance: textfield;
+	    }
+    </style>
+</head>
+
+<body>
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<div class="ibox float-e-margins">
+			<div class="row row-lg layui-form" lay-filter="layf">
+				<div class="col-sm-12">
+					<div class="example">
+						<blockquote class="layui-elem-quote news_search">
+							<div class="layui-inline">
+							<div class="layui-input-inline">
+								<input type="text" placeholder="账号名"
+									class="layui-input search_btn" type-close autocomplete="off">
+							</div>
+						</div>
+						<div class="layui-inline" style="width:100px" lay-filter="level">
+							<select name='level'>;
+								<option value='-1' selected="selected">选择权限</option>
+								<option value='120'>一般</option>
+								<option value='130'>普通</option>
+								<option value='200'>记者</option>
+								<option value='300'>控制</option>
+								<option value='1000'>GM</option>
+							</select>
+						</div>
+						<div class="layui-inline">
+							<a class="layui-btn" id="query">查询</a>
+						</div>
+						</blockquote>
+						<table id="table" lay-filter="test">
+							
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/js/bootstrap.min.js?v=3.3.5}"></script>
+	<script th:src="@{/static/sys/js/content.min.js}"></script>
+	<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/plugins/sweetalert/sweetalert.min.js}"></script>
+	<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+	<script th:src="@{/static/sys/js/public.js}"></script>
+		<script th:line="javascript">
+		var path2 = '[[${session.path}]]';
+		var layer;
+		var table;
+		var params;
+		var util;
+		var mapId;
+		var path = path2+"/account"
+		var pageNum = 1;
+		layui.use(['layer','table','form','util'], function(){
+			util = layui.util;
+		  	layer = layui.layer;
+		  	table = layui.table;
+		  	form = layui.form;
+		  	var cols =  [
+				{
+					title: 'id',
+					field: 'id'
+				}, 
+				{
+					title: '账号',
+					field: 'name'
+				},
+				{
+					title: '邀请码',
+					field: 'registerCode'
+				},
+				{
+					title: '注册ip',
+					field: 'registerIp'
+				},
+				{
+					title: '最后一次登录ip',
+					field: 'lastLoginIp'
+				},
+				{
+					title: '设备序列号',
+					field: 'mac'
+				},
+				{
+					title: '是否封号',
+					field: 'delete',
+					templet: function(value) {
+						if(value.deleted){
+							return "<font color='red'>封号</font>";
+						}else {
+							return "<font color='green'>正常</font>";
+						}
+					}
+				},
+				
+				{
+					title: '注册时间',
+					templet: function(value) {
+						if(value.addTime != undefined){
+							return util.toDateString(value.addTime,"yyyy-MM-dd");
+						}else {
+							return "";
+						}
+					}
+				},
+				{
+					title: '权限',
+					field: 'privilege',
+					templet:function(value){
+						var str = "无";
+						if(value.privilege==120) {
+							str = "一般";
+						}
+						if(value.privilege==130) {
+							str = "普通";
+						}
+						if(value.privilege==200) {
+							str = "记者";
+						}
+						if(value.privilege==300) {
+							str = "控制";
+						}
+						if(value.privilege==1000) {
+							str = "GM";
+						}
+						return '<span>'+str+'&nbsp;&nbsp;&nbsp;&nbsp;<a class="layui-btn layui-bg-blue layui-btn-xs" lay-event="privilege">权限</a></span>'
+					}
+				},
+			];
+		  
+		  	params = $.myRendar({"table":table,"elem":"#table","url":path+"/getAccounts","method":"post","cols":cols,toolbar:false,width:150,
+				width:200
+		  		,templet:function(data){
+					var html = '<a class="layui-btn layui-bg-blue layui-btn-xs" lay-event="show" data-id="'+data.partyId+'">所有角色</a>';
+					if(!data.deleted) {
+						html+='<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-id="'+data.partyId+'">封号</a>';
+					}else {
+						html+='<a class="layui-btn layui-btn-wring layui-btn-xs" lay-event="cancel" data-id="'+data.partyId+'">解封</a>';
+					}
+					return html;
+				},success:function(res,curr,count){
+					pageNum = curr;
+			  	}
+		  	});
+		  	table.on('tool(test)', function(obj){
+			  	var data = obj.data;
+			  	var layEvent = obj.event;
+			  	var t = $(this);
+			  	var obj = {};
+		 		if(layEvent == "del") {
+					  layer.confirm('是否封停?',function(){
+						  obj.id = data.id;
+						  obj.state = 1;
+						  u(obj)
+					  })
+				  }else if(layEvent == "cancel") {
+					  obj.id = data.id;
+					  obj.state = 0;
+					  u(obj)
+				  }else if(layEvent == "show") {
+					  layer.open({
+						  title:"查看[<font color='red'>"+data.name+"</font>]下的所有角色",
+						  type:2,
+						  area:["80%","80%"],
+						  content:path2+"/sys/charaPage?type=getRole&ps="+data.id
+					  })
+				  }else if(layEvent == "privilege") {
+					  type = "privilege";
+						var html = '<div class="layui-form" style="width:90%;margin-top:31px;" lay-filter="upPrivilegeForm">';
+						//位置编辑
+						html += '<div class="layui-form-item"> <label class="layui-form-label" style="width:52px">权限</label> <div class="layui-input-block">';
+						html += "<select name='privilege'>";
+						html += "<option value='0'>无</option>";
+						html += "<option value='120'>一般</option>";
+						html += "<option value='130'>普通</option>";
+						html += "<option value='200'>记者</option>";
+						html += "<option value='300'>控制</option>";
+						html += "<option value='1000'>GM</option>";
+						html +="</select>";
+						html+='</div></div>';
+						html += '<div class="layui-form-item"><a class="layui-btn layui-btn-danger layui-btn" data-id="'+data.id+'" style="margin-left: 109px;" id="UpPrivilege" lay-submit>保存</a></div>'
+						html += '</div>';
+						layer.open({
+							title: false,
+							area: ["400px","400px"],
+							type: 1,
+							shadeClose:true,
+							content: html,
+							success: function() {
+								$("select[name='privilege'] option[value="+data.privilege+"]").attr("selected","selected");
+								form.render('select');
+							}
+						});
+				  }
+			});
+		  	function u(obj) {
+		  		 $.post(path+"/accountDisableAndEnable",obj,function(d){
+				  		if(d.status == 200) {
+							layer.msg("操作成功");
+							params.options.page.curr = pageNum
+							table.render(params.options)
+						}else {
+							layer.msg(d.retmsg);
+						}
+				  });
+		  	}
+		  	//查询
+		  	$("#query").click(function(data){
+				var name = $(".search_btn").val();
+				var layf = form.val("layf");
+				var data = {};
+				if(name.trim() != "" && name.length > 0) {
+					data.name = name;
+				}
+				if(layf.level != "-1") {
+					data.privilege = layf.level;
+				}
+				params.options.where = data;
+				table.render(params.options);
+			})
+			
+			$(document).on("click","#UpPrivilege",function(){
+				var id = $(this).attr("data-id");
+				var da = form.val("upPrivilegeForm");
+				$.post(path2+"/account/updatePrivilege",{"id":id,"privilege":da.privilege},function(data){
+					if(data.status == 200) {
+						layer.msg("修改成功");
+						params.options.page.curr = pageNum;
+						table.render(params.options);
+					}else {
+						layer.msg("系统异常");
+					}
+				})
+			})
+			form.on('select(level)', function(data){
+				var obj = {};
+				if(data.value != "-1") {
+					obj.privilege = data.value;
+				}
+				var name = $(".search_btn").val();
+				obj.name = name;
+				params.options.where = obj;
+				table.render(params.options);
+			});
+		});
+	</script>
+</body>
+
+</html>

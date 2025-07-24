@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fengshen.db.dao.RenwuResetMapper">
+  <resultMap id="BaseResultMap" type="com.fengshen.db.domain.RenwuReset">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="account_id" jdbcType="INTEGER" property="accountId" />
+    <result column="renwu_status" jdbcType="INTEGER" property="renwuStatus" />
+  </resultMap>
+  <select id="select" parameterType="com.fengshen.db.domain.RenwuReset" resultMap="BaseResultMap">
+    select
+    account_id,
+    renwu_status
+    from renwu_reset
+    <where>
+        1=1
+    	<if test="accountId != null and accountId!=''">
+    		and account_id = #{accountId,jdbcType=INTEGER}
+    	</if>
+    	<if test="renwuStatus != null and renwuStatus!= ''">
+    		renwu_status = #{renwuStatus,jdbcType=INTEGER}
+    	</if>
+    </where>
+  </select>
+  <delete id="delete">
+    delete from renwu_reset
+  </delete>
+  <insert id="insert" parameterType="com.fengshen.db.domain.RenwuReset">
+    insert into renwu_reset (account_id, renwu_status)
+    values (#{accountId,jdbcType=INTEGER}, #{renwuStatus,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="update" parameterType="com.fengshen.db.domain.RenwuReset">
+    update renwu_reset
+    set renwu_status = #{renwuStatus,jdbcType=INTEGER}
+    where account_id = #{accountId,jdbcType=INTEGER}
+  </update>
+</mapper>

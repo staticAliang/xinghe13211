@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>首饰发送</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="stylesheet"
+	th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" />
+<style type="text/css">
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield;
+}
+</style>
+</head>
+
+<body>
+	<div style=" width: 335px; margin: 45px auto; ">
+		<!-- 角色首饰 -->
+		<div class="layui-form" lay-filter="formData">
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label" style="width: 30px">类型</label>
+					<div class="layui-input-inline" style="width: 120px;">
+						<select name="char_zb_ss_type" lay-filter="char_zb_ss_type_filter">
+							<option value="">请选择类型</option>
+							<option value="项链">项链</option>
+							<option value="玉佩">玉佩</option>
+							<option value="手镯">手镯</option>
+						</select>
+					</div>
+					<div class="layui-input-inline" style="width: 120px;">
+						<select name="ss_name" class="ss_name"
+								lay-filter="char_zb_ss_level_filter">
+							<option value="">请选择首饰</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label" style="width: 30px">属性</label>
+					<div class="layui-input-inline" style="width: 120px;">
+						<select name="ssAttr1" class="ssAttr">
+							<option value="">选择属性</option>
+						</select>
+					</div>
+					<div class="layui-input-inline" style="width: 120px;">
+						<input type="number" name="ssVal1" class="layui-input"
+							   placeholder="输入数值">
+					</div>
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label" style="width: 30px">属性</label>
+					<div class="layui-input-inline" style="width: 120px;">
+						<select name="ssAttr2" class="ssAttr">
+							<option value="">选择属性</option>
+						</select>
+					</div>
+					<div class="layui-input-inline" style="width: 120px;">
+						<input type="number" name="ssVal2" class="layui-input"
+							   placeholder="输入数值">
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label" style="width: 30px">属性</label>
+					<div class="layui-input-inline" style="width: 120px;">
+						<select name="ssAttr3" class="ssAttr">
+							<option value="">选择属性</option>
+						</select>
+					</div>
+					<div class="layui-input-inline" style="width: 120px;">
+						<input type="number" name="ssVal3" class="layui-input"
+							   placeholder="输入数值">
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label" style="width: 30px">属性</label>
+					<div class="layui-input-inline" style="width: 120px;">
+						<select name="ssAttr4" class="ssAttr">
+							<option value="">选择属性</option>
+						</select>
+					</div>
+					<div class="layui-input-inline" style="width: 120px;">
+						<input type="number" name="ssVal4" class="layui-input"
+							   placeholder="输入数值">
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label" style="width: 30px">属性</label>
+					<div class="layui-input-inline" style="width: 120px;">
+						<select name="ssAttr5" class="ssAttr">
+							<option value="">选择属性</option>
+						</select>
+					</div>
+					<div class="layui-input-inline" style="width: 120px;">
+						<input type="number" name="ssVal5" class="layui-input"
+							   placeholder="输入数值">
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label" style="width: 30px">属性</label>
+					<div class="layui-input-inline" style="width: 120px;">
+						<select name="ssAttr6" class="ssAttr">
+							<option value="">选择属性</option>
+						</select>
+					</div>
+					<div class="layui-input-inline" style="width: 120px;">
+						<input type="number" name="ssVal6" class="layui-input"
+							   placeholder="输入数值">
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label" style="width: 30px">属性</label>
+					<div class="layui-input-inline" style="width: 120px;">
+						<select name="ssAttr7" class="ssAttr">
+							<option value="">选择属性</option>
+						</select>
+					</div>
+					<div class="layui-input-inline" style="width: 120px;">
+						<input type="number" name="ssVal7" class="layui-input"
+							   placeholder="输入数值">
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label" style="width: 30px">属性</label>
+					<div class="layui-input-inline" style="width: 120px;">
+						<select name="ssAttr8" class="ssAttr">
+							<option value="">选择属性</option>
+						</select>
+					</div>
+					<div class="layui-input-inline" style="width: 120px;">
+						<input type="number" name="ssVal8" class="layui-input"
+							   placeholder="输入数值">
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label" style="width: 30px">属性</label>
+					<div class="layui-input-inline" style="width: 120px;">
+						<select name="ssAttr9" class="ssAttr">
+							<option value="">选择属性</option>
+						</select>
+					</div>
+					<div class="layui-input-inline" style="width: 120px;">
+						<input type="number" name="ssVal9" class="layui-input"
+							   placeholder="输入数值">
+					</div>
+				</div>
+			</div>
+		</div>
+			<div style="margin: 0px 13px;">
+			<div class="layui-form-mid layui-word-aux">数值随便填系统会校正</div>
+				<a class="layui-btn" id="char_zb_ss_info_send" style="width: 298px;">发送</a>
+			</div>
+		</div>
+
+
+	<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+	<script th:src="@{/static/sys/js/public.js}"></script>
+	<script th:line="javascript">
+		var path = '[[${session.path}]]';
+		var layer;
+		var table;
+		var params;
+		var util;
+		var mapId;
+		layui.use([ 'layer', 'table', 'form', 'util' ], function() {
+			util = layui.util;
+			layer = layui.layer;
+			table = layui.table;
+			form = layui.form;
+			//首饰发送
+			var zbSsInfo = {
+				"项链" : [ {name:"天机锁链",maxItem:1}, {name:"秘魔灵珠",maxItem:2}, {name:"金碧莲花",maxItem:3}, {name:"流光绝影",maxItem:4}, {name:"五蕴悯光",maxItem:5}, {name:"千彩流光",maxItem:6}, {name:"掠虹宝坠",maxItem:7}, {name:"破军捆灵",maxItem:8}, {name:"洛神回雪",maxItem:9}, {name:"景云烛天",maxItem:10}],
+				"玉佩" : [ {name:"七龙珠",maxItem:1}, {name:"金蝉宝囊",maxItem:2}, {name:"通灵宝玉",maxItem:3}, {name:"寒玉龙勾",maxItem:4}, {name:"八宝如意",maxItem:5}, {name:"游火灵焰",maxItem:6}, {name:"炫元玲珑",maxItem:7}, {name:"七杀固元",maxItem:8}, {name:"菩提镜明",maxItem:9}, {name:"和光同尘",maxItem:10}],
+				"手镯" : [ {name:"闭月双环",maxItem:1}, {name:"三清手镯",maxItem:2}, {name:"天星奇光",maxItem:3}, {name:"碎梦涵光",maxItem:4}, {name:"九天霜华",maxItem:5}, {name:"岚金火链",maxItem:6}, {name:"龙御七星",maxItem:7}, {name:"贪狼破日",maxItem:8}, {name:"屠龙封魔",maxItem:9}, {name:"九霞朝真",maxItem:10}]
+			};
+			var ssAttr = {
+				"项链" : [ "力量", "体质", "灵力", "敏捷","所有相性", "金抗性", "木抗性", "水抗性", "火抗性",
+						"土抗性", "抗遗忘", "抗中毒", "抗冰冻", "抗昏睡", "抗混乱", "所有技能上升",
+						"所有抗异常", "所有属性" ],
+				"玉佩" : [ "力量", "体质", "灵力", "敏捷","所有相性", "金抗性", "木抗性", "水抗性", "火抗性",
+						"土抗性", "抗遗忘", "抗中毒", "抗冰冻", "抗昏睡", "抗混乱", "所有技能上升",
+						"所有抗异常", "所有属性" ],
+				"手镯" : [ "力量", "体质", "灵力", "敏捷", "所有相性", "所有技能上升", "忽视目标抗金",
+						"忽视目标抗木", "忽视目标抗水", "忽视目标抗火", "忽视目标抗土", "忽视目标抗中毒",
+						"忽视目标抗冰冻", "忽视目标抗昏睡", "忽视目标抗混乱", "忽视目标抗遗忘", "忽视所有抗异常",
+						"所有技能上升", "所有属性" ]
+			}
+			form.on('select(char_zb_ss_type_filter)', function(d) {
+				var text = d.value;
+				var names = zbSsInfo[text];
+				var namesHtml = "<option value>请选择首饰</option>";
+				$(names).each(function(i, o) {
+					namesHtml += "<option value="+o.name+">" + o.name + "</option>";
+				});
+				$(".ss_name").html(namesHtml);
+				
+				/* var attrs = ssAttr[text];
+				var attrsHtml = "<option value>选择属性</option>";
+				$(attrs).each(function(i, o) {
+					attrsHtml += "<option value="+o+">" + o + "</option>";
+				});
+				$(".ssAttr").html(attrsHtml); */
+				form.render("select");
+			});
+			
+			form.on('select(char_zb_ss_level_filter)', function(d) {
+				var data = form.val("formData");
+				var names = zbSsInfo[data.char_zb_ss_type];
+				var max = 0;
+				$(names).each(function(i, o) {
+					//找到选中是什么首饰
+					if(o.name == data.ss_name) {
+						max = o.maxItem;						
+					}
+				});
+				var attrs = ssAttr[data.char_zb_ss_type];
+				var attrsHtml = "<option value>请选择</option>";
+				$(".ssAttr").html(attrsHtml);
+				$(attrs).each(function(i, o) {
+					attrsHtml += "<option value="+o+">" + o + "</option>";
+				});	
+				for(var i=1;i<=max;i++) {
+					$("select[name='ssAttr"+i+"']").html(attrsHtml);
+				}
+				form.render("select");
+			});
+			
+			$("#char_zb_ss_info_send").click(function(){
+				var data = form.val("formData");
+				var isSelected = "";
+				$(".ssAttr").each(function(i,o){
+					var text = $(o).find("option:selected").val();
+					isSelected = text;
+					if(text != "") {
+						return false;
+					}
+				})
+				if(isSelected == "") {
+					layer.msg("至少选中一条属性");
+					return;
+				}
+				var ary = new Array();
+				$(".ssAttr").each(function(i,o){
+					var sel = $(o).find("option:selected");
+					if(sel.val() != "") {
+						ary.push(sel.text());
+					}
+				});
+				var isReplace = false;
+				var chongfushuxing = "力量、体力、敏捷、体力、所有属性、所有技能上升、所有相性";
+				for(var i = 0; i < ary.length - 1; i++) {
+				  if(ary[i] == ary[i + 1]) {
+					  isReplace = true;
+					  break;
+				  }
+				}
+				if(isReplace) {
+					layer.msg("不允许有重复属性");
+					return;
+				}
+				var charaName = window.parent.getCharaName();
+				if(charaName == "") {
+					layer.msg("请输入角色名");
+					return;
+				}
+				data.charaName = charaName;
+				$.post(path+"/wd/chara/sendShouShi",data,function(d){
+					if(d.status == 200) {
+						
+					}
+					layer.msg(d.retmsg);
+				})
+			});
+		});
+	</script>
+</body>
+
+</html>

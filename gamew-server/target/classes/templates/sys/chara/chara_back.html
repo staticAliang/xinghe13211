@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+    <title>角色背包管理</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="favicon.ico"> 
+	<link th:href="@{/static/sys/css/bootstrap.min.css?v=3.3.5}" rel="stylesheet">
+<link th:href="@{/static/sys/css/plugins/sweetalert/sweetalert.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/font-awesome.min.css?v=4.4.0}" rel="stylesheet">
+<link th:href="@{/static/sys/css/animate.min.css}" rel="stylesheet">
+<link th:href="@{/static/sys/css/style.min.css?v=4.0.0}" rel="stylesheet">
+<link th:href="@{/static/sys/layui-v2.5.6/layui/css/layui.css}" rel="stylesheet" />
+<link rel="stylesheet" th:href="@{/static/sys/css/global.css}">
+
+     <style>
+    	.openMaxImg:hover{
+   		    box-shadow: 0px 0px 4px 1px #4e4e4e;
+   		    cursor: pointer;
+    	}
+		
+		/* 鼠标指向表格时,奇数行背景颜色 */
+		.layui-table tbody tr:hover,.layui-table-hover {
+		    background-color: #eeffee;
+		}
+		/* 表格头部工具栏背景色 */
+		.layui-table-tool {
+		    background-color: #eeffee;
+		}
+		.news_search{
+			font-size:14px;
+		}
+		.layui-form-label{
+			padding: 9px 0;
+		    left: 18px;
+		    color: black;
+		    font-size: 15px;
+		    top: 1px;
+	        width: 35px;
+		}
+		.layui-form-select {
+		    max-width:12.5rem;
+		}
+		input::-webkit-outer-spin-button,
+	    input::-webkit-inner-spin-button {
+	        -webkit-appearance: none;
+	    }
+	    input[type="number"]{
+	        -moz-appearance: textfield;
+	    }
+    </style>
+</head>
+
+<body>
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<!-- Panel Other -->
+		<div class="ibox float-e-margins">
+			<div class="row row-lg">
+				<div class="col-sm-12">
+					<!-- Example Events -->
+					<div class="example">
+						<table class="layui-table" lay-filter="test">
+						  <colgroup>
+						    <col width="150">
+						    <col width="200">
+						    <col>
+						  </colgroup>
+						  <thead>
+						    <tr>
+						      <th lay-data="{field:'name'}">物品名称</th>
+						      <th>格子</th>
+						      <th>操作</th>
+						    </tr> 
+						  </thead>
+						  <tbody id="tbody">
+						  </tbody>
+						</table>
+					</div>
+					<!-- End Example Events -->
+				</div>
+			</div>
+		</div>
+		<!-- End Panel Other -->
+	</div>
+
+		<script th:src="@{/static/sys/js/jquery.min.js?v=2.1.4}"></script>
+	<script th:src="@{/static/sys/js/bootstrap.min.js?v=3.3.5}"></script>
+	<script th:src="@{/static/sys/js/content.min.js}"></script>
+	<script th:src="@{/static/sys/layui-v2.5.6/layui/layui.js}"></script>
+	<script th:src="@{/static/sys/js/plugins/sweetalert/sweetalert.min.js}"></script>
+	<script th:src="@{/static/sys/js/layer.table.exapnd.js}"></script>
+	<script th:src="@{/static/sys/js/public.js}"></script>
+		<script th:line="javascript">
+		var path = '[[${session.path}]]';
+		var layer;
+		var table;
+		var params;
+		var util;
+		var mapId;
+		var ps = $.getQueryString("ps");
+		layui.use(['layer','table','form','util'], function(){
+			util = layui.util;
+		  	layer = layui.layer;
+		  	table = layui.table;
+		  	$.post(path+"/wd/chara/getCharaValue",{"gid":ps,"type":"back"},function(data){
+		  		if(data.status == 200) {
+		  			var html = "";
+		  			for(var p in data.data){
+		  				var html = "";
+			  			for(var p in data.data){
+			  				html+="<tr>";
+			  				html+="<td>"+p+"</td>";
+			  				html+="<td>"+data.data[p].length+"</td>";
+			  				html+='<td><a class="layui-btn layui-btn-wring layui-btn-xs del" data-value="'+p+'">删除</a></td>';
+			  			}
+			  			$("#tbody").html(html);
+		  			}
+		  		}
+		  	})
+		  	$(document).on("click",".del",function(){
+		  		var value = $(this).attr("data-value");
+		  		layer.confirm('是否删除',function(){
+		  			var obj2 = {};
+					obj2.gid = ps;
+					obj2.type = "delBack";
+					obj2.value = value;
+					u(obj2)
+				 })
+		  	})
+		  	
+		  	function u(obj) {
+		  		 $.post(path+"/wd/chara/updateValue",obj,function(d){
+			  		if(d.status == 200) {
+						layer.msg("删除成功");
+						location.reload();
+					}else {
+						layer.msg(d.retmsg);
+					}
+				 });
+		  	}
+		});
+	</script>
+</body>
+
+</html>

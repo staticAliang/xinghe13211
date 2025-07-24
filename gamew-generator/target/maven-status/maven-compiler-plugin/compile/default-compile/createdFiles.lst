@@ -1,0 +1,3 @@
+com\fengshen\db\Application.class
+com\fengshen\db\dao\RareShopItemMapper.class
+com\fengshen\db\domain\RareShopItem.class

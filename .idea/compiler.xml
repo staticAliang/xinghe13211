@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="gamew-generator" />
+        <module name="gamew-utils" />
+        <module name="gamew-db" />
+        <module name="gamew-server" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="gamew-db" options="-parameters" />
+      <module name="gamew-generator" options="-parameters" />
+      <module name="gamew-server" options="-parameters" />
+      <module name="gamew-utils" options="-parameters" />
+    </option>
+  </component>
+</project>

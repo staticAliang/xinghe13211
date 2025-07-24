@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fengshen.db.dao.PartyMapper">
+  <resultMap id="BaseResultMap" type="com.fengshen.db.domain.Party">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="party_id" jdbcType="VARCHAR" property="partyId" />
+    <result column="party_name" jdbcType="VARCHAR" property="partyName" />
+    <result column="party_base_info" jdbcType="VARCHAR" property="partyBaseInfo" />
+    <result column="party_announce" jdbcType="VARCHAR" property="partyAnnounce" />
+    <result column="rights" jdbcType="INTEGER" property="rights" />
+    <result column="construct" jdbcType="INTEGER" property="construct" />
+    <result column="money" jdbcType="INTEGER" property="money" />
+    <result column="salary" jdbcType="INTEGER" property="salary" />
+    <result column="auto_accept_level" jdbcType="INTEGER" property="autoAcceptLevel" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="population" jdbcType="INTEGER" property="population" />
+    <result column="party_level" jdbcType="INTEGER" property="partyLevel" />
+    <result column="heir" jdbcType="VARCHAR" property="heir" />
+    <result column="icon_md5" jdbcType="VARCHAR" property="iconMd5" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.fengshen.db.domain.Party">
+    <result column="review_icon_md5" jdbcType="LONGVARBINARY" property="reviewIconMd5" />
+    <result column="leader" jdbcType="LONGVARCHAR" property="leader" />
+  </resultMap>
+</mapper>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fengshen.db.dao.CharaNicknameMapper">
+  <resultMap id="BaseResultMap" type="com.fengshen.db.domain.CharaNickname">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="label" jdbcType="VARCHAR" property="label" />
+    <result column="delete" jdbcType="INTEGER" property="delete" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  
+  <select id="randomData"  resultMap="BaseResultMap" parameterType="com.fengshen.db.domain.CharaNickname">
+		SELECT
+	`name`
+	FROM
+	`chara_nickname`
+	WHERE
+	id >= ( SELECT floor( RAND( ) * ( SELECT MAX( id ) FROM `chara_nickname`
+	) ) )
+	AND sex = #{sex} 
+	ORDER BY
+	id
+	LIMIT 1;
+  </select> 
+  
+  
+  
+  <select id="randomData2"  resultMap="BaseResultMap" parameterType="com.fengshen.db.domain.CharaNickname">
+	SELECT
+	`name`
+	FROM
+	`chara_nickname`
+	WHERE
+	id >= ( SELECT floor( RAND( ) * ( SELECT MAX( id ) FROM `chara_nickname`
+	) ) )
+	AND sex = #{sex},
+	AND name != #{name}
+	ORDER BY
+	id
+	LIMIT 1;
+  </select> 
+</mapper>
